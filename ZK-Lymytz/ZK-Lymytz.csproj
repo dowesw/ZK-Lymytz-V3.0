@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{223B9870-927D-4F4A-9310-7DB8943B9DCF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZK_Lymytz</RootNamespace>
+    <AssemblyName>ZK-Lymytz</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ZK_Lymytz.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.zkemkeeper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>obj\Release\Interop.zkemkeeper.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=2.0.14.3, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\The Npgsql Development Team\Npgsql\Npgsql-2.0.14.3-net20\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\AgenceBLL.cs" />
+    <Compile Include="BLL\CalendrierBLL.cs" />
+    <Compile Include="BLL\ContratBLL.cs" />
+    <Compile Include="BLL\UsersBLL.cs" />
+    <Compile Include="BLL\ParametreBLL.cs" />
+    <Compile Include="BLL\EmployeBLL.cs" />
+    <Compile Include="BLL\EmpreinteBLL.cs" />
+    <Compile Include="BLL\JoursOuvresBLL.cs" />
+    <Compile Include="BLL\PlanningBLL.cs" />
+    <Compile Include="BLL\PointageBLL.cs" />
+    <Compile Include="BLL\PointeuseBLL.cs" />
+    <Compile Include="BLL\PresenceBLL.cs" />
+    <Compile Include="BLL\SettingBLL.cs" />
+    <Compile Include="BLL\ServeurBLL.cs" />
+    <Compile Include="BLL\SocieteBLL.cs" />
+    <Compile Include="BLL\TrancheHoraireBLL.cs" />
+    <Compile Include="DAO\AgenceDAO.cs" />
+    <Compile Include="DAO\CalendrierDAO.cs" />
+    <Compile Include="DAO\ContratDAO.cs" />
+    <Compile Include="DAO\UsersDAO.cs" />
+    <Compile Include="DAO\ParametreDAO.cs" />
+    <Compile Include="DAO\EmployeDAO.cs" />
+    <Compile Include="DAO\EmpreinteDAO.cs" />
+    <Compile Include="DAO\SettingDAO.cs" />
+    <Compile Include="DAO\JoursOuvresDAO.cs" />
+    <Compile Include="DAO\PlanningDAO.cs" />
+    <Compile Include="DAO\PointageDAO.cs" />
+    <Compile Include="DAO\PointeuseDAO.cs" />
+    <Compile Include="DAO\PresenceDAO.cs" />
+    <Compile Include="DAO\ServeurDAO.cs" />
+    <Compile Include="DAO\SocieteDAO.cs" />
+    <Compile Include="DAO\TrancheHoraireDAO.cs" />
+    <Compile Include="ENTITE\Calendrier.cs" />
+    <Compile Include="ENTITE\Contrat.cs" />
+    <Compile Include="ENTITE\Agence.cs" />
+    <Compile Include="ENTITE\Employe.cs" />
+    <Compile Include="ENTITE\Empreinte.cs" />
+    <Compile Include="ENTITE\Finger.cs" />
+    <Compile Include="ENTITE\IOEMDevice.cs" />
+    <Compile Include="ENTITE\JoursOuvres.cs" />
+    <Compile Include="ENTITE\Parametre.cs" />
+    <Compile Include="ENTITE\Planning.cs" />
+    <Compile Include="ENTITE\Pointage.cs" />
+    <Compile Include="ENTITE\Pointeuse.cs" />
+    <Compile Include="ENTITE\Presence.cs" />
+    <Compile Include="ENTITE\Serveur.cs" />
+    <Compile Include="ENTITE\Setting.cs" />
+    <Compile Include="ENTITE\Societe.cs" />
+    <Compile Include="ENTITE\TrancheHoraire.cs" />
+    <Compile Include="ENTITE\Users.cs" />
+    <Compile Include="Form_Parent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Parent.designer.cs">
+      <DependentUpon>Form_Parent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Archive_Pointeuse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Archive_Pointeuse.Designer.cs">
+      <DependentUpon>Form_Archive_Pointeuse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Archive_Serveur.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Archive_Serveur.Designer.cs">
+      <DependentUpon>Form_Archive_Serveur.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Add_Empreinte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Add_Empreinte.Designer.cs">
+      <DependentUpon>Form_Add_Empreinte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Employe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Employe.Designer.cs">
+      <DependentUpon>Form_Employe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Empreinte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Empreinte.Designer.cs">
+      <DependentUpon>Form_Empreinte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Evenement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Evenement.Designer.cs">
+      <DependentUpon>Form_Evenement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Gestion_Pointeuse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Gestion_Pointeuse.Designer.cs">
+      <DependentUpon>Form_Gestion_Pointeuse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Login.designer.cs">
+      <DependentUpon>Form_Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Pointeuse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Pointeuse.Designer.cs">
+      <DependentUpon>Form_Pointeuse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Serveur.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Serveur.designer.cs">
+      <DependentUpon>Form_Serveur.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Serveur_Distant.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Serveur_Distant.Designer.cs">
+      <DependentUpon>Form_Serveur_Distant.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Setting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Setting.designer.cs">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Societe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Societe.designer.cs">
+      <DependentUpon>Form_Societe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Users.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Users.Designer.cs">
+      <DependentUpon>Form_Users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_ViewResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_ViewResult.designer.cs">
+      <DependentUpon>Form_ViewResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TOOLS\Chemins.cs" />
+    <Compile Include="TOOLS\Configuration.cs" />
+    <Compile Include="TOOLS\Connexion.cs" />
+    <Compile Include="TOOLS\Constantes.cs" />
+    <Compile Include="TOOLS\Scheduler.cs" />
+    <Compile Include="TOOLS\Appareil.cs" />
+    <Compile Include="TOOLS\ReadWriteTxt.cs" />
+    <Compile Include="TOOLS\Logs.cs" />
+    <Compile Include="TOOLS\Messages.cs" />
+    <Compile Include="TOOLS\Mots.cs" />
+    <Compile Include="TOOLS\ObjectThread.cs" />
+    <Compile Include="TOOLS\ReadWriteCsv.cs" />
+    <Compile Include="TOOLS\Fonctions.cs" />
+    <Compile Include="TOOLS\SearchforUSBCom.cs" />
+    <Compile Include="TOOLS\Utils.cs" />
+    <EmbeddedResource Include="Form_Parent.resx">
+      <DependentUpon>Form_Parent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Archive_Pointeuse.resx">
+      <DependentUpon>Form_Archive_Pointeuse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Archive_Serveur.resx">
+      <DependentUpon>Form_Archive_Serveur.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Add_Empreinte.resx">
+      <DependentUpon>Form_Add_Empreinte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Employe.resx">
+      <DependentUpon>Form_Employe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Empreinte.resx">
+      <DependentUpon>Form_Empreinte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Evenement.resx">
+      <DependentUpon>Form_Evenement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Gestion_Pointeuse.resx">
+      <DependentUpon>Form_Gestion_Pointeuse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Login.resx">
+      <DependentUpon>Form_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Pointeuse.resx">
+      <DependentUpon>Form_Pointeuse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Serveur.resx">
+      <DependentUpon>Form_Serveur.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Serveur_Distant.resx">
+      <DependentUpon>Form_Serveur_Distant.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Setting.resx">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Societe.resx">
+      <DependentUpon>Form_Societe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Users.resx">
+      <DependentUpon>Form_Users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_ViewResult.resx">
+      <DependentUpon>Form_ViewResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>6</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <None Include="IMG\ACTIONS\unconnecte.png" />
+    <None Include="IMG\ACTIONS\connecte.png" />
+    <None Include="IMG\ACTIONS\test.png" />
+    <None Include="IMG\clean.png" />
+    <None Include="IMG\ACTIONS\documentinfo.png" />
+    <None Include="IMG\ACTIONS\appareil.png" />
+    <None Include="IMG\ACTIONS\folder.png" />
+    <None Include="IMG\ACTIONS\empreinte_mini.png" />
+    <None Include="IMG\ACTIONS\empreinte.png" />
+    <None Include="IMG\ACTIONS\admin_icon.png" />
+    <None Include="IMG\ACTIONS\db.png" />
+    <None Include="IMG\ACTIONS\flag.png" />
+    <None Include="IMG\ACTIONS\history.png" />
+    <None Include="IMG\ACTIONS\group_user.png" />
+    <None Include="IMG\empreinte03.png" />
+    <None Include="IMG\empreinte02.png" />
+    <None Include="IMG\empreinte01.png" />
+    <None Include="IMG\empreinte.png" />
+    <None Include="IMG\mains_gauche.png" />
+    <None Include="IMG\mains_droite.png" />
+    <None Include="IMG\ACTIONS\no_vue.png" />
+    <None Include="IMG\ICONES\favicon-32.ico" />
+    <None Include="IMG\ICONES\favicon-16.ico" />
+    <None Include="IMG\ICONES\favicon.ico" />
+    <None Include="IMG\THEMES\Classique.JPG" />
+    <None Include="IMG\THEMES\BlueTrack.JPG" />
+    <None Include="IMG\THEMES\BlackClass.JPG" />
+    <None Include="IMG\THEMES\Basique.JPG" />
+    <None Include="IMG\LANGUE\Fr.jpg" />
+    <None Include="IMG\LANGUE\En.jpg" />
+    <None Include="IMG\ACTIONS\vue.png" />
+    <None Include="IMG\ACTIONS\stop.png" />
+    <None Include="IMG\ACTIONS\save.png" />
+    <None Include="IMG\ACTIONS\rotate_cw.png" />
+    <None Include="IMG\ACTIONS\rotate.png" />
+    <None Include="IMG\ACTIONS\resume.png" />
+    <None Include="IMG\ACTIONS\restart-1.png" />
+    <None Include="IMG\ACTIONS\restart.png" />
+    <None Include="IMG\ACTIONS\reset.png" />
+    <None Include="IMG\ACTIONS\prec.png" />
+    <None Include="IMG\ACTIONS\player_stop.png" />
+    <None Include="IMG\ACTIONS\player_play.png" />
+    <None Include="IMG\ACTIONS\pause.png" />
+    <None Include="IMG\ACTIONS\out.png" />
+    <None Include="IMG\ACTIONS\next.png" />
+    <None Include="IMG\ACTIONS\logout.png" />
+    <None Include="IMG\ACTIONS\irkickflash.png" />
+    <None Include="IMG\ACTIONS\irkick.png" />
+    <None Include="IMG\ACTIONS\in.png" />
+    <None Include="IMG\ACTIONS\exit.png" />
+    <None Include="IMG\ACTIONS\endturn.png" />
+    <None Include="IMG\ACTIONS\edit_user.png" />
+    <None Include="IMG\ACTIONS\easymoblog.png" />
+    <None Include="IMG\ACTIONS\delete.png" />
+    <None Include="IMG\ACTIONS\connected.png" />
+    <None Include="IMG\ACTIONS\connect.png" />
+    <None Include="IMG\ACTIONS\configure.png" />
+    <None Include="IMG\ACTIONS\cancel.png" />
+    <None Include="IMG\ACTIONS\alert.png" />
+    <None Include="IMG\ACTIONS\add.png" />
+    <None Include="IMG\users.png" />
+    <None Include="IMG\settings.png" />
+    <None Include="IMG\remote.png" />
+    <None Include="IMG\pc.png" />
+    <None Include="IMG\niveau.png" />
+    <None Include="IMG\mouvement.png" />
+    <None Include="IMG\inventaire.png" />
+    <None Include="IMG\famille.png" />
+    <None Include="IMG\document.png" />
+    <None Include="IMG\database.png" />
+    <None Include="IMG\contact.png" />
+    <None Include="IMG\catalogue.png" />
+    <None Include="IMG\article.png" />
+    <None Include="IMG\ajouter.png" />
+    <None Include="IMG\acces.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZK-LymytzService\ZK-LymytzService.csproj">
+      <Project>{77654516-44d2-4fb9-a216-49e3f685dc60}</Project>
+      <Name>ZK-LymytzService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
