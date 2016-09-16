@@ -28,13 +28,20 @@ namespace ZK_Lymytz.DAO
                         bean.Id = Convert.ToInt32(lect["id"].ToString());
                         bean.Nom = lect["nom"].ToString();
                         bean.Prenom = lect["prenom"].ToString();
+                        bean.Matricule = lect["matricule"].ToString();
                         bean.Photo = lect["photos"].ToString();
                         bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
-                        string l = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true";
-                        List<Contrat> list = ContratDAO.getList(l);
-                        if (list.Count > 0)
+                        string q = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true limit 1";
+                        List<Contrat> lc = ContratDAO.getList(q);
+                        if (lc.Count > 0)
                         {
-                            bean.Contrat = list[0];
+                            bean.Contrat = lc[0];
+                        }
+                        q = "select * from yvs_grh_poste_employes where employe = " + bean.Id + " and actif = true and valider = true limit 1";
+                        List<PosteTravail> lp = PosteTravailDAO.getList(q);
+                        if (lp.Count > 0)
+                        {
+                            bean.Poste = lp[0];
                         }
                         if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
                         {
@@ -67,21 +74,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Nom = lect["nom"].ToString();
-                        bean.Prenom = lect["prenom"].ToString();
-                        bean.Photo = lect["photos"].ToString();
-                        bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
-                        string l = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true";
-                        List<Contrat> list = ContratDAO.getList(l);
-                        if (list.Count > 0)
-                        {
-                            bean.Contrat = list[0];
-                        }
-                        if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
-                        {
-                            bean.Agence = AgenceDAO.getOneById(Convert.ToInt32(lect["agence"].ToString()));
-                        }
+                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
                     }
                 }
                 return bean;
@@ -110,28 +103,43 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Nom = lect["nom"].ToString();
-                        bean.Prenom = lect["prenom"].ToString();
-                        bean.Photo = lect["photos"].ToString();
-                        bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
-                        string l = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true";
-                        List<Contrat> list = ContratDAO.getList(l);
-                        if (list.Count > 0)
-                        {
-                            bean.Contrat = list[0];
-                        }
-                        if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
-                        {
-                            bean.Agence = AgenceDAO.getOneById(Convert.ToInt32(lect["agence"].ToString()));
-                        }
+                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
                     }
                 }
                 return bean;
             }
             catch (Exception ex)
             {
-                Messages.Exception("EmployeDao (getOneById) ", ex);
+                Messages.Exception("EmployeDao (getOneByNom) ", ex);
+                return bean;
+            }
+            finally
+            {
+                connect.Close();
+            }
+        }
+
+        public static Employe getOneByNom(string nom_prenom, int societe)
+        {
+            Employe bean = new Employe();
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                string query = "select e.* from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where concat(nom, ' ',prenom) = '" + nom_prenom + "' and a.societe = " + societe;
+                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
+                NpgsqlDataReader lect = Lcmd.ExecuteReader();
+                if (lect.HasRows)
+                {
+                    while (lect.Read())
+                    {
+                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
+                    }
+                }
+                return bean;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("EmployeDao (getOneByNom) ", ex);
                 return bean;
             }
             finally

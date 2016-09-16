@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
 using System.Security;
-using Microsoft.Win32;
 using System.ServiceProcess;
 using System.Diagnostics;
 using System.Threading;
@@ -17,6 +16,8 @@ using System.Security.Principal;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+
+using Microsoft.Win32;
 
 using ZK_Lymytz.IHM;
 using ZK_Lymytz.BLL;
@@ -685,6 +686,14 @@ namespace ZK_Lymytz.TOOLS
             return d;
         }
 
+        public static string GetTime(double valeur)
+        {
+            string time = Convert.ToString(((Int32)valeur)).Length > 1 ? ((Int32)valeur) + "h" : "0" + ((Int32)valeur) + "h";
+            double r = valeur - (Int32)valeur;
+            time += Convert.ToString(Math.Round(r * 60)).Length > 1 ? Math.Round(r * 60) + "min" : "0" + Math.Round(r * 60) + "min";
+            return time;
+        }
+
         public static string GetErrorMessage(int errorCode)
         {
             int FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x100;
@@ -759,7 +768,7 @@ namespace ZK_Lymytz.TOOLS
                 connect.Close();
             }
         }
-        
+
         public static string GetMd5Hash(string input)
         {
             using (MD5 md5Hash = MD5.Create())

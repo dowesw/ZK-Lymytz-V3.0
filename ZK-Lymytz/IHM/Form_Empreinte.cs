@@ -91,8 +91,7 @@ namespace ZK_Lymytz.IHM
             try
             {
                 employes.Clear();
-                string query = "select e.* from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " order by e.nom, e.prenom";
-                employes = EmployeBLL.List(query);
+                employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
                 com_employe.DisplayMember = "NomPrenom";
                 com_employe.ValueMember = "Id";
                 com_employe.DataSource = new BindingSource(employes, null);

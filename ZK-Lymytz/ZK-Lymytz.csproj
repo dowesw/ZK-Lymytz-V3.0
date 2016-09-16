@@ -68,6 +68,8 @@
     <Compile Include="BLL\AgenceBLL.cs" />
     <Compile Include="BLL\CalendrierBLL.cs" />
     <Compile Include="BLL\ContratBLL.cs" />
+    <Compile Include="BLL\PosteTravailBLL.cs" />
+    <Compile Include="BLL\PosteBLL.cs" />
     <Compile Include="BLL\UsersBLL.cs" />
     <Compile Include="BLL\ParametreBLL.cs" />
     <Compile Include="BLL\EmployeBLL.cs" />
@@ -84,6 +86,8 @@
     <Compile Include="DAO\AgenceDAO.cs" />
     <Compile Include="DAO\CalendrierDAO.cs" />
     <Compile Include="DAO\ContratDAO.cs" />
+    <Compile Include="DAO\PosteTravailDAO.cs" />
+    <Compile Include="DAO\PosteDAO.cs" />
     <Compile Include="DAO\UsersDAO.cs" />
     <Compile Include="DAO\ParametreDAO.cs" />
     <Compile Include="DAO\EmployeDAO.cs" />
@@ -109,6 +113,8 @@
     <Compile Include="ENTITE\Planning.cs" />
     <Compile Include="ENTITE\Pointage.cs" />
     <Compile Include="ENTITE\Pointeuse.cs" />
+    <Compile Include="ENTITE\Poste.cs" />
+    <Compile Include="ENTITE\PosteTravail.cs" />
     <Compile Include="ENTITE\Presence.cs" />
     <Compile Include="ENTITE\Serveur.cs" />
     <Compile Include="ENTITE\Setting.cs" />
@@ -174,6 +180,12 @@
     </Compile>
     <Compile Include="IHM\Form_Pointeuse.Designer.cs">
       <DependentUpon>Form_Pointeuse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Presence.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Presence.Designer.cs">
+      <DependentUpon>Form_Presence.cs</DependentUpon>
     </Compile>
     <Compile Include="IHM\Form_Serveur.cs">
       <SubType>Form</SubType>
@@ -258,6 +270,9 @@
     <EmbeddedResource Include="IHM\Form_Pointeuse.resx">
       <DependentUpon>Form_Pointeuse.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Presence.resx">
+      <DependentUpon>Form_Presence.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_Serveur.resx">
       <DependentUpon>Form_Serveur.cs</DependentUpon>
     </EmbeddedResource>
@@ -328,6 +343,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <None Include="IMG\ACTIONS\signal_4.png" />
+    <None Include="IMG\ACTIONS\signal_3.png" />
+    <None Include="IMG\ACTIONS\signal_1.png" />
     <None Include="IMG\ACTIONS\unconnecte.png" />
     <None Include="IMG\ACTIONS\connecte.png" />
     <None Include="IMG\ACTIONS\test.png" />

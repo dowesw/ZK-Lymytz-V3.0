@@ -46,6 +46,18 @@ namespace ZK_Lymytz.BLL
             }
         }
 
+        public static Employe OneByNom(string nom_prenom, int societe)
+        {
+            try
+            {
+                return EmployeDAO.getOneByNom(nom_prenom, societe);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static List<Employe> List(string query)
         {
             try

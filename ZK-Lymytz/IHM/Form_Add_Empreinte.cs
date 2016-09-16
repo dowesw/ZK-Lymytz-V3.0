@@ -56,7 +56,8 @@ namespace ZK_Lymytz.IHM
                 this.Text = "Sauvegarde Empreinte (Pointeuse : " + pointeuse.Ip + ")";
                 Appareil z = Utils.ReturnAppareil(pointeuse);
                 Utils.VerifyZkemkeeper(ref z, ref pointeuse, this);
-                z.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(z.axCZKEM1_OnFingerFeature);
+                if (z != null)
+                    z.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(z.axCZKEM1_OnFingerFeature);
             }
         }
 
@@ -89,8 +90,7 @@ namespace ZK_Lymytz.IHM
             try
             {
                 employes.Clear();
-                string query = "select e.* from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " order by e.nom, e.prenom";
-                employes = EmployeBLL.List(query);
+                employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
                 com_employe.DisplayMember = "NomPrenom";
                 com_employe.ValueMember = "Id";
                 com_employe.DataSource = new BindingSource(employes, null);
@@ -168,90 +168,10 @@ namespace ZK_Lymytz.IHM
             ResetDoigt();
         }
 
-        private void panel_1_5_Click(object sender, EventArgs e)
-        {
-            ResetDoigt();
-            _FINGER_ID = 9;
-            panel_1_5.BackColor = SystemColors.GradientActiveCaption;
-            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
-            {
-                com_employe.Enabled = false;
-                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
-                save = (em != null ? em.Id < 1 : true);
-                if (!save)
-                {
-                    panel_1_5.BackColor = Color.Red;
-                }
-            }
-            pointeuse.Zkemkeeper._FINGER.Index = 9;
-            pointeuse.Zkemkeeper._FINGER.Main = "droite";
-            pointeuse.Zkemkeeper._FINGER.Doigt = "auriculaire";
-        }
-
-        private void panel_1_4_Click(object sender, EventArgs e)
-        {
-            ResetDoigt();
-            _FINGER_ID = 8;
-            panel_1_4.BackColor = SystemColors.GradientActiveCaption;
-            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
-            {
-                com_employe.Enabled = false;
-                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
-                save = (em != null ? em.Id < 1 : true);
-                if (!save)
-                {
-                    panel_1_4.BackColor = Color.Red;
-                }
-            }
-            pointeuse.Zkemkeeper._FINGER.Index = 8;
-            pointeuse.Zkemkeeper._FINGER.Main = "droite";
-            pointeuse.Zkemkeeper._FINGER.Doigt = "annulaire";
-        }
-
-        private void panel_1_3_Click(object sender, EventArgs e)
-        {
-            ResetDoigt();
-            _FINGER_ID = 7;
-            panel_1_3.BackColor = SystemColors.GradientActiveCaption;
-            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
-            {
-                com_employe.Enabled = false;
-                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
-                save = (em != null ? em.Id < 1 : true);
-                if (!save)
-                {
-                    panel_1_3.BackColor = Color.Red;
-                }
-            }
-            pointeuse.Zkemkeeper._FINGER.Index = 7;
-            pointeuse.Zkemkeeper._FINGER.Main = "droite";
-            pointeuse.Zkemkeeper._FINGER.Doigt = "majeur";
-        }
-
-        private void panel_1_2_Click(object sender, EventArgs e)
-        {
-            ResetDoigt();
-            _FINGER_ID = 6;
-            panel_1_2.BackColor = SystemColors.GradientActiveCaption;
-            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
-            {
-                com_employe.Enabled = false;
-                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
-                save = (em != null ? em.Id < 1 : true);
-                if (!save)
-                {
-                    panel_1_2.BackColor = Color.Red;
-                }
-            }
-            pointeuse.Zkemkeeper._FINGER.Index = 6;
-            pointeuse.Zkemkeeper._FINGER.Main = "droite";
-            pointeuse.Zkemkeeper._FINGER.Doigt = "index";
-        }
-
         private void panel_1_1_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 5;
+            _FINGER_ID = 0;
             panel_1_1.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -263,15 +183,95 @@ namespace ZK_Lymytz.IHM
                     panel_1_1.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 5;
+            pointeuse.Zkemkeeper._FINGER.Index = 0;
             pointeuse.Zkemkeeper._FINGER.Main = "droite";
             pointeuse.Zkemkeeper._FINGER.Doigt = "pouce";
+        }
+
+        private void panel_1_2_Click(object sender, EventArgs e)
+        {
+            ResetDoigt();
+            _FINGER_ID = 1;
+            panel_1_2.BackColor = SystemColors.GradientActiveCaption;
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
+            {
+                com_employe.Enabled = false;
+                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
+                save = (em != null ? em.Id < 1 : true);
+                if (!save)
+                {
+                    panel_1_2.BackColor = Color.Red;
+                }
+            }
+            pointeuse.Zkemkeeper._FINGER.Index = 1;
+            pointeuse.Zkemkeeper._FINGER.Main = "droite";
+            pointeuse.Zkemkeeper._FINGER.Doigt = "index";
+        }
+
+        private void panel_1_3_Click(object sender, EventArgs e)
+        {
+            ResetDoigt();
+            _FINGER_ID = 2;
+            panel_1_3.BackColor = SystemColors.GradientActiveCaption;
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
+            {
+                com_employe.Enabled = false;
+                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
+                save = (em != null ? em.Id < 1 : true);
+                if (!save)
+                {
+                    panel_1_3.BackColor = Color.Red;
+                }
+            }
+            pointeuse.Zkemkeeper._FINGER.Index = 2;
+            pointeuse.Zkemkeeper._FINGER.Main = "droite";
+            pointeuse.Zkemkeeper._FINGER.Doigt = "majeur";
+        }
+
+        private void panel_1_4_Click(object sender, EventArgs e)
+        {
+            ResetDoigt();
+            _FINGER_ID = 3;
+            panel_1_4.BackColor = SystemColors.GradientActiveCaption;
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
+            {
+                com_employe.Enabled = false;
+                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
+                save = (em != null ? em.Id < 1 : true);
+                if (!save)
+                {
+                    panel_1_4.BackColor = Color.Red;
+                }
+            }
+            pointeuse.Zkemkeeper._FINGER.Index = 3;
+            pointeuse.Zkemkeeper._FINGER.Main = "droite";
+            pointeuse.Zkemkeeper._FINGER.Doigt = "annulaire";
+        }
+
+        private void panel_1_5_Click(object sender, EventArgs e)
+        {
+            ResetDoigt();
+            _FINGER_ID = 4;
+            panel_1_5.BackColor = SystemColors.GradientActiveCaption;
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
+            {
+                com_employe.Enabled = false;
+                Empreinte em = EmpreinteBLL.OneByEmployeFinger(_EMPLOYE.Id, _FINGER_ID);
+                save = (em != null ? em.Id < 1 : true);
+                if (!save)
+                {
+                    panel_1_5.BackColor = Color.Red;
+                }
+            }
+            pointeuse.Zkemkeeper._FINGER.Index = 4;
+            pointeuse.Zkemkeeper._FINGER.Main = "droite";
+            pointeuse.Zkemkeeper._FINGER.Doigt = "auriculaire";
         }
 
         private void panel_2_1_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 0;
+            _FINGER_ID = 5;
             panel_2_1.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -283,7 +283,7 @@ namespace ZK_Lymytz.IHM
                     panel_2_1.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 0;
+            pointeuse.Zkemkeeper._FINGER.Index = 5;
             pointeuse.Zkemkeeper._FINGER.Main = "gauche";
             pointeuse.Zkemkeeper._FINGER.Doigt = "pouce";
         }
@@ -291,7 +291,7 @@ namespace ZK_Lymytz.IHM
         private void panel_2_2_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 1;
+            _FINGER_ID = 6;
             panel_2_2.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -303,7 +303,7 @@ namespace ZK_Lymytz.IHM
                     panel_2_2.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 1;
+            pointeuse.Zkemkeeper._FINGER.Index = 6;
             pointeuse.Zkemkeeper._FINGER.Main = "gauche";
             pointeuse.Zkemkeeper._FINGER.Doigt = "index";
         }
@@ -311,7 +311,7 @@ namespace ZK_Lymytz.IHM
         private void panel_2_3_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 2;
+            _FINGER_ID = 7;
             panel_2_3.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -323,7 +323,7 @@ namespace ZK_Lymytz.IHM
                     panel_2_3.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 2;
+            pointeuse.Zkemkeeper._FINGER.Index = 7;
             pointeuse.Zkemkeeper._FINGER.Main = "gauche";
             pointeuse.Zkemkeeper._FINGER.Doigt = "majeur";
         }
@@ -331,7 +331,7 @@ namespace ZK_Lymytz.IHM
         private void panel_2_4_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 3;
+            _FINGER_ID = 8;
             panel_2_4.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -343,7 +343,7 @@ namespace ZK_Lymytz.IHM
                     panel_2_4.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 3;
+            pointeuse.Zkemkeeper._FINGER.Index = 8;
             pointeuse.Zkemkeeper._FINGER.Main = "gauche";
             pointeuse.Zkemkeeper._FINGER.Doigt = "annulaire";
         }
@@ -351,7 +351,7 @@ namespace ZK_Lymytz.IHM
         private void panel_2_5_Click(object sender, EventArgs e)
         {
             ResetDoigt();
-            _FINGER_ID = 4;
+            _FINGER_ID = 9;
             panel_2_5.BackColor = SystemColors.GradientActiveCaption;
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
@@ -363,7 +363,7 @@ namespace ZK_Lymytz.IHM
                     panel_2_5.BackColor = Color.Red;
                 }
             }
-            pointeuse.Zkemkeeper._FINGER.Index = 4;
+            pointeuse.Zkemkeeper._FINGER.Index = 9;
             pointeuse.Zkemkeeper._FINGER.Main = "gauche";
             pointeuse.Zkemkeeper._FINGER.Doigt = "auriculaire";
         }

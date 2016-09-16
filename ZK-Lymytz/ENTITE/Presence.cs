@@ -15,8 +15,22 @@ namespace ZK_Lymytz.ENTITE
         private DateTime heure_fin;
         private DateTime duree_pause;
         private DateTime marge_approuve;
+        private double total_presence;
+        private double total_supplementaire;
         private bool valider;
         private bool supplementaire;
+
+        public double TotalSupplementaire
+        {
+            get { return total_supplementaire; }
+            set { total_supplementaire = value; }
+        }
+
+        public double TotalPresence
+        {
+            get { return total_presence; }
+            set { total_presence = value; }
+        }
 
         public bool Supplementaire
         {

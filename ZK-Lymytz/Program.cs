@@ -32,30 +32,18 @@ namespace ZK_Lymytz
 
         static void Test()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Configuration.Return();
             Load();
 
-            //Form_Parent f = new Form_Parent();
-            //Constantes.FORM_PARENT = f;
-            //////Constantes.ACTIVE = true;
-            //////Application.Run(f);
+            Form_Parent f = new Form_Parent();
+            Constantes.FORM_PARENT = f;
+            ////Constantes.ACTIVE = true;
+            ////Application.Run(f);
 
-            //f.Hide();
-            //Application.Run(new Form_Users());
-            Users u = UsersBLL.OneById(2686);
-            string source = u.Code + u.AleaMdp + "ADMIN";
-            string hash = Utils.GetMd5Hash(source);
-
-            Console.WriteLine("The MD5 hash of " + source + " is: " + hash + ".");
-
-            Console.WriteLine("Verifying the hash...");
-            if (Utils.VerifyMd5Hash(source, hash))
-            {
-                Console.WriteLine("The hashes are the same.");
-            }
-            else
-            {
-                Console.WriteLine("The hashes are not same.");
-            }
+            f.Hide();
+            Application.Run(new Form_Presence());
         }
 
         public static void StartProgram(bool registry)

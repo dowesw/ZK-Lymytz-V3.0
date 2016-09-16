@@ -468,7 +468,7 @@ namespace ZK_Lymytz.IHM
         {
             if (txt_path_photo.BackColor == System.Drawing.Color.Red)
             {
-                txt_path_photo.BackColor = SystemColors.Window;
+                txt_path_photo.BackColor = Color.FromName(Configuration.back_color_Text);
             }
         }
 

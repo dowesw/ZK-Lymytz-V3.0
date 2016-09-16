@@ -70,6 +70,7 @@ namespace ZK_Lymytz.IHM
             dateFin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 17, 30, 0);
             chk_date.Checked = false;
             chk_employe.Checked = false;
+            chk_invalid_only.Checked = false;
             dtp_date_debut.ResetText();
             dtp_date_fin.ResetText();
             txt_debut.Text = dateDebut.ToShortDateString() + " " + dateDebut.ToShortTimeString();
@@ -83,8 +84,7 @@ namespace ZK_Lymytz.IHM
                 employes.Clear();
                 dgv_employe.Rows.Clear();
 
-                string query = "select e.* from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " order by e.nom, e.prenom";
-                employes = EmployeBLL.List(query);
+                employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
                 com_employe.DisplayMember = "NomPrenom";
                 com_employe.ValueMember = "Id";
                 com_employe.DataSource = new BindingSource(employes, null);
@@ -352,7 +352,7 @@ namespace ZK_Lymytz.IHM
             o.UpdateMaxBar(0);
             if (chk_filter.Checked)
             {
-                Fonctions.SynchroniseServer(lIO, currentPointeuse.Ip, false, currentPointeuse.Zkemkeeper, employe, chk_date.Checked, dateDebut, dateFin);
+                Fonctions.SynchroniseServer(lIO, currentPointeuse.Ip, false, currentPointeuse.Zkemkeeper, employe, chk_date.Checked, dateDebut, dateFin, chk_invalid_only.Checked);
             }
             else
             {

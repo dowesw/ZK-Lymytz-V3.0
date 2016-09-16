@@ -9,7 +9,7 @@ using ZK_Lymytz.TOOLS;
 
 namespace ZK_Lymytz.TOOLS
 {
-    class Configuration
+    public class Configuration
     {
         public static string langue = Constantes.LANGUE_ANGLAIS;
 
@@ -118,14 +118,24 @@ namespace ZK_Lymytz.TOOLS
                     (crtl.GetType().ToString() == "System.Windows.Forms.ComboBox") ||
                     (crtl.GetType().ToString() == "System.Windows.Forms.NumericUpDown") ||
                     (crtl.GetType().ToString() == "System.Windows.Forms.MaskedTextBox") ||
-                    (crtl.GetType().ToString() == "System.Windows.Forms.CheckBox"))
+                    (crtl.GetType().ToString() == "System.Windows.Forms.DateTimePicker"))
                 {
                     FontFamily p = new FontFamily(police_Text);
                     crtl.Font = new Font((FontFamily)p, taille_Text);
                     crtl.ForeColor = Color.FromName(fore_color_Text);
                     crtl.BackColor = Color.FromName(back_color_Text);
                 }
-                else if (crtl.GetType().ToString() == "System.Windows.Forms.Button")
+                else if (crtl.GetType().ToString() == "System.Windows.Forms.DataGridView")
+                    crtl.ForeColor = Color.Black;
+                else if ((crtl.GetType().ToString() == "System.Windows.Forms.Label")||
+                     (crtl.GetType().ToString() == "System.Windows.Forms.CheckBox") ||
+                        (crtl.GetType().ToString() == "System.Windows.Forms.RadioButton"))
+                {
+                    FontFamily p = new FontFamily(police_Label);
+                    crtl.Font = new Font((FontFamily)p, taille_Label);
+                    crtl.ForeColor = Color.FromName(fore_color_Label);
+                }
+                else if ((crtl.GetType().ToString() == "System.Windows.Forms.Button"))
                     if (back_color_Form == "Black")
                     {
                         crtl.ForeColor = Color.White;
@@ -134,14 +144,6 @@ namespace ZK_Lymytz.TOOLS
                     {
                         crtl.ForeColor = Color.Black;
                     }
-                else if (crtl.GetType().ToString() == "System.Windows.Forms.DataGridView")
-                    crtl.ForeColor = Color.Black;
-                else if ((crtl.GetType().ToString() == "System.Windows.Forms.Label"))
-                {
-                    FontFamily p = new FontFamily(police_Label);
-                    crtl.Font = new Font((FontFamily)p, taille_Label);
-                    crtl.ForeColor = Color.FromName(fore_color_Label);
-                }
                 else if (crtl.GetType().ToString() == "System.Windows.Forms.GroupBox")
                 {
                     FontFamily p = new FontFamily(police_Label);

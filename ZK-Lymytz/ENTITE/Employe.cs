@@ -29,8 +29,10 @@ namespace ZK_Lymytz.ENTITE
         private long id;
         private string nom;
         private string prenom;
+        private string matricule;
         private bool horaire_dynamique;
         private Contrat contrat = new Contrat();
+        private PosteTravail poste = new PosteTravail();
         private string password;
         private int privilege;
         private bool bEnabled;
@@ -41,6 +43,12 @@ namespace ZK_Lymytz.ENTITE
         {
             get { return agence; }
             set { agence = value; }
+        }
+
+        public string Matricule
+        {
+            get { return matricule; }
+            set { matricule = value; }
         }
 
         public bool BEnabled
@@ -91,6 +99,13 @@ namespace ZK_Lymytz.ENTITE
             get { return contrat; }
             set { contrat = value; }
         }
+
+        public PosteTravail Poste
+        {
+            get { return poste; }
+            set { poste = value; }
+        }
+
 
         public string NomPrenom
         {

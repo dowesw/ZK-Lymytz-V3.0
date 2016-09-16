@@ -48,6 +48,7 @@
             this.chk_filter = new System.Windows.Forms.CheckBox();
             this.grp_filter = new System.Windows.Forms.GroupBox();
             this.txt_marge_heure_fin = new System.Windows.Forms.NumericUpDown();
+            this.chk_invalid_only = new System.Windows.Forms.CheckBox();
             this.txt_marge_heure_debut = new System.Windows.Forms.NumericUpDown();
             this.chk_date = new System.Windows.Forms.CheckBox();
             this.chk_employe = new System.Windows.Forms.CheckBox();
@@ -266,6 +267,7 @@
             // grp_filter
             // 
             this.grp_filter.Controls.Add(this.txt_marge_heure_fin);
+            this.grp_filter.Controls.Add(this.chk_invalid_only);
             this.grp_filter.Controls.Add(this.txt_marge_heure_debut);
             this.grp_filter.Controls.Add(this.chk_date);
             this.grp_filter.Controls.Add(this.chk_employe);
@@ -304,6 +306,16 @@
             this.txt_marge_heure_fin.Size = new System.Drawing.Size(41, 20);
             this.txt_marge_heure_fin.TabIndex = 8;
             this.tt_message.SetToolTip(this.txt_marge_heure_fin, "marge supérieur sur l\'heure de fin");
+            // 
+            // chk_invalid_only
+            // 
+            this.chk_invalid_only.AutoSize = true;
+            this.chk_invalid_only.Location = new System.Drawing.Point(10, 346);
+            this.chk_invalid_only.Name = "chk_invalid_only";
+            this.chk_invalid_only.Size = new System.Drawing.Size(174, 17);
+            this.chk_invalid_only.TabIndex = 8;
+            this.chk_invalid_only.Text = "Uniquement les fiches invalides";
+            this.chk_invalid_only.UseVisualStyleBackColor = true;
             // 
             // txt_marge_heure_debut
             // 
@@ -771,5 +783,6 @@
         private System.Windows.Forms.NumericUpDown txt_marge_heure_fin;
         private System.Windows.Forms.NumericUpDown txt_marge_heure_debut;
         private System.Windows.Forms.ToolTip tt_message;
+        private System.Windows.Forms.CheckBox chk_invalid_only;
     }
 }

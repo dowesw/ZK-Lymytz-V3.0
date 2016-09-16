@@ -18,6 +18,7 @@ namespace ZK_Lymytz.TOOLS
         public static Parametre PARAMETRE = new Parametre();
         public static Societe SOCIETE = new Societe();
         public static Setting SETTING = new Setting();
+        public static Configuration CONFIGURATION = new Configuration();
         public static Users USERS = new Users();
 
         public const string ADMINISTRATEUR = "MEG2710/";
@@ -48,11 +49,17 @@ namespace ZK_Lymytz.TOOLS
         public static Form_Gestion_Pointeuse FORM_GESTION_POINTEUSE = null;
         public static Form_Evenement FORM_EVENEMENT = null;
         public static Form_Employe FORM_EMPLOYE = null;
+        public static Form_Presence FORM_PRESENCE = null;
         public static Form_Empreinte FORM_EMPREINTE = null;
         public static Form_Serveur_Distant FORM_SERVEUR_DISTANT = null;
-        public static ProgressBar PBAR_WAIT = null;   
+        public static ProgressBar PBAR_WAIT = null;
 
         static public string[] MOIS = new string[] { "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" };
+
+        public static string QUERY_EMPLOYE(Societe SOCIETE)
+        {
+            return "select e.* from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + SOCIETE.Id + " order by e.nom, e.prenom";
+        }
 
         public static List<ENTITE.Finger> FINGERS()
         {

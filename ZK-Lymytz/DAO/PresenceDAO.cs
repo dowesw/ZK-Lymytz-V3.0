@@ -27,10 +27,12 @@ namespace ZK_Lymytz.DAO
                     while (lect.Read())
                     {
                         bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.DateDebut = Convert.ToDateTime(lect["date_debut"].ToString());
-                        bean.DateFin = Convert.ToDateTime(lect["date_fin"].ToString());
-                        bean.HeureDebut = Convert.ToDateTime(lect["heure_debut"].ToString());
-                        bean.HeureFin = Convert.ToDateTime(lect["heure_fin"].ToString());
+                        bean.DateDebut = (DateTime)((lect["date_debut"] != null) ? (!lect["date_debut"].ToString().Trim().Equals("") ? lect["date_debut"] : DateTime.Now) : DateTime.Now);
+                        bean.DateFin = (DateTime)((lect["date_fin"] != null) ? (!lect["date_fin"].ToString().Trim().Equals("") ? lect["date_fin"] : DateTime.Now) : DateTime.Now);
+                        bean.HeureDebut = (DateTime)((lect["heure_debut"] != null) ? (!lect["heure_debut"].ToString().Trim().Equals("") ? lect["heure_debut"] : DateTime.Now) : DateTime.Now);
+                        bean.HeureFin = (DateTime)((lect["heure_fin"] != null) ? (!lect["heure_fin"].ToString().Trim().Equals("") ? lect["heure_fin"] : DateTime.Now) : DateTime.Now);
+                        bean.TotalPresence = (Double)((lect["total_presence"] != null) ? (!lect["total_presence"].ToString().Trim().Equals("") ? lect["total_presence"] : 0.0) : 0.0);
+                        bean.TotalSupplementaire = (Double)((lect["total_heure_sup"] != null) ? (!lect["total_heure_sup"].ToString().Trim().Equals("") ? lect["total_heure_sup"] : 0.0) : 0.0);
                         bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
                         bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
                     }
@@ -61,14 +63,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.DateDebut = Convert.ToDateTime(lect["date_debut"].ToString());
-                        bean.DateFin = Convert.ToDateTime(lect["date_fin"].ToString());
-                        bean.HeureDebut = Convert.ToDateTime(lect["heure_debut"].ToString());
-                        bean.HeureFin = Convert.ToDateTime(lect["heure_fin"].ToString());
-                        bean.DureePause = Convert.ToDateTime(lect["duree_pause"].ToString());
-                        bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
-                        bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
+                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
                     }
                 }
                 return bean;
@@ -97,14 +92,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.DateDebut = Convert.ToDateTime(lect["date_debut"].ToString());
-                        bean.DateFin = Convert.ToDateTime(lect["date_fin"].ToString());
-                        bean.HeureDebut = Convert.ToDateTime(lect["heure_debut"].ToString());
-                        bean.HeureFin = Convert.ToDateTime(lect["heure_fin"].ToString());
-                        bean.DureePause = Convert.ToDateTime(lect["duree_pause"].ToString());
-                        bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
-                        bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
+                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
                     }
                 }
                 return bean;

@@ -17,6 +17,13 @@ namespace ZK_Lymytz.ENTITE
         private bool system_in;
         private bool system_out;
         private bool supplementaire;
+        private double duree;
+
+        public double Duree
+        {
+            get { return ((heure_sortie - heure_entree).TotalHours) > 0 ? ((heure_sortie - heure_entree).TotalHours) : 0; }
+            set { }
+        }
 
         public bool Supplementaire
         {

@@ -997,34 +997,6 @@ namespace ZK_Lymytz
             }
         }
 
-        private void employesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
-            {
-                if (Constantes.FORM_EMPLOYE == null)
-                {
-                    if (!VerifyActionPointeuse())
-                    {
-                        return;
-                    }
-                    Form_Employe f = new Form_Employe(currentPointeuse, true);
-                    f.Show();
-                    Constantes.FORM_EMPLOYE = f;
-                    Utils.WriteLog("Ouverture page (Gestion Employe)");
-                    Utils.addFrom("Form_Employe");
-                }
-                else
-                {
-                    Constantes.FORM_EMPLOYE.WindowState = FormWindowState.Normal;
-                    Constantes.FORM_EMPLOYE.BringToFront();
-                }
-            }
-            else
-            {
-                Utils.WriteLog("Vous devez selectionner l'appareil");
-            }
-        }
-
         private void empreintesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Constantes.FORM_EMPREINTE == null)
@@ -1125,6 +1097,51 @@ namespace ZK_Lymytz
             if (Constantes.USERS != null)
             {
                 Constantes.USERS.Id = 0;
+            }
+        }
+
+        private void listeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+            {
+                if (Constantes.FORM_EMPLOYE == null)
+                {
+                    if (!VerifyActionPointeuse())
+                    {
+                        return;
+                    }
+                    Form_Employe f = new Form_Employe(currentPointeuse, true);
+                    f.Show();
+                    Constantes.FORM_EMPLOYE = f;
+                    Utils.WriteLog("Ouverture page (Gestion Employe)");
+                    Utils.addFrom("Form_Employe");
+                }
+                else
+                {
+                    Constantes.FORM_EMPLOYE.WindowState = FormWindowState.Normal;
+                    Constantes.FORM_EMPLOYE.BringToFront();
+                }
+            }
+            else
+            {
+                Utils.WriteLog("Vous devez selectionner l'appareil");
+            }
+        }
+
+        private void présenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Constantes.FORM_PRESENCE == null)
+            {
+                Form_Presence f = new Form_Presence();
+                f.Show();
+                Constantes.FORM_PRESENCE = f;
+                Utils.WriteLog("Ouverture page (Gestion Présence)");
+                Utils.addFrom("Form_Presence");
+            }
+            else
+            {
+                Constantes.FORM_PRESENCE.WindowState = FormWindowState.Normal;
+                Constantes.FORM_PRESENCE.BringToFront();
             }
         }
     }

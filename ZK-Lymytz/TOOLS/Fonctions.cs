@@ -93,6 +93,10 @@ namespace ZK_Lymytz.TOOLS
             {
                 Constantes.FORM_EMPREINTE.Hide();
             }
+            if (Constantes.FORM_PRESENCE != null)
+            {
+                Constantes.FORM_PRESENCE.Hide();
+            }
         }
 
         public static void OpenForm()
@@ -145,6 +149,10 @@ namespace ZK_Lymytz.TOOLS
             if (Constantes.FORM_EMPREINTE != null)
             {
                 Constantes.FORM_EMPREINTE.Show();
+            }
+            if (Constantes.FORM_PRESENCE != null)
+            {
+                Constantes.FORM_PRESENCE.Show();
             }
         }
 
@@ -373,13 +381,12 @@ namespace ZK_Lymytz.TOOLS
             return false;
         }
 
-        public static TrancheHoraire GetTrancheHoraire(Employe e, DateTime heure_, string query)
+        public static TrancheHoraire GetTrancheHoraire(DateTime heure_, string query)
         {
             TrancheHoraire p_ = new TrancheHoraire();
             List<TrancheHoraire> lt = TrancheHoraireBLL.List(query);
             if (lt != null ? lt.Count > 0 : false)
             {
-
                 for (int i = 0; i < lt.Count; i++)
                 {
                     TrancheHoraire t = lt[i];
@@ -394,7 +401,6 @@ namespace ZK_Lymytz.TOOLS
                             p_.HeureDebut = t.HeureDebut;
                             p_.HeureFin = t.HeureFin;
                             p_.DureePause = t.DureePause;
-                            break;
                         }
                         else
                         {
@@ -407,7 +413,6 @@ namespace ZK_Lymytz.TOOLS
                                 p_.HeureDebut = t_.HeureDebut;
                                 p_.HeureFin = t_.HeureFin;
                                 p_.DureePause = t_.DureePause;
-                                break;
                             }
                             else
                             {
@@ -415,9 +420,9 @@ namespace ZK_Lymytz.TOOLS
                                 p_.HeureDebut = t.HeureDebut;
                                 p_.HeureFin = t.HeureFin;
                                 p_.DureePause = t.DureePause;
-                                break;
                             }
                         }
+                        break;
                     }
                     else if ((heureDebut < heure_) && (heure_ < heureFin))
                     {
@@ -432,7 +437,6 @@ namespace ZK_Lymytz.TOOLS
                                 p_.HeureDebut = t_.HeureDebut;
                                 p_.HeureFin = t_.HeureFin;
                                 p_.DureePause = t_.DureePause;
-                                break;
                             }
                             else
                             {
@@ -440,7 +444,6 @@ namespace ZK_Lymytz.TOOLS
                                 p_.HeureDebut = t.HeureDebut;
                                 p_.HeureFin = t.HeureFin;
                                 p_.DureePause = t.DureePause;
-                                break;
                             }
                         }
                         else
@@ -449,15 +452,15 @@ namespace ZK_Lymytz.TOOLS
                             p_.HeureDebut = t.HeureDebut;
                             p_.HeureFin = t.HeureFin;
                             p_.DureePause = t.DureePause;
-                            break;
                         }
+                        break;
                     }
                 }
             }
             return p_;
         }
 
-        public static Planning GetPlanning(Employe e, DateTime heure_)
+        public static Planning GetPlanning(Employe e, DateTime heure_) 
         {
             try
             {
@@ -559,11 +562,11 @@ namespace ZK_Lymytz.TOOLS
                                 {
                                     string type = ((e.Contrat != null) ? e.Contrat.TypeTranche : "JN");
                                     string query = "select * from yvs_grh_tranche_horaire where upper(type_journee) = upper('" + type + "') order by heure_debut asc, type_journee";
-                                    TrancheHoraire t = GetTrancheHoraire(e, heure_, query);
+                                    TrancheHoraire t = GetTrancheHoraire(heure_, query);
                                     if (t != null ? t.Id < 1 : true)
                                     {
                                         query = "select * from yvs_grh_tranche_horaire order by heure_debut asc, type_journee";
-                                        t = GetTrancheHoraire(e, heure_, query);
+                                        t = GetTrancheHoraire(heure_, query);
                                     }
                                     if (t != null ? t.Id > 0 : false)
                                     {
@@ -977,7 +980,7 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public static void SynchroniseServer(List<IOEMDevice> lp, String ip, bool auto, Appareil z, Employe e, bool date_, DateTime d, DateTime f)
+        public static void SynchroniseServer(List<IOEMDevice> lp, String ip, bool auto, Appareil z, Employe e, bool date_, DateTime d, DateTime f, bool invalid)
         {
             bool synchro = auto;
             if (lp.Count > 0 && ip.Length > 0)
@@ -987,22 +990,34 @@ namespace ZK_Lymytz.TOOLS
                 {
                     if (date_)
                     {
-                        query = "delete from yvs_grh_presence where employe = " + e.Id + " and date_debut between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and date_fin between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "'";
+                        if (!invalid)
+                            query = "delete from yvs_grh_presence where employe = " + e.Id + " and date_debut between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and date_fin between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "'";
+                        else
+                            query = "";
                     }
                     else
                     {
-                        query = "delete from yvs_grh_presence where employe = " + e.Id + "";
+                        if (!invalid)
+                            query = "delete from yvs_grh_presence where employe = " + e.Id + "";
+                        else
+                            query = "delete from yvs_grh_presence where employe = " + e.Id + " and valider = false";
                     }
                 }
                 else
                 {
                     if (date_)
                     {
-                        query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ") and date_debut between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and date_fin between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "'";
+                        if (!invalid)
+                            query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ") and date_debut between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and date_fin between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "'";
+                        else
+                            query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ") and date_debut between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and date_fin between '" + d.ToShortDateString() + "' and '" + f.ToShortDateString() + "' and valider = false";
                     }
                     else
                     {
-                        query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ")";
+                        if (!invalid)
+                            query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ")";
+                        else
+                            query = "delete from yvs_grh_presence where employe in (select e.id from yvs_grh_employes e inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + ") and valider = false";
                     }
                 }
                 if (Utils.RequeteLibre(query))

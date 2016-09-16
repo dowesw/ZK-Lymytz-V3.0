@@ -48,7 +48,9 @@
             this.serveurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.employesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.présenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evenementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.empreintesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,6 +82,7 @@
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.arrêterProcessusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.déconnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redémarerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.bubble = new System.Windows.Forms.NotifyIcon(this.components);
@@ -98,7 +101,6 @@
             this.lv_report = new System.Windows.Forms.ListBox();
             this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.déconnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -275,20 +277,37 @@
             // employesToolStripMenuItem
             // 
             this.employesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listeToolStripMenuItem,
+            this.présenceToolStripMenuItem,
             this.testerToolStripMenuItem});
             this.employesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.group_user;
             this.employesToolStripMenuItem.Name = "employesToolStripMenuItem";
             this.employesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.employesToolStripMenuItem.Text = "Employes";
-            this.employesToolStripMenuItem.Click += new System.EventHandler(this.employesToolStripMenuItem_Click);
+            // 
+            // listeToolStripMenuItem
+            // 
+            this.listeToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.easymoblog;
+            this.listeToolStripMenuItem.Name = "listeToolStripMenuItem";
+            this.listeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.listeToolStripMenuItem.Text = "Liste";
+            this.listeToolStripMenuItem.Click += new System.EventHandler(this.listeToolStripMenuItem_Click);
             // 
             // testerToolStripMenuItem
             // 
-            this.testerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.test;
+            this.testerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.signal_1;
             this.testerToolStripMenuItem.Name = "testerToolStripMenuItem";
-            this.testerToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.testerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.testerToolStripMenuItem.Text = "Tester";
             this.testerToolStripMenuItem.Click += new System.EventHandler(this.testerToolStripMenuItem_Click);
+            // 
+            // présenceToolStripMenuItem
+            // 
+            this.présenceToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.test;
+            this.présenceToolStripMenuItem.Name = "présenceToolStripMenuItem";
+            this.présenceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.présenceToolStripMenuItem.Text = "Présence";
+            this.présenceToolStripMenuItem.Click += new System.EventHandler(this.présenceToolStripMenuItem_Click);
             // 
             // evenementsToolStripMenuItem
             // 
@@ -562,6 +581,14 @@
             this.arrêterProcessusToolStripMenuItem.Visible = false;
             this.arrêterProcessusToolStripMenuItem.Click += new System.EventHandler(this.arrêterProcessusToolStripMenuItem_Click);
             // 
+            // déconnectionToolStripMenuItem
+            // 
+            this.déconnectionToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.logout;
+            this.déconnectionToolStripMenuItem.Name = "déconnectionToolStripMenuItem";
+            this.déconnectionToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.déconnectionToolStripMenuItem.Text = "Déconnection";
+            this.déconnectionToolStripMenuItem.Click += new System.EventHandler(this.déconnectionToolStripMenuItem_Click);
+            // 
             // redémarerToolStripMenuItem
             // 
             this.redémarerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.restart;
@@ -726,14 +753,6 @@
             this.effacerToolStripMenuItem.Text = "Effacer";
             this.effacerToolStripMenuItem.Click += new System.EventHandler(this.effacerToolStripMenuItem_Click);
             // 
-            // déconnectionToolStripMenuItem
-            // 
-            this.déconnectionToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.logout;
-            this.déconnectionToolStripMenuItem.Name = "déconnectionToolStripMenuItem";
-            this.déconnectionToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.déconnectionToolStripMenuItem.Text = "Déconnection";
-            this.déconnectionToolStripMenuItem.Click += new System.EventHandler(this.déconnectionToolStripMenuItem_Click);
-            // 
             // Form_Parent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -842,6 +861,8 @@
         private System.Windows.Forms.ToolStripMenuItem effacerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testerToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem déconnectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem présenceToolStripMenuItem;
     }
 }
 

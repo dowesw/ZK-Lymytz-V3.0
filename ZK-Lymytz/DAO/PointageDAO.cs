@@ -35,6 +35,7 @@ namespace ZK_Lymytz.DAO
                             bean.HeureSortie = Convert.ToDateTime(lect["heure_sortie"].ToString());
                         }
                         bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
+                        bean.Supplementaire = Convert.ToBoolean((lect["heure_supplementaire"].ToString() != "") ? lect["heure_supplementaire"].ToString() : "false");
                         if ((lect["presence"] != null) ? lect["presence"].ToString() != "" : false)
                         {
                             bean.Presence = PresenceDAO.getOneById(Convert.ToInt32(lect["presence"].ToString()));
