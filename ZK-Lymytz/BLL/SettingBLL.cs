@@ -6,13 +6,13 @@ using ZK_Lymytz.ENTITE;
 
 namespace ZK_Lymytz.BLL
 {
-    class SettingBLL
+    public class SettingBLL
     {
         public static bool CreateSetting(Setting config)
         {
             try
             {
-                return SettingDAO.getCreateSetting(config);
+                return SettingDAO.CreateSetting(config);
             }
             catch (Exception ex)
             {
@@ -24,7 +24,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return SettingDAO.getReturnSetting();
+                return SettingDAO.ReturnSetting();
             }
             catch (Exception ex)
             {

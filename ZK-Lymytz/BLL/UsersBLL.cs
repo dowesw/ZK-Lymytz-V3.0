@@ -12,7 +12,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return UsersDAO.getCreateUsers(config);
+                return UsersDAO.CreateUsers(config);
             }
             catch (Exception ex)
             {
@@ -24,7 +24,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return UsersDAO.getReturnUsers();
+                return UsersDAO.ReturnUsers();
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return UsersDAO.getDestroyUsers();
+                return UsersDAO.DestroyUsers();
             }
             catch (Exception ex)
             {

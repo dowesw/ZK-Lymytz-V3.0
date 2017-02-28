@@ -51,13 +51,13 @@ namespace ZK_Lymytz.IHM
         public void LoadFileBackup()
         {
             dgv_backup.Rows.Clear();
-            string[] files = System.IO.Directory.GetFiles(Chemins.getCheminBackupServeur(), "*.csv");
+            string[] files = System.IO.Directory.GetFiles(Chemins.CheminBackupServeur(), "*.csv");
             foreach (string f in files)
             {
                 FileInfo file = new FileInfo(f);
                 if (file.Name != "LogRecord.csv")
                 {
-                    dgv_backup.Rows.Add(new object[] {file.Name});
+                    dgv_backup.Rows.Add(new object[] { file.Name });
                 }
             }
             ResetDataBackup();
@@ -94,36 +94,9 @@ namespace ZK_Lymytz.IHM
             }
         }
 
-        private void dgv_backup_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgv_backup.CurrentRow.Cells["fileName"].Value != null)
-                {
-                    currentFile = Convert.ToString(dgv_backup.CurrentRow.Cells["fileName"].Value);
-                    if (currentFile != null)
-                    {
-                        current = false;
-                        pbar_statut.Value = 0;
-                        Constantes.PBAR_WAIT = pbar_statut;
-                        Thread t = new Thread(new ThreadStart(ReadSelectFile));
-                        t.Start();
-                    }
-                    else
-                    {
-                        ResetDataBackup();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Form_Archive_Serveur (dgv_backup_CellContentClick) ", ex);
-            }
-        }
-
         private void ReadSelectFile()
         {
-            List<IOEMDevice> l = Logs.ReadCsv(Chemins.getCheminBackupServeur() + currentFile);
+            List<IOEMDevice> l = Logs.ReadCsv(Chemins.CheminBackupServeur() + currentFile);
             ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
             o.UpdateMaxBar(l.Count);
             LoadLogs(l);
@@ -134,7 +107,7 @@ namespace ZK_Lymytz.IHM
             lIO = new List<IOEMDevice>();
             currentFile = "LogRecord.csv";
             current = false;
-            string fileName = Chemins.getCheminDatabase() + currentFile;
+            string fileName = Chemins.CheminDatabase() + currentFile;
             if (File.Exists(fileName))
             {
                 current = true;
@@ -189,7 +162,7 @@ namespace ZK_Lymytz.IHM
 
         private void SaveCurrent()
         {
-            string fileName = Chemins.getCheminBackupServeur() + DateTime.Now.ToString("dd-MM-yyyy") + ".csv";
+            string fileName = Chemins.CheminBackupServeur() + DateTime.Now.ToString("dd-MM-yyyy") + ".csv";
             bool deja = File.Exists(fileName);
             ObjectThread o_ = new ObjectThread(Constantes.PBAR_WAIT);
             o_.UpdateMaxBar(lIO.Count);
@@ -205,13 +178,77 @@ namespace ZK_Lymytz.IHM
                 ObjectThread o1 = new ObjectThread(dgv_backup);
                 o1.WriteDataGridView(new object[] { file.Name });
             }
-            File.Delete(Chemins.getCheminDatabase() + "LogRecord.csv");
-            File.Create(Chemins.getCheminDatabase() + "LogRecord.csv");
+            File.Delete(Chemins.CheminDatabase() + "LogRecord.csv");
+            File.Create(Chemins.CheminDatabase() + "LogRecord.csv");
 
             ObjectThread o2 = new ObjectThread(dgv_log);
             o2.ClearDataGridView(true);
             Utils.WriteLog("-- Sauvegarde du fichier courant effectuée");
             Constantes.LoadPatience(true);
+        }
+
+        private void supprimerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentFile != null ? currentFile.Trim().Length > 0 : false)
+            {
+                Utils.WriteLog("Demande de suppression du fichier " + currentFile + " du serveur");
+                if (Messages.Question("Voulez-vous vraiment supprimer ce fichier?") == System.Windows.Forms.DialogResult.Yes)
+                {
+                    String file = Chemins.CheminBackupServeur() + currentFile;
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                    LoadFileBackup();
+                    dgv_log.Rows.Clear();
+                }
+                else
+                {
+                    Utils.WriteLog("Suppression du fichier " + currentFile + " du serveur annulée");
+                }
+            }
+        }
+
+        private void dgv_backup_MouseDown(object sender, MouseEventArgs e)
+        {
+            DataGridView.HitTestInfo info = dgv_backup.HitTest(e.X, e.Y); //get info
+            int pos = dgv_backup.HitTest(e.X, e.Y).RowIndex;
+            if (pos > -1)
+            {
+                try
+                {
+                    if (dgv_backup.Rows[pos].Cells["fileName"].Value != null)
+                    {
+                        currentFile = Convert.ToString(dgv_backup.Rows[pos].Cells["fileName"].Value);
+                        if (currentFile != null)
+                        {
+                            switch (e.Button)
+                            {
+                                case MouseButtons.Right:
+                                    {
+                                        dgv_backup.Rows[pos].Selected = true; //Select the row
+                                    }
+                                    break;
+                                default:
+                                    current = false;
+                                    pbar_statut.Value = 0;
+                                    Constantes.PBAR_WAIT = pbar_statut;
+                                    Thread t = new Thread(new ThreadStart(ReadSelectFile));
+                                    t.Start();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            ResetDataBackup();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Messages.Exception("Form_Archive_Serveur (dgv_backup_MouseDown) ", ex);
+                }
+            }
         }
     }
 }

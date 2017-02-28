@@ -6,14 +6,14 @@ using ZK_Lymytz.ENTITE;
 
 namespace ZK_Lymytz.BLL
 {
-    class SocieteBLL
+    public class SocieteBLL
     {
 
         public static bool CreateSociete(Societe uneConfig)
         {
             try
             {
-                return SocieteDAO.getCreateSociete(uneConfig);
+                return SocieteDAO.CreateSociete(uneConfig);
             }
             catch (Exception ex)
             {
@@ -25,7 +25,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return SocieteDAO.getReturnSociete();
+                return SocieteDAO.ReturnSociete();
             }
             catch (Exception ex)
             {

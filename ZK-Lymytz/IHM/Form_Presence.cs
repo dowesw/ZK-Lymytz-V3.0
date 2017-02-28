@@ -18,14 +18,18 @@ namespace ZK_Lymytz.IHM
     public partial class Form_Presence : Form
     {
         List<Presence> presences = new List<Presence>();
+        List<Pointage> pointages = new List<Pointage>();
         List<Employe> employes = new List<Employe>();
         Employe employe = new Employe();
+        ObjectThread object_statut;
+
         int position = 0;
 
         public Form_Presence()
         {
             InitializeComponent();
             Configuration.Load(this);
+            object_statut = new ObjectThread(pbar_statut);
         }
 
         private void Form_Presence_Load(object sender, EventArgs e)
@@ -48,6 +52,7 @@ namespace ZK_Lymytz.IHM
             {
                 employes.Clear();
                 com_employe.Items.Clear();
+                com_employe.Items.Add("");
 
                 employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
                 foreach (Employe e in employes)
@@ -67,15 +72,19 @@ namespace ZK_Lymytz.IHM
 
         private void LoadPresence(DateTime d, Employe e)
         {
+            object_statut.SetValueBar(0);
+            Constantes.PBAR_WAIT = pbar_statut;
             position = 0;
             try
             {
-                string query = "select p.* from yvs_grh_presence p inner join yvs_grh_employes e on p.employe = e.id inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " and p.date_debut = '" + d.ToShortDateString() + "' order by p.heure_debut, e.nom, e.prenom";
+                string query = "select p.* from yvs_grh_presence p inner join yvs_grh_employes e on p.employe = e.id inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " and p.date_debut = '" + d.ToShortDateString() + "' order by e.nom, e.prenom, p.heure_debut";
+                string queryCount = "select count(p.id) from yvs_grh_presence p inner join yvs_grh_employes e on p.employe = e.id inner join yvs_agences a on e.agence = a.id where a.societe = " + Constantes.SOCIETE.Id + " and p.date_debut = '" + d.ToShortDateString() + "'";
                 if (e != null ? e.Id > 0 : false)
                 {
                     query = "select p.* from yvs_grh_presence p where p.employe = " + e.Id + " and p.date_debut = '" + d.ToShortDateString() + "' order by heure_debut";
+                    queryCount = "select count(p.id) from yvs_grh_presence p where p.employe = " + e.Id + " and p.date_debut = '" + d.ToShortDateString() + "'";
                 }
-                presences = PresenceBLL.List(query);
+                presences = PresenceBLL.List(query, queryCount);
                 if (presences != null ? presences.Count > 0 : false)
                 {
                     LoadOnView(presences[0]);
@@ -97,12 +106,18 @@ namespace ZK_Lymytz.IHM
         {
             try
             {
-                dgv_pointage.Rows.Clear();
+                object_statut.SetValueBar(0);
+                Constantes.PBAR_WAIT = pbar_statut;
+
+                ObjectThread o = new ObjectThread(dgv_pointage);
+                o.ClearDataGridView(true);
+
                 string query = "select * from yvs_grh_pointage where presence = " + p.Id + " order by heure_entree, heure_sortie";
-                List<Pointage> lp = PointageBLL.List(query);
-                for (int i = 0; i < lp.Count; i++)
+                string queryCount = "select count(id) from yvs_grh_pointage where presence = " + p.Id + "";
+                pointages = PointageBLL.List(query, queryCount);
+                for (int i = 0; i < pointages.Count; i++)
                 {
-                    dgv_pointage.Rows.Add(new object[] { i + 1, lp[i].HeureEntree.ToShortTimeString(), lp[i].HeureSortie.ToShortTimeString(), Utils.GetTime(lp[i].Duree), lp[i].Valider, lp[i].Supplementaire });
+                    o.WriteDataGridView(new object[] { pointages[i].Id, i + 1, pointages[i].HeureEntree.ToShortTimeString(), pointages[i].HeureSortie.ToShortTimeString(), Utils.GetTime(pointages[i].Duree), pointages[i].Valider, pointages[i].Supplementaire });
                 }
             }
             catch (Exception ex)
@@ -126,9 +141,9 @@ namespace ZK_Lymytz.IHM
                 box_identity.Image = global::ZK_Lymytz.Properties.Resources.contact;
 
             txt_date_debut.Text = p.DateDebut.ToString("dd MMM yyyy");
-            txt_date_fin.Text = p.DateFin.ToString("dd MMM yyyy");
+            txt_date_fin.Text = p.DateFinPrevu.ToString("dd MMM yyyy");
             txt_heure_debut.Text = p.HeureDebut.ToShortTimeString();
-            txt_heure_fin.Text = p.HeureFin.ToShortTimeString();
+            txt_heure_fin.Text = p.HeureFinPrevu.ToShortTimeString();
             txt_total_presence.Text = Utils.GetTime(p.TotalPresence);
             txt_total_suppl.Text = Utils.GetTime(p.TotalSupplementaire);
             rbtn_yes.Checked = p.Valider;
@@ -137,6 +152,7 @@ namespace ZK_Lymytz.IHM
             LoadPointage(p);
 
             lb_pagination.Text = (position + 1) + "/" + presences.Count;
+            Constantes.LoadPatience(true);
         }
 
         private void ResetFiche()
@@ -156,16 +172,28 @@ namespace ZK_Lymytz.IHM
             txt_total_suppl.Text = Utils.GetTime(0);
             rbtn_yes.Checked = false;
             rbtn_no.Checked = false;
+
+            dgv_pointage.Rows.Clear();
         }
 
         private void com_employe_SelectedIndexChanged(object sender, EventArgs e)
         {
             string nom_prenom = com_employe.Text.Trim();
-            if (employe != null ? (employe.Id < 0 || !employe.NomPrenom.Equals(nom_prenom)) : true)
+            if (!(nom_prenom == null || nom_prenom.Trim().Equals("")))
             {
-                employe = EmployeBLL.OneByNom(nom_prenom, Constantes.SOCIETE.Id);
-                txt_id_search.Text = employe.Id.ToString();
-                LoadPresence(dtp_date.Value, employe);
+                if (employe != null ? (employe.Id < 0 || !employe.NomPrenom.Equals(nom_prenom)) : true)
+                {
+                    employe = EmployeBLL.OneByNom(nom_prenom, Constantes.SOCIETE.Id);
+                    txt_id_search.Text = employe.Id.ToString();
+                    LoadPresence(dtp_date.Value, employe);
+                }
+            }
+            else
+            {
+                txt_id_search.Text = "0";
+                com_employe.ResetText();
+                employe = null;
+                LoadPresence(dtp_date.Value, null);
             }
         }
 
@@ -191,27 +219,233 @@ namespace ZK_Lymytz.IHM
 
         private void btn_prec_Click(object sender, EventArgs e)
         {
-            if (presences != null ? presences.Count > 0 : false)
+            if (employe != null ? employe.Id < 1 : true)
             {
-                position = position > 0 ? position - 1 : presences.Count - 1;
-                LoadOnView(presences[position]);
+                if (presences != null ? presences.Count > 0 : false)
+                {
+                    position = position > 0 ? position - 1 : presences.Count - 1;
+                    LoadOnView(presences[position]);
+                }
+            }
+            else
+            {
+                dtp_date.Value = dtp_date.Value.AddDays(-1);
             }
         }
 
         private void btn_next_Click(object sender, EventArgs e)
         {
-            if (presences != null ? presences.Count > 0 : false)
+            if (employe != null ? employe.Id < 1 : true)
             {
-                position = position < presences.Count - 1 ? position + 1 : 0;
-                LoadOnView(presences[position]);
+                if (presences != null ? presences.Count > 0 : false)
+                {
+                    position = position < presences.Count - 1 ? position + 1 : 0;
+                    LoadOnView(presences[position]);
+                }
+            }
+            else
+            {
+                dtp_date.Value = dtp_date.Value.AddDays(1);
             }
         }
 
         private void dtp_date_ValueChanged(object sender, EventArgs e)
         {
-            LoadPresence(dtp_date.Value, null);
-            txt_id_search.Text = "0";
-            com_employe.ResetText();
+            LoadPresence(dtp_date.Value, employe);
+        }
+
+        private void dgv_pointage_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewCell cell = this.dgv_pointage.Rows[e.RowIndex].Cells[0];
+            Pointage po = PointageBLL.OneById(Convert.ToInt32(cell.Value));
+            if ((e.ColumnIndex == this.dgv_pointage.Columns["heure_sortie"].Index) && e.Value != null)
+            {
+                cell = this.dgv_pointage.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if ((po.HeureSortie != null) ? po.HeureSortie.ToString() != "01/01/0001 00:00:00" : false)
+                {
+                    cell.ToolTipText = po.HeureSortie.ToString();
+                }
+            }
+            else if ((e.ColumnIndex == this.dgv_pointage.Columns["heure_entree"].Index) && e.Value != null)
+            {
+                cell = this.dgv_pointage.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if ((po.HeureEntree != null) ? po.HeureEntree.ToString() != "01/01/0001 00:00:00" : false)
+                {
+                    cell.ToolTipText = po.HeureEntree.ToString();
+                }
+            }
+        }
+
+        private void reorganiserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (position > -1)
+            {
+                Presence presence = presences[position];
+                presence.Pointages = pointages;
+                ReorganiserFiche(presence);
+            }
+        }
+
+        public void ReorganiserFiche(Presence presence)
+        {
+            if (presence != null ? presence.Id > 0 : false)
+            {
+                if (Connexion.RequeteLibre("delete from yvs_grh_pointage where presence = " + presence.Id))
+                {
+                    List<DateTime> times = new List<DateTime>();
+                    foreach (Pointage po in presence.Pointages)
+                    {
+                        if ((po.HeureEntree != null) ? po.HeureEntree.ToString() != "01/01/0001 00:00:00" : false)
+                            times.Add(po.HeureEntree);
+                        if ((po.HeureSortie != null) ? po.HeureSortie.ToString() != "01/01/0001 00:00:00" : false)
+                            times.Add(po.HeureSortie);
+                    }
+                    times.Sort();
+
+                    presence.HeureDebut = Utils.TimeStamp(presence.DateDebut, presence.HeureDebut);
+                    presence.HeureFin = Utils.TimeStamp(presence.DateFin, presence.HeureFin);
+                    foreach (DateTime current_time in times)
+                    {
+                        Fonctions.OnSavePointage(presence, current_time, null);
+                    }
+                    LoadOnView(presence);
+                    Messages.Succes();
+                }
+            }
+        }
+
+        private void fusionnerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (position > -1)
+            {
+                Presence presence = presences[position];
+                presence.Pointages = pointages;
+                if (presence != null ? presence.Id > 0 : false)
+                {
+                    List<Presence> list = PresenceBLL.List("select p.* from yvs_grh_presence p where p.employe = " + presence.Employe.Id + " and p.date_debut = '" + dtp_date.Value + "' order by heure_debut");
+                    if (list != null ? list.Count > 1 : false)
+                    {
+                        foreach (Presence p in list)
+                        {
+                            if (p.Id != presence.Id)
+                            {
+                                presence.Pointages.AddRange(PointageBLL.List("select * from yvs_grh_pointage where presence = " + p.Id));
+                                Connexion.RequeteLibre("delete from yvs_grh_presence where id = " + p.Id);
+                                presences.Remove(p);
+                                lb_pagination.Text = (position + 1) + "/" + presences.Count;
+                                txt_index_of.Text = (position + 1).ToString();
+                            }
+                        }
+                    }
+                    ReorganiserFiche(presence);
+                }
+            }
+        }
+
+        private void reevaluerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (position > -1)
+            {
+                Presence presence = presences[position];
+                if (presence != null ? presence.Id > 0 : false)
+                {
+                    if (Connexion.RequeteLibre("select reevaluer_total_presence(" + presence.Id + "::bigint)"))
+                    {
+                        presence = PresenceBLL.OneById((int)presence.Id);
+                        presences.RemoveAt(position);
+                        presences.Insert(position, presence);
+                        LoadOnView(presence);
+                    }
+                }
+            }
+        }
+
+        private void txt_index_of_Leave(object sender, EventArgs e)
+        {
+            position = Convert.ToInt32(txt_index_of.Text);
+            if (position < presences.Count && position > -1)
+            {
+                position -= 1;
+                LoadOnView(presences[position]);
+            }
+        }
+
+        private void actualiserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (employe != null ? employe.Id > 0 : false)
+                LoadPresence(dtp_date.Value, employe);
+        }
+
+        private void synchroniserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((presences != null ? presences.Count > 0 : false) && (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false))
+            {
+                Presence p = presences[position];
+                Employe emp = p.Employe;
+                Utils.WriteLog("Demande de synchronisation des logs de l'employe " + emp.NomPrenom + "");
+                if (Messages.Confirmation_Infos("synchroniser") == System.Windows.Forms.DialogResult.Yes)
+                {
+                    if (p.Id > 0)
+                    {
+                        if (p.Pointeuses == null)
+                        {
+                            p.Pointeuses = new List<string>();
+                        }
+                        if (p.Pointeuses.Count < 1)
+                        {
+                            foreach (Pointeuse y in Constantes.POINTEUSES)
+                            {
+                                if (y.Logs.Count > 0)
+                                {
+                                    p.Pointeuses.Add(y.Id.ToString());
+                                }
+                            }
+                        }
+                        if (p.Pointeuses.Count > 0)
+                        {
+                            object_statut.SetValueBar(0);
+                            Constantes.PBAR_WAIT = pbar_statut;
+
+                            List<IOEMDevice> logs = new List<IOEMDevice>();
+                            foreach (string id in p.Pointeuses)
+                            {
+                                Pointeuse y = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(id));
+                                if (y != null ? y.Id > 0 : false)
+                                    logs.InsertRange(logs.Count, Utils.FindLogsInFileTamponLogs(y.Logs, emp, true, p.DateDebut, p.DateFin));
+                            }
+
+                            if (logs.Count > 0)
+                            {
+                                Pointeuse y = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(p.Pointeuses[0]));
+                                object_statut.UpdateMaxBar(0);
+                                Thread thread = new Thread(delegate() { SynchroniseFichePresence(logs, y, p); });
+                                thread.Start();
+                            }
+                            else
+                            {
+                                Utils.WriteLog("-- Synchronisation impossible car le log est vide");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Utils.WriteLog("-- Synchronisation des logs de l'employe " + emp.NomPrenom + " annulée");
+                }
+            }
+        }
+
+        public void SynchroniseFichePresence(List<IOEMDevice> logs, Pointeuse y, Presence p)
+        {
+            Employe emp = p.Employe;
+            Thread thread = new Thread(delegate() { Fonctions.SynchroniseServer(logs, y.Ip, false, emp, true, p.DateDebut, p.DateFin, false); });
+            thread.Start();
+            if (thread.IsAlive)
+            {
+                thread.Join();
+            }
+            LoadPresence(dtp_date.Value, emp);
+            Utils.WriteLog("-- Synchronisation des logs de l'employe " + emp.NomPrenom + " terminée");
         }
     }
 }

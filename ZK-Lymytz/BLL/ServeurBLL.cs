@@ -12,7 +12,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return ServeurDAO.getCreateServeur(config);
+                return ServeurDAO.CreateServeur(config);
             }
             catch (Exception ex)
             {
@@ -24,7 +24,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return ServeurDAO.getReturnServeur();
+                return ServeurDAO.ReturnServeur();
             }
             catch (Exception ex)
             {

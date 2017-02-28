@@ -394,12 +394,15 @@ namespace ZK_Lymytz.IHM
                                 }
                                 z.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(z.axCZKEM1_OnFingerFeature);
                             }
+                            else
+                                z.FORM_ADD_EMPREINTE = this;
 
                             z.CancelOperation();
                             z.SSR_DelUserTmpExt(pointeuse.IMachine, _EMPLOYE.Id.ToString(), _FINGER_ID);//If the specified index of user's templates has existed ,delete it first.(SSR_DelUserTmp is also available sometimes)
-                            Utils.WriteLog("Demande d'enrollement de l'employe " + _EMPLOYE.NomPrenom + ", Doigt (" + z._FINGER.Doigt + ") - Main (" + z._FINGER.Doigt + ")");
+                            Utils.WriteLog("Demande d'enrollement de l'employe " + _EMPLOYE.NomPrenom + ", Doigt (" + z._FINGER.Doigt + ") - Main (" + z._FINGER.Main + ")");
                             if (DialogResult.Yes == Messages.Confirmation("commencer"))
                             {
+
                                 pointeuse.Zkemkeeper._EMPLOYE = _EMPLOYE;
                                 pointeuse.Zkemkeeper._FINGER_ID = _FINGER_ID;
                                 correct = false;

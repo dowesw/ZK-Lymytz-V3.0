@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ZK_Lymytz.ENTITE
 {
-    public class IOEMDevice
+    public class IOEMDevice : IComparable
     {
 
         public IOEMDevice() { }
@@ -32,7 +32,7 @@ namespace ZK_Lymytz.ENTITE
             this.idwSecond = idwSecond;
         }
 
-        public IOEMDevice(int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
+        public IOEMDevice(Pointeuse iPointeuse, int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
         {
             this.iMachineNumber = iMachineNumber;
             this.idwTMachineNumber = idwTMachineNumber;
@@ -44,8 +44,10 @@ namespace ZK_Lymytz.ENTITE
             this.idwHour = idwHour;
             this.idwMinute = idwMinute;
             this.idwSecond = idwSecond;
+            this.pointeuse = iPointeuse;
         }
 
+        public int id = 0;
         public int iMachineNumber = 0;
         public int idwTMachineNumber = 0;
         public int idwSEnrollNumber = 0;
@@ -60,5 +62,59 @@ namespace ZK_Lymytz.ENTITE
         public int idwHour = 0;
         public int idwMinute = 0;
         public int idwSecond = 0;
+        public bool exclure = false;
+        public bool iCorrect = false;
+        public Pointeuse pointeuse = new Pointeuse();
+
+        public System.Drawing.Bitmap Icon()
+        {
+            if (iCorrect)
+            {
+                return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.vu, 16, 16);
+            }
+            return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.vu_non, 16, 16);
+        }
+
+        public DateTime CurrentDateTime
+        {
+            get { return new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond); }
+            set { }
+        }
+
+        public DateTime CurrentDate
+        {
+            get { return new DateTime(idwYear, idwMonth, idwDay, 0, 0, 0); }
+            set { }
+        }
+
+        public int CompareTo(Object o)
+        {
+            IOEMDevice f = (IOEMDevice)o;
+            if (idwYear.Equals(f.idwYear))
+            {
+                if (idwMonth.Equals(f.idwMonth))
+                {
+                    if (idwDay.Equals(f.idwDay))
+                    {
+                        if (idwHour.Equals(f.idwHour))
+                        {
+                            if (idwMinute.Equals(f.idwMinute))
+                            {
+                                if (idwSecond.Equals(f.idwSecond))
+                                {
+                                    return idwSEnrollNumber.CompareTo(f.idwSEnrollNumber);
+                                }
+                                return idwSecond.CompareTo(f.idwSecond);
+                            }
+                            return idwMinute.CompareTo(f.idwMinute);
+                        }
+                        return idwHour.CompareTo(f.idwHour);
+                    }
+                    return idwDay.CompareTo(f.idwDay);
+                }
+                return idwMonth.CompareTo(f.idwMonth);
+            }
+            return idwYear.CompareTo(f.idwYear);
+        }
     }
 }

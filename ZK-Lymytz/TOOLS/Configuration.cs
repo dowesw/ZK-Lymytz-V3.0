@@ -33,10 +33,25 @@ namespace ZK_Lymytz.TOOLS
 
         public static void Save()
         {
-            string chemin = Chemins.getCheminConfiguration();
-            RegistryKey Nkey = Registry.CurrentUser;
+            using (RegistryKey Nkey = Registry.LocalMachine)
+            {
+                Save(Nkey);
+            }
+            if (Utils.Is64BitOperatingSystem())
+            {
+                using (RegistryKey Nkey = Registry.CurrentUser)
+                {
+                    Save(Nkey);
+                }
+            }
+
+        }
+
+        public static void Save(RegistryKey Nkey)
+        {
             try
             {
+                string chemin = Chemins.CheminConfiguration();
                 RegistryKey valKey = Nkey.OpenSubKey(@chemin, true);
                 if (valKey == null)
                 {
@@ -62,14 +77,36 @@ namespace ZK_Lymytz.TOOLS
             {
                 Nkey.Close();
             }
+
         }
 
         public static void Return()
         {
-            string chemin = Chemins.getCheminConfiguration();
-            RegistryKey Nkey = Registry.CurrentUser;
+            RegistryKey Nkey = Registry.LocalMachine;
             try
             {
+                Return(Nkey);
+                if (template != null ? template.Trim().Length < 1 : true)
+                {
+                    Nkey = Registry.CurrentUser;
+                    Return(Nkey);
+                }
+            }
+            catch (Exception e)
+            {
+                Messages.Exception("UsersDAO (getReturnUsers) ", e);
+            }
+            finally
+            {
+                Nkey.Close();
+            }
+        }
+
+        public static void Return(RegistryKey Nkey)
+        {
+            try
+            {
+                string chemin = Chemins.CheminConfiguration();
                 Object[] lic = new Object[3];
                 RegistryKey valKey = Nkey.OpenSubKey(@chemin, true);
                 if (valKey != null)
@@ -127,7 +164,7 @@ namespace ZK_Lymytz.TOOLS
                 }
                 else if (crtl.GetType().ToString() == "System.Windows.Forms.DataGridView")
                     crtl.ForeColor = Color.Black;
-                else if ((crtl.GetType().ToString() == "System.Windows.Forms.Label")||
+                else if ((crtl.GetType().ToString() == "System.Windows.Forms.Label") ||
                      (crtl.GetType().ToString() == "System.Windows.Forms.CheckBox") ||
                         (crtl.GetType().ToString() == "System.Windows.Forms.RadioButton"))
                 {
@@ -174,13 +211,32 @@ namespace ZK_Lymytz.TOOLS
         {
             try
             {
-                form.BackColor = Color.FromName(back_color_Form);
-                Reload(form);
+                if (form != null)
+                {
+                    checkValue();
+                    form.BackColor = Color.FromName(back_color_Form);
+                    Reload(form);
+                }
             }
             catch (Exception e)
             {
                 Messages.Exception("Configuration (Load) ", e);
             }
+        }
+
+        public static void checkValue()
+        {
+            back_color_Form = back_color_Form != null ? back_color_Form : "GradientInactiveCaption";
+            langue = langue != null ? langue : Constantes.LANGUE_FRANCAIS;
+            template = template != null ? template : "Basique";
+            back_color_Form = back_color_Form != null ? back_color_Form : "GradientInactiveCaption";
+            fore_color_Label = fore_color_Label != null ? fore_color_Label : "ControlText";
+            back_color_Text = back_color_Text != null ? back_color_Text : "Control";
+            fore_color_Text = fore_color_Text != null ? fore_color_Text : "WindowText";
+            police_Label = police_Label != null ? police_Label : "Microsoft Sans Serif";
+            police_Text = police_Text != null ? police_Text : "Microsoft Sans Serif";
+            taille_Label = taille_Text > 0 ? taille_Text : float.Parse("8,25");
+            taille_Text = taille_Text > 0 ? taille_Text : float.Parse("8,25");
         }
     }
 }

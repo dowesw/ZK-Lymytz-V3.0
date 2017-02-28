@@ -11,18 +11,39 @@ namespace ZK_Lymytz.TOOLS
 {
     class Connexion
     {
+        NpgsqlConnection INSTANCE = null;
+
         public NpgsqlConnection Connection()
         {
-            NpgsqlConnection con = new NpgsqlConnection();
-            ENTITE.Serveur bean = ServeurBLL.ReturnServeur();
-            if ((bean != null) ? bean.Port != 0 : false)
+            if (INSTANCE != null)
             {
-                con = getConnexion(bean);
+                if (INSTANCE.State == System.Data.ConnectionState.Closed)
+                {
+                    INSTANCE.Open();
+                }
             }
-            return con;
+            else
+            {
+                ENTITE.Serveur bean = ServeurBLL.ReturnServeur();
+                if ((bean != null) ? bean.Port != 0 : false)
+                {
+                    INSTANCE = returnConnexion(bean);
+                }
+            }
+            return INSTANCE;
         }
 
-        public NpgsqlConnection Connection1()
+        public static void Close(NpgsqlConnection con)
+        {
+            if (con != null)
+            {
+                con.Close();
+                con.Dispose();
+            }
+            con = null;
+        }
+
+        public NpgsqlConnection onConnection()
         {
             try
             {
@@ -34,12 +55,12 @@ namespace ZK_Lymytz.TOOLS
             }
             catch (Exception ex)
             {
-                Messages.Exception("Connexion (Connection1) ", ex);
+                Messages.Exception("Connexion (onConnection) ", ex);
                 return null;
             }
         }
 
-        public NpgsqlConnection getConnexion(ENTITE.Serveur bean)
+        public NpgsqlConnection returnConnexion(ENTITE.Serveur bean)
         {
             try
             {
@@ -63,7 +84,7 @@ namespace ZK_Lymytz.TOOLS
             }
             catch (Exception ex)
             {
-                Messages.Exception("Connexion (getConnexion) ", ex);
+                Messages.Exception("Connexion (returnConnexion) ", ex);
                 return null;
             }
         }
@@ -77,8 +98,15 @@ namespace ZK_Lymytz.TOOLS
                 {
                     string constr = "PORT=" + bean.Port + ";TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;COMPATIBLE= 2.0.14.3;DATABASE=" + bean.Database + ";HOST=" + bean.Adresse + ";PASSWORD=" + bean.Password + ";USER ID=" + bean.User + "";
                     con = new NpgsqlConnection(constr);
-                    con.Open();
-                    return true;
+                    try
+                    {
+                        con.Open();
+                        return true;
+                    }
+                    catch (System.StackOverflowException ex)
+                    {
+                        return isConnection(out con, bean);
+                    }
                 }
                 else
                 {
@@ -110,6 +138,92 @@ namespace ZK_Lymytz.TOOLS
             {
                 Messages.Exception("Connexion (isInfosServeur) ", ex);
                 return false;
+            }
+        }
+
+        public static bool RequeteLibre(string query)
+        {
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                if (query != null ? query.Trim().Length > 0 : false)
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Connexion (RequeteLibre) ", ex);
+                return false;
+            }
+            finally
+            {
+                Close(connect);
+            }
+        }
+
+        public static object LoadOneObject(string query)
+        {
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                if (query != null ? query.Trim().Length > 0 : false)
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                    NpgsqlDataReader lect = cmd.ExecuteReader();
+                    if (lect.HasRows)
+                    {
+                        while (lect.Read())
+                        {
+                            return lect[0];
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Connexion (LoadOneObject) ", ex);
+                return null;
+            }
+            finally
+            {
+                Close(connect);
+            }
+        }
+
+        public static List<string> LoadListObject(string query)
+        {
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                List<string> list = new List<string>();
+                if (query != null ? query.Trim().Length > 0 : false)
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
+                    NpgsqlDataReader lect = cmd.ExecuteReader();
+                    if (lect.HasRows)
+                    {
+                        while (lect.Read())
+                        {
+                            list.Add(lect[0].ToString());
+                        }
+                    }
+
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Connexion (LoadListObject) ", ex);
+                return null;
+            }
+            finally
+            {
+                Close(connect);
             }
         }
     }

@@ -85,6 +85,7 @@
             this.Controls.Add(this.btn_save);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(234, 91);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(213, 91);
             this.Name = "Form_Serveur_Distant";

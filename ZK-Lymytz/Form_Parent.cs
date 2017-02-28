@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Net;
+using System.IO;
 
 using ZK_Lymytz.ENTITE;
 using ZK_Lymytz.BLL;
@@ -16,12 +18,14 @@ namespace ZK_Lymytz
 {
     public partial class Form_Parent : Form
     {
-        Pointeuse currentPointeuse = new Pointeuse();
+        public Pointeuse currentPointeuse = new Pointeuse();
         private static volatile bool _pointeuseThread = true, _restartThread = true, _stopThread = true;
+        public ObjectThread object_pointeuse;
 
         public Form_Parent()
         {
             InitializeComponent();
+            object_pointeuse = new ObjectThread(dgv_pointeuse);
         }
 
         private void Form_Parent_Load(object sender, EventArgs e)
@@ -59,27 +63,21 @@ namespace ZK_Lymytz
 
         public void AddPointeuse(Pointeuse p)
         {
-            dgv_pointeuse.Rows.Add(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif });
+            object_pointeuse.WriteDataGridView(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif, p.Icon() });
         }
 
-        private void UpdatePointeuse(Pointeuse p)
+        public void UpdatePointeuse(Pointeuse p)
         {
             int i = Utils.GetRowData(dgv_pointeuse, p.Id);
-            dgv_pointeuse.Rows.RemoveAt(i);
-            dgv_pointeuse.Rows.Insert(i, new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif });
-
-            ResetDataPointeuse();
-            dgv_pointeuse.Rows[i].Selected = true;
-            currentPointeuse = p;
-        }
-
-        public void UpdatePointeuse_(Pointeuse p)
-        {
-            int i = Utils.GetRowData(dgv_pointeuse, p.Id);
-            ObjectThread o = new ObjectThread(dgv_pointeuse);
-            o.RemoveDataGridView(i);
-            o.WriteDataGridView(i, new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif });
-
+            if (i > -1)
+            {
+                object_pointeuse.RemoveDataGridView(i);
+            }
+            else
+            {
+                i = 0;
+            }
+            object_pointeuse.WriteDataGridView(i, new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif, p.Icon() });
             ResetDataPointeuse();
             dgv_pointeuse.Rows[i].Selected = true;
             currentPointeuse = p;
@@ -87,13 +85,17 @@ namespace ZK_Lymytz
 
         public void DeletePointeuse(Pointeuse p)
         {
-            dgv_pointeuse.Rows.RemoveAt(Utils.GetRowData(dgv_pointeuse, p.Id));
-            p = null;
+            int i = Utils.GetRowData(dgv_pointeuse, p.Id);
+            if (i > -1)
+            {
+                object_pointeuse.RemoveDataGridView(i);
+                p = null;
+            }
         }
 
         public void LoadPointeuse()
         {
-            dgv_pointeuse.Rows.Clear();
+            object_pointeuse.ClearDataGridView(true);
             if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count < 1 : true)
             {
                 Societe s = SocieteBLL.ReturnSociete();
@@ -101,8 +103,7 @@ namespace ZK_Lymytz
             }
             foreach (Pointeuse p in Constantes.POINTEUSES)
             {
-                ObjectThread o = new ObjectThread(dgv_pointeuse);
-                o.WriteDataGridView(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif });
+                AddPointeuse(p);
             }
             ResetDataPointeuse();
             Setting i = SettingBLL.ReturnSetting();
@@ -157,6 +158,7 @@ namespace ZK_Lymytz
             currentPointeuse.Port = p.Port;
             currentPointeuse.Societe = p.Societe;
             currentPointeuse.Zkemkeeper = p.Zkemkeeper;
+            currentPointeuse.MultiSociete = p.MultiSociete;
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -343,11 +345,11 @@ namespace ZK_Lymytz
             activerToolStripMenuItem.Image = Constantes.ACTIVE ? global::ZK_Lymytz.Properties.Resources.no_vue : global::ZK_Lymytz.Properties.Resources.vue;
             if (Constantes.ACTIVE)
             {
-                Fonctions.OpenForm();
+                Utils.OpenForm();
             }
             else
             {
-                Fonctions.CloseForm();
+                Utils.CloseForm();
             }
         }
 
@@ -431,7 +433,7 @@ namespace ZK_Lymytz
             Constantes.ACTIVE = false;
             activerToolStripMenuItem.Text = Constantes.ACTIVE ? Mots.Cacher : Mots.Afficher;
             activerToolStripMenuItem.Image = Constantes.ACTIVE ? global::ZK_Lymytz.Properties.Resources.no_vue : global::ZK_Lymytz.Properties.Resources.vue;
-            Fonctions.CloseForm();
+            Utils.CloseForm();
             this.Hide();
         }
 
@@ -471,62 +473,38 @@ namespace ZK_Lymytz
             }
         }
 
-        private void dgv_pointeuse_SelectionChanged(int pos)
-        {
-            try
-            {
-                if (dgv_pointeuse.Rows.Count > 0 && pos < dgv_pointeuse.Rows.Count && pos > -1)
-                {
-                    if (dgv_pointeuse.Rows[pos].Cells["id"].Value != null)
-                    {
-                        Int32 id = (Int32)dgv_pointeuse.Rows[pos].Cells["id"].Value;
-                        if (id > 0)
-                        {
-                            Pointeuse f = PointeuseBLL.OneById(id);
-                            Populate(f);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception(ex);
-            }
-        }
-
         private void dgv_pointeuse_MouseDown(object sender, MouseEventArgs e)
         {
             DataGridView.HitTestInfo info = dgv_pointeuse.HitTest(e.X, e.Y); //get info
             int pos = dgv_pointeuse.HitTest(e.X, e.Y).RowIndex;
             if (pos > -1)
             {
-                switch (e.Button)
+                if (dgv_pointeuse.Rows[pos].Cells["id"].Value != null)
                 {
-                    case MouseButtons.Right:
+                    Int32 id = (Int32)dgv_pointeuse.Rows[pos].Cells["id"].Value;
+                    if (id > 0)
+                    {
+                        Pointeuse f = Constantes.POINTEUSES.Find(x => x.Id == id);
+                        switch (e.Button)
                         {
-                            ResetDataPointeuse();
-                            dgv_pointeuse.Rows[pos].Selected = true; //Select the row
-                            if (dgv_pointeuse.Rows[pos].Cells["id"] != null ? dgv_pointeuse.Rows[pos].Cells["id"].Value != null : false)
-                            {
-                                Int32 id = (Int32)dgv_pointeuse.Rows[pos].Cells["id"].Value;
-                                if (id > 0)
+                            case MouseButtons.Right:
                                 {
-                                    Pointeuse f = PointeuseBLL.OneById(id);
+                                    ResetDataPointeuse();
+                                    dgv_pointeuse.Rows[pos].Selected = true; //Select the row
                                     Populate(f);
-
                                     tsmi_active.Text = f.Actif ? "Désactiver" : "Activer";
                                     tsmi_active.Image = f.Actif ? global::ZK_Lymytz.Properties.Resources.no_vue : global::ZK_Lymytz.Properties.Resources.vue;
                                 }
-                            }
+                                break;
+                            default:
+                                Populate(f);
+                                break;
                         }
-                        break;
-                    default:
-                        dgv_pointeuse_SelectionChanged(pos);
-                        break;
-                }
-                if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
-                {
-                    Utils.WriteLog("Pointeuse " + currentPointeuse.Ip + " selectionnée");
+                        if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+                        {
+                            Utils.WriteLog("Pointeuse " + currentPointeuse.Ip + " selectionnée");
+                        }
+                    }
                 }
             }
         }
@@ -559,31 +537,25 @@ namespace ZK_Lymytz
         {
             if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
             {
-                Appareil z = Utils.ReturnAppareil(currentPointeuse);
-                Utils.VerifyZkemkeeper_(ref z, ref currentPointeuse, this);
-                if (currentPointeuse.Connecter)
+                if (Constantes.FORM_UPD_POINTEUSE == null)
                 {
-                    if (Constantes.FORM_UPD_POINTEUSE == null)
-                    {
-                        Form_Pointeuse f = new Form_Pointeuse(currentPointeuse);
-                        f.Text = "Modifier Appareil : " + currentPointeuse.Ip;
-                        Constantes.FORM_UPD_POINTEUSE = f;
-                        f.Show();
-                        Utils.addFrom("Form_Pointeuse_U");
-                    }
-                    else
-                    {
-                        if (Constantes.FORM_UPD_POINTEUSE.pointeuse.Id != currentPointeuse.Id)
-                        {
-                            Utils.WriteLog("Vous avez ouvert une page de modification sur l'appareil " + Constantes.FORM_UPD_POINTEUSE.pointeuse.Ip + "....Terminer d'abord le traitement de cet appareil");
-                            return;
-                        }
-
-                        Constantes.FORM_UPD_POINTEUSE.WindowState = FormWindowState.Normal;
-                        Constantes.FORM_UPD_POINTEUSE.BringToFront();
-                    }
-                    Utils.WriteLog("Ouverture page (Modification Appareil : " + currentPointeuse.Ip + ")");
+                    Form_Pointeuse f = new Form_Pointeuse(currentPointeuse);
+                    f.Text = "Modifier Appareil : " + currentPointeuse.Ip;
+                    Constantes.FORM_UPD_POINTEUSE = f;
+                    f.Show();
+                    Utils.addFrom("Form_Pointeuse_U");
                 }
+                else
+                {
+                    if (Constantes.FORM_UPD_POINTEUSE.pointeuse.Id != currentPointeuse.Id)
+                    {
+                        Utils.WriteLog("Vous avez ouvert une page de modification sur l'appareil " + Constantes.FORM_UPD_POINTEUSE.pointeuse.Ip + "....Terminer d'abord le traitement de cet appareil");
+                        return;
+                    }
+                    Constantes.FORM_UPD_POINTEUSE.WindowState = FormWindowState.Normal;
+                    Constantes.FORM_UPD_POINTEUSE.BringToFront();
+                }
+                Utils.WriteLog("Ouverture page (Modification Appareil : " + currentPointeuse.Ip + ")");
             }
             else
             {
@@ -742,6 +714,7 @@ namespace ZK_Lymytz
                     {
                         currentPointeuse.Connecter = false;
                         currentPointeuse.IMachine = 1;
+                        currentPointeuse.Zkemkeeper = null;
 
                         Utils.WriteLog("-- Déconnexion de l'appareil : " + currentPointeuse.Ip + " effectuée");
                         Constantes.POINTEUSES.Find(x => x.Id == currentPointeuse.Id).Zkemkeeper = null;
@@ -804,9 +777,8 @@ namespace ZK_Lymytz
 
         private void tsb_rattach_Click(object sender, EventArgs e)
         {
-            Utils.WriteLog("Début du rattachement des appareils");
-            Utils.SetZkemkeeper();
-            Utils.WriteLog("Fin du rattachement des appareils");
+            Utils.WriteLog("Début du rattachement des logs des appareils");
+            Fonctions.LoadFileTamponPointeuses(1, true);
         }
 
         private void tsb_stop_Click(object sender, EventArgs e)
@@ -819,7 +791,7 @@ namespace ZK_Lymytz
                     Utils.WriteLog("Demande d'arret du service de l'appareil " + currentPointeuse.Ip);
                     if (Messages.Confirmation("arreter le service") == System.Windows.Forms.DialogResult.Yes)
                     {
-                        z.Deconnect();
+                        z.StopOneDirect();
                         Utils.DestroyZkemkeeper(currentPointeuse);
                         currentPointeuse.Zkemkeeper = null;
                         UpdatePointeuse(currentPointeuse);
@@ -1142,6 +1114,166 @@ namespace ZK_Lymytz
             {
                 Constantes.FORM_PRESENCE.WindowState = FormWindowState.Normal;
                 Constantes.FORM_PRESENCE.BringToFront();
+            }
+        }
+
+        private void pingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Constantes.FORM_VIEW_LOG == null)
+            {
+                Form_ViewLog f = new Form_ViewLog();
+                f.Show();
+                Constantes.FORM_VIEW_LOG = f;
+                Utils.WriteLog("Ouverture page (Viewer Ping)");
+            }
+            else
+            {
+                Constantes.FORM_VIEW_LOG.WindowState = FormWindowState.Normal;
+                Constantes.FORM_VIEW_LOG.BringToFront();
+            }
+        }
+
+        private void dgv_pointeuse_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewCell cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[0];
+            if ((e.ColumnIndex == this.dgv_pointeuse.Columns["icon"].Index) && e.Value != null)
+            {
+                Pointeuse po = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(cell.Value));
+                cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if (po != null ? (po.Logs != null ? po.Logs.Count > 0 : false) : false)
+                    cell.ToolTipText = "Fichier tampon de cet appareil est chargé";
+                else
+                    cell.ToolTipText = "Fichier tampon de cet appareil n'est pas chargé";
+            }
+        }
+
+        private void chargerFichierTamponToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+            {
+                Utils.WriteLog("Demande de chargement du fichier tampon de la pointeuse " + currentPointeuse.Ip + "");
+                if (Messages.Confirmation("charger le fichier tampon") == System.Windows.Forms.DialogResult.Yes)
+                {
+                    currentPointeuse.Logs.Clear();
+                    UpdatePointeuse(currentPointeuse);
+                    Utils.WriteLog("-- Début du chargerment du fichier tampon de la pointeuse " + currentPointeuse.Ip + "");
+                    Fonctions.LoadFileTamponPointeuse(currentPointeuse, 1, true);
+                }
+                else
+                {
+                    Utils.WriteLog("-- Chargement du fichier tampon de la pointeuse " + currentPointeuse.Ip + " annulée");
+                }
+            }
+            else
+            {
+                Utils.WriteLog("Vous devez selectionner l'appareil");
+            }
+        }
+
+        private void recherchePointeuseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Utils.WriteLog("Demande de recherche des pointeuses du réseau");
+            if (Messages.Question("Cela peut prendre du temps... Continuer?") == System.Windows.Forms.DialogResult.Yes)
+            {
+                Thread thread = new Thread(new ThreadStart(SearchAdresseByPing));
+                thread.Start();
+            }
+            else
+            {
+                Utils.WriteLog("-- Recherche des pointeuses du réseau annulée");
+            }
+        }
+
+        public void SearchAdresseByPing()
+        {
+            string hôte = Dns.GetHostName();
+            IPHostEntry iphe = Dns.Resolve(hôte);
+            string ip = iphe.AddressList[0].ToString();
+            if (ip != null ? ip.Trim().Length > 0 : false)
+            {
+                string subIp = "";
+                for (int i = ip.Length; i > 1; i--)
+                {
+                    if (ip[i - 1] == '.')
+                    {
+                        subIp = ip.Substring(0, i);
+                        break;
+                    }
+                }
+                string[] debut = null;
+                string[] fin = null;
+                if (Utils.StringToAdress(subIp + "1", ref debut) && Utils.StringToAdress(subIp + "255", ref fin))
+                {
+                    string file = Chemins.CheminDatabase() + "Adresses.txt";
+                    if (File.Exists(file))
+                        File.Delete(file);
+                    List<string> adresses = Utils.Adresses(debut, fin);
+                    List<string> pointeuses = new List<string>();
+                    foreach (string adresse in adresses)
+                    {
+                        Appareil z = null;
+                        if (Utils.PingAdresse(adresse, ref z))
+                        {
+                            Logs.WriteTxt(file, adresse);
+                            if (!pointeuses.Contains(adresse))
+                                pointeuses.Add(adresse);
+                        }
+                    }
+                    Utils.WriteLog("-- Recherche des pointeuses du réseau terminée (" + pointeuses.Count + " pointeuse(s) trouvée(s))");
+                }
+            }
+        }
+
+        private void voirResultatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string file = Chemins.CheminDatabase() + "Adresses.txt";
+            List<string> adresses = new List<string>();
+            if (File.Exists(file))
+                adresses = Logs.ReadTxt(file);
+            if (Constantes.FORM_FIND_POINTEUSE == null)
+            {
+                Form_Search_Pointeuse f = new Form_Search_Pointeuse(adresses);
+                f.Show();
+                Constantes.FORM_FIND_POINTEUSE = f;
+                Utils.WriteLog("Ouverture page (Recherche pointeuse)");
+                Utils.addFrom("Form_Search_Pointeuse");
+            }
+            else
+            {
+                Constantes.FORM_FIND_POINTEUSE.adresses = adresses;
+                Constantes.FORM_FIND_POINTEUSE.LoadAdresse();
+                Constantes.FORM_FIND_POINTEUSE.WindowState = FormWindowState.Normal;
+                Constantes.FORM_FIND_POINTEUSE.BringToFront();
+            }
+        }
+
+        private void pingToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (Constantes.FORM_PING_APPAREIL == null)
+            {
+                Form_Ping_Appareil f = new Form_Ping_Appareil();
+                f.Show();
+                Constantes.FORM_PING_APPAREIL = f;
+                Utils.WriteLog("Ouverture page (Ping Appareil)");
+                Utils.addFrom("Form_Ping_Appareil");
+            }
+            else
+            {
+                Constantes.FORM_PING_APPAREIL.WindowState = FormWindowState.Normal;
+                Constantes.FORM_PING_APPAREIL.BringToFront();
+            }
+        }
+
+        private void connexionExterneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+            {
+                Dial_Connet_Externe f = new Dial_Connet_Externe(currentPointeuse);
+                f.ShowDialog();
+            }
+            else
+            {
+                Utils.WriteLog("Vous devez selectionner l'appareil");
             }
         }
     }

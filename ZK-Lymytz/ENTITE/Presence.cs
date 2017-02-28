@@ -13,12 +13,53 @@ namespace ZK_Lymytz.ENTITE
         private DateTime heure_debut;
         private DateTime date_fin;
         private DateTime heure_fin;
+        private DateTime date_fin_prevu;
+        private DateTime heure_fin_prevu;
         private DateTime duree_pause;
         private DateTime marge_approuve;
         private double total_presence;
         private double total_supplementaire;
         private bool valider;
         private bool supplementaire;
+        private List<Pointage> pointages = new List<Pointage>();
+        private List<string> pointeuses = new List<string>();
+
+        public List<string> Pointeuses
+        {
+            get { return pointeuses; }
+            set { pointeuses = value; }
+        }
+
+        internal List<Pointage> Pointages
+        {
+            get { return pointages; }
+            set { pointages = value; }
+        }
+
+        public DateTime DateFinPrevu
+        {
+            get { return date_fin_prevu; }
+            set { date_fin_prevu = value; }
+        }
+
+        public DateTime HeureFinPrevu
+        {
+            get { return heure_fin_prevu; }
+            set { heure_fin_prevu = value; }
+        }
+
+        public bool Chevauche
+        {
+            get
+            {
+                if (DateDebut != null && DateFin != null)
+                {
+                    return DateFin > DateDebut;
+                }
+                return false;
+            }
+            set { }
+        }
 
         public double TotalSupplementaire
         {

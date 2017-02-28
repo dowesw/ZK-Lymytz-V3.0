@@ -46,6 +46,18 @@ namespace ZK_Lymytz.BLL
             }
         }
 
+        public static Presence OneByDate(Employe empl, DateTime dateDebut, DateTime dateFin, DateTime dateFinPrevu)
+        {
+            try
+            {
+                return PresenceDAO.getOneByDates(empl, dateDebut, dateFin, dateFinPrevu);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static bool Insert(Presence bean)
         {
             try
@@ -86,7 +98,19 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PresenceDAO.getList(query);
+                return PresenceDAO.List(query);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static List<Presence> List(string query, string queryCount)
+        {
+            try
+            {
+                return PresenceDAO.List(query, queryCount);
             }
             catch (Exception ex)
             {

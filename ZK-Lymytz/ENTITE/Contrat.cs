@@ -8,12 +8,19 @@ namespace ZK_Lymytz.ENTITE
     {
         private long id;
         private string reference;
+        private bool horaire_dynamique;
         private Calendrier calendrier = new Calendrier();
 
         public long Id
         {
             get { return id; }
             set { id = value; }
+        }
+
+        public bool HoraireDynamique
+        {
+            get { return horaire_dynamique; }
+            set { horaire_dynamique = value; }
         }
 
         public string Reference
@@ -31,7 +38,7 @@ namespace ZK_Lymytz.ENTITE
         private string typeTranche;
         public string TypeTranche
         {
-            get { return typeTranche != null ? typeTranche : "JN"; }
+            get { return typeTranche != null ? (typeTranche.Trim().Length > 0 ? typeTranche : "JN") : "JN"; }
             set { typeTranche = value; }
         }
     }

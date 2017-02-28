@@ -32,6 +32,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_niveau = new System.Windows.Forms.TabPage();
             this.grp_preference = new System.Windows.Forms.GroupBox();
+            this.dtp_time_synchro_auto = new System.Windows.Forms.DateTimePicker();
             this.grp_path_photo = new System.Windows.Forms.GroupBox();
             this.lnk_default = new System.Windows.Forms.LinkLabel();
             this.btn_open = new System.Windows.Forms.Button();
@@ -40,6 +41,7 @@
             this.chk_auto_backup = new System.Windows.Forms.CheckBox();
             this.chk_add_enroller_auto = new System.Windows.Forms.CheckBox();
             this.chk_rattach = new System.Windows.Forms.CheckBox();
+            this.chk_connect_synchro = new System.Windows.Forms.CheckBox();
             this.chk_save_delete = new System.Windows.Forms.CheckBox();
             this.chk_auto_synchro = new System.Windows.Forms.CheckBox();
             this.chk_connect = new System.Windows.Forms.CheckBox();
@@ -80,6 +82,7 @@
             this.lb_adresse = new System.Windows.Forms.Label();
             this.tab_secure = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lb_new_repassword_log = new System.Windows.Forms.Label();
             this.btn_new_repassword_log = new System.Windows.Forms.Button();
             this.btn_new_password_log = new System.Windows.Forms.Button();
             this.btn_old_password_log = new System.Windows.Forms.Button();
@@ -90,6 +93,7 @@
             this.txt_old_password_log = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.grp_password_pc = new System.Windows.Forms.GroupBox();
+            this.lb_new_repassword_pc = new System.Windows.Forms.Label();
             this.btn_new_repassword_pc = new System.Windows.Forms.Button();
             this.btn_new_password_pc = new System.Windows.Forms.Button();
             this.btn_old_password_pc = new System.Windows.Forms.Button();
@@ -106,8 +110,7 @@
             this.btn_save_users = new System.Windows.Forms.Button();
             this.ofd_open = new System.Windows.Forms.OpenFileDialog();
             this.fbd_search = new System.Windows.Forms.FolderBrowserDialog();
-            this.lb_new_repassword_pc = new System.Windows.Forms.Label();
-            this.lb_new_repassword_log = new System.Windows.Forms.Label();
+            this.chk_use_tampon_log = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tab_niveau.SuspendLayout();
             this.grp_preference.SuspendLayout();
@@ -156,10 +159,13 @@
             // 
             // grp_preference
             // 
+            this.grp_preference.Controls.Add(this.dtp_time_synchro_auto);
             this.grp_preference.Controls.Add(this.grp_path_photo);
+            this.grp_preference.Controls.Add(this.chk_use_tampon_log);
             this.grp_preference.Controls.Add(this.chk_auto_backup);
             this.grp_preference.Controls.Add(this.chk_add_enroller_auto);
             this.grp_preference.Controls.Add(this.chk_rattach);
+            this.grp_preference.Controls.Add(this.chk_connect_synchro);
             this.grp_preference.Controls.Add(this.chk_save_delete);
             this.grp_preference.Controls.Add(this.chk_auto_synchro);
             this.grp_preference.Controls.Add(this.chk_connect);
@@ -171,6 +177,16 @@
             this.grp_preference.TabIndex = 1;
             this.grp_preference.TabStop = false;
             this.grp_preference.Text = "Préference";
+            // 
+            // dtp_time_synchro_auto
+            // 
+            this.dtp_time_synchro_auto.Enabled = false;
+            this.dtp_time_synchro_auto.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtp_time_synchro_auto.Location = new System.Drawing.Point(377, 166);
+            this.dtp_time_synchro_auto.Name = "dtp_time_synchro_auto";
+            this.dtp_time_synchro_auto.ShowUpDown = true;
+            this.dtp_time_synchro_auto.Size = new System.Drawing.Size(70, 20);
+            this.dtp_time_synchro_auto.TabIndex = 10;
             // 
             // grp_path_photo
             // 
@@ -229,7 +245,7 @@
             // chk_auto_backup
             // 
             this.chk_auto_backup.AutoSize = true;
-            this.chk_auto_backup.Location = new System.Drawing.Point(22, 158);
+            this.chk_auto_backup.Location = new System.Drawing.Point(439, 50);
             this.chk_auto_backup.Name = "chk_auto_backup";
             this.chk_auto_backup.Size = new System.Drawing.Size(257, 17);
             this.chk_auto_backup.TabIndex = 3;
@@ -239,7 +255,7 @@
             // chk_add_enroller_auto
             // 
             this.chk_add_enroller_auto.AutoSize = true;
-            this.chk_add_enroller_auto.Location = new System.Drawing.Point(22, 130);
+            this.chk_add_enroller_auto.Location = new System.Drawing.Point(22, 108);
             this.chk_add_enroller_auto.Name = "chk_add_enroller_auto";
             this.chk_add_enroller_auto.Size = new System.Drawing.Size(289, 17);
             this.chk_add_enroller_auto.TabIndex = 3;
@@ -249,17 +265,28 @@
             // chk_rattach
             // 
             this.chk_rattach.AutoSize = true;
-            this.chk_rattach.Location = new System.Drawing.Point(22, 103);
+            this.chk_rattach.Location = new System.Drawing.Point(22, 50);
             this.chk_rattach.Name = "chk_rattach";
             this.chk_rattach.Size = new System.Drawing.Size(219, 17);
             this.chk_rattach.TabIndex = 3;
             this.chk_rattach.Text = "Rattachement des appareils automatique";
             this.chk_rattach.UseVisualStyleBackColor = true;
             // 
+            // chk_connect_synchro
+            // 
+            this.chk_connect_synchro.AutoSize = true;
+            this.chk_connect_synchro.Location = new System.Drawing.Point(24, 169);
+            this.chk_connect_synchro.Name = "chk_connect_synchro";
+            this.chk_connect_synchro.Size = new System.Drawing.Size(292, 17);
+            this.chk_connect_synchro.TabIndex = 3;
+            this.chk_connect_synchro.Text = "Verifier la connexion puis synchronisation automatique à \r\n";
+            this.chk_connect_synchro.UseVisualStyleBackColor = true;
+            this.chk_connect_synchro.CheckedChanged += new System.EventHandler(this.chk_connect_synchro_CheckedChanged);
+            // 
             // chk_save_delete
             // 
             this.chk_save_delete.AutoSize = true;
-            this.chk_save_delete.Location = new System.Drawing.Point(22, 76);
+            this.chk_save_delete.Location = new System.Drawing.Point(23, 138);
             this.chk_save_delete.Name = "chk_save_delete";
             this.chk_save_delete.Size = new System.Drawing.Size(333, 17);
             this.chk_save_delete.TabIndex = 3;
@@ -269,17 +296,17 @@
             // chk_auto_synchro
             // 
             this.chk_auto_synchro.AutoSize = true;
-            this.chk_auto_synchro.Location = new System.Drawing.Point(22, 48);
+            this.chk_auto_synchro.Location = new System.Drawing.Point(22, 79);
             this.chk_auto_synchro.Name = "chk_auto_synchro";
-            this.chk_auto_synchro.Size = new System.Drawing.Size(234, 17);
+            this.chk_auto_synchro.Size = new System.Drawing.Size(302, 17);
             this.chk_auto_synchro.TabIndex = 4;
-            this.chk_auto_synchro.Text = "Synchronisation des opérations automatique";
+            this.chk_auto_synchro.Text = "Synchronisation des opérations automatique au démarrage";
             this.chk_auto_synchro.UseVisualStyleBackColor = true;
             // 
             // chk_connect
             // 
             this.chk_connect.AutoSize = true;
-            this.chk_connect.Location = new System.Drawing.Point(487, 19);
+            this.chk_connect.Location = new System.Drawing.Point(439, 19);
             this.chk_connect.Name = "chk_connect";
             this.chk_connect.Size = new System.Drawing.Size(152, 17);
             this.chk_connect.TabIndex = 5;
@@ -703,6 +730,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mot de passe logiciel";
             // 
+            // lb_new_repassword_log
+            // 
+            this.lb_new_repassword_log.AutoSize = true;
+            this.lb_new_repassword_log.ForeColor = System.Drawing.Color.Red;
+            this.lb_new_repassword_log.Location = new System.Drawing.Point(468, 70);
+            this.lb_new_repassword_log.Name = "lb_new_repassword_log";
+            this.lb_new_repassword_log.Size = new System.Drawing.Size(61, 13);
+            this.lb_new_repassword_log.TabIndex = 18;
+            this.lb_new_repassword_log.Text = "Pas correct";
+            this.lb_new_repassword_log.Visible = false;
+            // 
             // btn_new_repassword_log
             // 
             this.btn_new_repassword_log.BackColor = System.Drawing.Color.Transparent;
@@ -810,6 +848,17 @@
             this.grp_password_pc.TabIndex = 15;
             this.grp_password_pc.TabStop = false;
             this.grp_password_pc.Text = "Mot de passe ordinateur";
+            // 
+            // lb_new_repassword_pc
+            // 
+            this.lb_new_repassword_pc.AutoSize = true;
+            this.lb_new_repassword_pc.ForeColor = System.Drawing.Color.Red;
+            this.lb_new_repassword_pc.Location = new System.Drawing.Point(468, 70);
+            this.lb_new_repassword_pc.Name = "lb_new_repassword_pc";
+            this.lb_new_repassword_pc.Size = new System.Drawing.Size(61, 13);
+            this.lb_new_repassword_pc.TabIndex = 18;
+            this.lb_new_repassword_pc.Text = "Pas correct";
+            this.lb_new_repassword_pc.Visible = false;
             // 
             // btn_new_repassword_pc
             // 
@@ -951,27 +1000,15 @@
             // 
             this.ofd_open.FileName = "openFileDialog1";
             // 
-            // lb_new_repassword_pc
+            // chk_use_tampon_log
             // 
-            this.lb_new_repassword_pc.AutoSize = true;
-            this.lb_new_repassword_pc.ForeColor = System.Drawing.Color.Red;
-            this.lb_new_repassword_pc.Location = new System.Drawing.Point(468, 70);
-            this.lb_new_repassword_pc.Name = "lb_new_repassword_pc";
-            this.lb_new_repassword_pc.Size = new System.Drawing.Size(61, 13);
-            this.lb_new_repassword_pc.TabIndex = 18;
-            this.lb_new_repassword_pc.Text = "Pas correct";
-            this.lb_new_repassword_pc.Visible = false;
-            // 
-            // lb_new_repassword_log
-            // 
-            this.lb_new_repassword_log.AutoSize = true;
-            this.lb_new_repassword_log.ForeColor = System.Drawing.Color.Red;
-            this.lb_new_repassword_log.Location = new System.Drawing.Point(468, 70);
-            this.lb_new_repassword_log.Name = "lb_new_repassword_log";
-            this.lb_new_repassword_log.Size = new System.Drawing.Size(61, 13);
-            this.lb_new_repassword_log.TabIndex = 18;
-            this.lb_new_repassword_log.Text = "Pas correct";
-            this.lb_new_repassword_log.Visible = false;
+            this.chk_use_tampon_log.AutoSize = true;
+            this.chk_use_tampon_log.Location = new System.Drawing.Point(439, 79);
+            this.chk_use_tampon_log.Name = "chk_use_tampon_log";
+            this.chk_use_tampon_log.Size = new System.Drawing.Size(198, 17);
+            this.chk_use_tampon_log.TabIndex = 3;
+            this.chk_use_tampon_log.Text = "Utiliser des fichiers tampons des logs";
+            this.chk_use_tampon_log.UseVisualStyleBackColor = true;
             // 
             // Form_Setting
             // 
@@ -1099,5 +1136,8 @@
         private System.Windows.Forms.Button btn_old_password_pc;
         private System.Windows.Forms.Label lb_new_repassword_log;
         private System.Windows.Forms.Label lb_new_repassword_pc;
+        private System.Windows.Forms.CheckBox chk_connect_synchro;
+        private System.Windows.Forms.DateTimePicker dtp_time_synchro_auto;
+        private System.Windows.Forms.CheckBox chk_use_tampon_log;
     }
 }

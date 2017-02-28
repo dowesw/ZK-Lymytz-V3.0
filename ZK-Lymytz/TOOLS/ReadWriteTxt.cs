@@ -32,6 +32,46 @@ namespace ZK_Lymytz.TOOLS
             return lignes;
         }
 
+        public List<string> ReadRow(DateTime dd, DateTime df)
+        {
+            List<string> lignes = new List<string>();
+            DateTime _last = DateTime.Now;
+
+            while ((CurrLine = Reader.ReadLine()) != null)
+            {
+                bool add = true;
+                if (CurrLine != null ? CurrLine.Trim().Length > 10 : false)
+                {
+                    var value = CurrLine.Substring(0, 10);
+                    try
+                    {
+                        DateTime date = Convert.ToDateTime(value);
+                        if (dd > date || date > df)
+                        {
+                            add = false;
+                        }
+                    }
+                    catch (Exception ex) { }
+                }
+                if (add)
+                {
+                    var value = CurrLine.Substring(0, 10);
+                    try
+                    {
+                        DateTime date = Convert.ToDateTime(value);
+                        if (_last != date)
+                        {
+                            lignes.Add("---------------------------------------------------------------------------------------- " + date.ToShortDateString() + " -----------------------------------------------------------------------------------------");
+                            _last = date;
+                        }
+                    }
+                    catch (Exception ex) { }
+                    lignes.Add(CurrLine);
+                }
+            }
+            return lignes;
+        }
+
         // Propagate Dispose to StreamReader
         public void Dispose()
         {

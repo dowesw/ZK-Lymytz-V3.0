@@ -11,20 +11,23 @@ namespace ZK_Lymytz.DAO
 {
     public class UsersDAO
     {
-        static string chemin = Chemins.getCheminUsers();
+        static string chemin = Chemins.CheminUsers();
         static List<Users> listeUsers = new List<Users>();
 
-        public static bool getCreateUsers(Users user)
+        public static bool CreateUsers(Users user)
         {
             try
             {
-                using (RegistryKey Nkey = Registry.CurrentUser)
-                {
-                    getCreateUsers(user, Nkey);
-                }
                 using (RegistryKey Nkey = Registry.LocalMachine)
                 {
-                    getCreateUsers(user, Nkey);
+                    CreateUsers(user, Nkey);
+                }
+                if (Utils.Is64BitOperatingSystem())
+                {
+                    using (RegistryKey Nkey = Registry.CurrentUser)
+                    {
+                        CreateUsers(user, Nkey);
+                    }
                 }
                 return true;
             }
@@ -34,7 +37,7 @@ namespace ZK_Lymytz.DAO
                 return false;
             }
         }
-        public static bool getCreateUsers(Users user, RegistryKey Nkey)
+        public static bool CreateUsers(Users user, RegistryKey Nkey)
         {
             try
             {
@@ -60,28 +63,16 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Users getReturnUsers()
+        public static Users ReturnUsers()
         {
-            RegistryKey Nkey = Registry.CurrentUser;
+            RegistryKey Nkey = Registry.LocalMachine;
             try
             {
-                Users user = getReturnUsers(Nkey);
+                Users user = ReturnUsers(Nkey);
                 if (user != null ? (user.Name != null ? user.Name.Trim().Length < 1 : true) : true)
                 {
-                    RegistryKey Nkey_ = Registry.LocalMachine;
-                    try
-                    {
-                        user = getReturnUsers(Nkey_);
-                    }
-                    catch (Exception e)
-                    {
-                        Messages.Exception("UsersDAO (getReturnUsers) ", e);
-                        return null;
-                    }
-                    finally
-                    {
-                        Nkey_.Close();
-                    }
+                    Nkey = Registry.CurrentUser;
+                    user = ReturnUsers(Nkey);
                 }
                 return user;
             }
@@ -96,7 +87,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Users getReturnUsers(RegistryKey Nkey)
+        public static Users ReturnUsers(RegistryKey Nkey)
         {
             try
             {
@@ -122,7 +113,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getDestroyUsers()
+        public static bool DestroyUsers()
         {
             RegistryKey Nkey = Registry.CurrentUser;
             try
@@ -177,7 +168,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -212,7 +203,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

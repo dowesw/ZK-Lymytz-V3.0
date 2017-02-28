@@ -16,8 +16,17 @@ namespace ZK_Lymytz.ENTITE
         private string emplacement;
         private bool connecter;
         private bool actif;
-        private int societe;
+        private Int64 societe;
+        private bool multiSociete;
         private Appareil zkemkeeper = null;
+        private List<IOEMDevice> logs = new List<IOEMDevice>();
+        private bool tampon, fileLoad;
+
+        public Pointeuse() { }
+
+        public Pointeuse(int id) { this.id = id; }
+
+        public Pointeuse(string ip) { this.ip = ip; }
 
         internal Appareil Zkemkeeper
         {
@@ -25,7 +34,25 @@ namespace ZK_Lymytz.ENTITE
             set { zkemkeeper = value; }
         }
 
-        public int Societe
+        public List<IOEMDevice> Logs
+        {
+            get { return logs; }
+            set { logs = value; }
+        }
+
+        public bool FileLoad
+        {
+            get { return fileLoad; }
+            set { fileLoad = value; }
+        }
+
+        public bool MultiSociete
+        {
+            get { return multiSociete; }
+            set { multiSociete = value; }
+        }
+
+        public Int64 Societe
         {
             get { return societe; }
             set { societe = value; }
@@ -69,7 +96,7 @@ namespace ZK_Lymytz.ENTITE
 
         public bool Connecter
         {
-            get { return zkemkeeper!=null; }
+            get { return zkemkeeper != null; }
             set { connecter = value; }
         }
 
@@ -79,7 +106,27 @@ namespace ZK_Lymytz.ENTITE
             set { actif = value; }
         }
 
-        public static Pointeuse Defaut(){
+        public bool Tampon
+        {
+            get { return tampon; }
+            set { tampon = value; }
+        }
+
+        public System.Drawing.Bitmap Icon()
+        {
+            if (logs != null ? logs.Count > 0 : false)
+            {
+                if (fileLoad)
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources._in, 16, 16);
+                else
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.in_out, 16, 16);
+
+            }
+            return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources._out, 16, 16);
+        }
+
+        public static Pointeuse Defaut()
+        {
             Pointeuse p = new Pointeuse();
             p.id = 3;
             p.Ip = "192.168.30.236";

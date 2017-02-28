@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using ZK_Lymytz.BLL;
 using ZK_Lymytz.TOOLS;
@@ -11,11 +12,11 @@ using ZK_Lymytz.ENTITE;
 
 namespace ZK_Lymytz.TOOLS
 {
-    class Logs
+    public class Logs
     {
         public static void WriteCsv(IOEMDevice iO)
         {
-            string fileName = TOOLS.Chemins.getCheminDatabase() + "LogRecord.csv";
+            string fileName = TOOLS.Chemins.CheminDatabase() + "LogRecord.csv";
             WriteCsv(fileName, iO);
         }
 
@@ -83,7 +84,7 @@ namespace ZK_Lymytz.TOOLS
 
         public static List<IOEMDevice> ReadCsv()
         {
-            return ReadCsv(TOOLS.Chemins.getCheminDatabase() + "LogRecord.csv");
+            return ReadCsv(TOOLS.Chemins.CheminDatabase() + "LogRecord.csv");
         }
 
         public static List<IOEMDevice> ReadCsv(string fileName)
@@ -123,7 +124,7 @@ namespace ZK_Lymytz.TOOLS
 
         public static void WriteTxt(string message)
         {
-            string fileName = TOOLS.Chemins.getCheminDatabase() + "Log.txt";
+            string fileName = TOOLS.Chemins.CheminDatabase() + "Log.txt";
             WriteTxt(fileName, message);
         }
 
@@ -157,7 +158,12 @@ namespace ZK_Lymytz.TOOLS
 
         public static List<string> ReadTxt()
         {
-            return ReadTxt(TOOLS.Chemins.getCheminDatabase() + "Log.txt");
+            return ReadTxt(TOOLS.Chemins.CheminDatabase() + "Log.txt");
+        }
+
+        public static List<string> ReadTxt(DateTime dateDebut, DateTime dateFin)
+        {
+            return ReadTxt(TOOLS.Chemins.CheminDatabase() + "Log.txt", dateDebut, dateFin);
         }
 
         public static List<string> ReadTxt(string fileName)
@@ -173,6 +179,42 @@ namespace ZK_Lymytz.TOOLS
                 l = reader.ReadRow();
             }
             return l;
+        }
+
+        public static List<string> ReadTxt(string fileName, DateTime dateDebut, DateTime dateFin)
+        {
+            if (!File.Exists(fileName))
+            {
+                return new List<string>();
+            }
+
+            List<string> l = new List<string>();
+            using (TxtFileReader reader = new TxtFileReader(fileName))
+            {
+                l = reader.ReadRow(dateDebut, dateFin);
+            }
+            return l;
+        }
+
+        public static List<object[]> ReadEvenLog(string logName, string sourceName)
+        {
+            System.Diagnostics.EventLog events = new System.Diagnostics.EventLog();
+            events.Log = logName;
+            events.Source = sourceName;
+            events.MachineName = Chemins.machineName;
+            List<object[]> list = new List<object[]>();
+            if (System.Diagnostics.EventLog.SourceExists(events.Source))
+            {
+                foreach (EventLogEntry record in events.Entries)
+                {
+                    if (record.Source.Equals(sourceName))
+                    {
+                        object[] r = new object[] { record.TimeGenerated, record.TimeWritten, record.Message };
+                        list.Add(r);
+                    }
+                }
+            }
+            return list;
         }
 
     }

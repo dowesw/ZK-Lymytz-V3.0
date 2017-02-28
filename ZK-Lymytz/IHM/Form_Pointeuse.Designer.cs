@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Pointeuse));
             this.btn_appliquer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbtn_multi = new System.Windows.Forms.CheckBox();
             this.rbtn_non = new System.Windows.Forms.RadioButton();
             this.rbtn_oui = new System.Windows.Forms.RadioButton();
             this.txt_emplacement = new System.Windows.Forms.RichTextBox();
@@ -51,7 +52,7 @@
             this.btn_appliquer.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_appliquer.Image = global::ZK_Lymytz.Properties.Resources.save;
             this.btn_appliquer.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_appliquer.Location = new System.Drawing.Point(365, 271);
+            this.btn_appliquer.Location = new System.Drawing.Point(365, 241);
             this.btn_appliquer.Name = "btn_appliquer";
             this.btn_appliquer.Size = new System.Drawing.Size(100, 29);
             this.btn_appliquer.TabIndex = 3;
@@ -61,6 +62,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rbtn_multi);
             this.groupBox1.Controls.Add(this.rbtn_non);
             this.groupBox1.Controls.Add(this.rbtn_oui);
             this.groupBox1.Controls.Add(this.txt_emplacement);
@@ -73,12 +75,24 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(14, 12);
+            this.groupBox1.Location = new System.Drawing.Point(4, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(461, 253);
+            this.groupBox1.Size = new System.Drawing.Size(461, 235);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // rbtn_multi
+            // 
+            this.rbtn_multi.AutoSize = true;
+            this.rbtn_multi.Checked = true;
+            this.rbtn_multi.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rbtn_multi.Location = new System.Drawing.Point(344, 208);
+            this.rbtn_multi.Name = "rbtn_multi";
+            this.rbtn_multi.Size = new System.Drawing.Size(106, 19);
+            this.rbtn_multi.TabIndex = 12;
+            this.rbtn_multi.Text = "Multi Socièté ?";
+            this.rbtn_multi.UseVisualStyleBackColor = true;
             // 
             // rbtn_non
             // 
@@ -106,7 +120,7 @@
             // 
             // txt_emplacement
             // 
-            this.txt_emplacement.Location = new System.Drawing.Point(89, 134);
+            this.txt_emplacement.Location = new System.Drawing.Point(89, 70);
             this.txt_emplacement.Name = "txt_emplacement";
             this.txt_emplacement.Size = new System.Drawing.Size(362, 53);
             this.txt_emplacement.TabIndex = 9;
@@ -114,7 +128,7 @@
             // 
             // txt_description
             // 
-            this.txt_description.Location = new System.Drawing.Point(90, 64);
+            this.txt_description.Location = new System.Drawing.Point(89, 134);
             this.txt_description.Name = "txt_description";
             this.txt_description.Size = new System.Drawing.Size(361, 59);
             this.txt_description.TabIndex = 10;
@@ -149,7 +163,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 137);
+            this.label4.Location = new System.Drawing.Point(6, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(86, 15);
             this.label4.TabIndex = 3;
@@ -158,7 +172,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 67);
+            this.label3.Location = new System.Drawing.Point(6, 137);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 15);
             this.label3.TabIndex = 4;
@@ -188,13 +202,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(487, 303);
+            this.ClientSize = new System.Drawing.Size(466, 274);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btn_appliquer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(503, 342);
-            this.MinimumSize = new System.Drawing.Size(503, 342);
+            this.MaximumSize = new System.Drawing.Size(482, 313);
+            this.MinimumSize = new System.Drawing.Size(482, 313);
             this.Name = "Form_Pointeuse";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ajout Appareil";
@@ -221,5 +235,6 @@
         private System.Windows.Forms.RadioButton rbtn_non;
         private System.Windows.Forms.RadioButton rbtn_oui;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox rbtn_multi;
     }
 }

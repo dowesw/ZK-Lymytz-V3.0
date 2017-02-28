@@ -12,6 +12,14 @@ namespace ZK_Lymytz.DAO
 {
     class AgenceDAO
     {
+        private static Agence Return(NpgsqlDataReader lect)
+        {
+            Agence bean = new Agence();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Name = lect["designation"].ToString();
+            return bean;
+        }
+
         public static Agence getOneById(int id)
         {
             Agence bean = new Agence();
@@ -25,8 +33,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Name = lect["designation"].ToString();
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -38,7 +45,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -54,8 +61,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -67,7 +73,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

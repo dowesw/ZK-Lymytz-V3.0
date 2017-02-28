@@ -12,6 +12,16 @@ namespace ZK_Lymytz.DAO
 {
     class ParametreDAO
     {
+        private static Parametre Return(NpgsqlDataReader lect)
+        {
+            Parametre bean = new Parametre(); bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.PlanningDynamique = Convert.ToBoolean((lect["calcul_planning_dynamique"].ToString() != "") ? lect["calcul_planning_dynamique"].ToString() : "true");
+            bean.TimeMargeAvance = (DateTime)((lect["time_marge_avance"] != null) ? (!lect["time_marge_avance"].ToString().Trim().Equals("") ? lect["time_marge_avance"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0));
+            bean.TimeMargeAutorise = (DateTime)((lect["duree_retard_autorise"] != null) ? (!lect["duree_retard_autorise"].ToString().Trim().Equals("") ? lect["duree_retard_autorise"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0));
+            bean.TimeMargeRetard = (DateTime)((lect["time_marge_retard"] != null) ? (!lect["time_marge_retard"].ToString().Trim().Equals("") ? lect["time_marge_retard"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0));
+            return bean;
+        }
+
         public static Parametre getOneById(int id)
         {
             Parametre bean = new Parametre();
@@ -25,11 +35,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.PlanningDynamique = Convert.ToBoolean((lect["calcul_planning_dynamique"].ToString() != "") ? lect["calcul_planning_dynamique"].ToString() : "false");
-                        bean.TimeMargeAvance = (DateTime)((lect["time_marge_avance"] != null) ? (!lect["time_marge_avance"].ToString().Trim().Equals("") ? lect["time_marge_avance"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0));
-                        bean.TimeMargeAutorise = (DateTime)((lect["duree_retard_autorise"] != null) ? (!lect["duree_retard_autorise"].ToString().Trim().Equals("") ? lect["duree_retard_autorise"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0));
-                        bean.TimeMargeRetard = (DateTime)((lect["time_marge_retard"] != null) ? (!lect["time_marge_retard"].ToString().Trim().Equals("") ? lect["time_marge_retard"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0));
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -41,7 +47,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -58,11 +64,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.PlanningDynamique = Convert.ToBoolean((lect["calcul_planning_dynamique"].ToString() != "") ? lect["calcul_planning_dynamique"].ToString() : "false");
-                        bean.TimeMargeAvance = (DateTime)((lect["time_marge_avance"] != null) ? (!lect["time_marge_avance"].ToString().Trim().Equals("") ? lect["time_marge_avance"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 1, 0, 0));
-                        bean.TimeMargeAutorise = (DateTime)((lect["duree_retard_autorise"] != null) ? (!lect["duree_retard_autorise"].ToString().Trim().Equals("") ? lect["duree_retard_autorise"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 15, 0));
-                        bean.TimeMargeRetard = (DateTime)((lect["time_marge_retard"] != null) ? (!lect["time_marge_retard"].ToString().Trim().Equals("") ? lect["time_marge_retard"] : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0)) : new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 0, 0));
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -74,7 +76,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -103,7 +105,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

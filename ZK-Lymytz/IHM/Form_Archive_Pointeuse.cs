@@ -17,7 +17,7 @@ namespace ZK_Lymytz.IHM
     public partial class Form_Archive_Pointeuse : Form
     {
         Pointeuse currentPointeuse = new Pointeuse();
-        List<IOEMDevice> lIO = new List<IOEMDevice>(),lIO_ = new List<IOEMDevice>();
+        List<IOEMDevice> lIO = new List<IOEMDevice>(), lIO_ = new List<IOEMDevice>();
         string currentFile;
         bool bFile;
 
@@ -124,7 +124,7 @@ namespace ZK_Lymytz.IHM
             {
                 dgv_backup.Rows.Clear();
                 int i = 0;
-                string[] files = System.IO.Directory.GetFiles(Chemins.getCheminBackup(currentPointeuse.Ip), "*.csv");
+                string[] files = System.IO.Directory.GetFiles(Chemins.CheminBackup(currentPointeuse.Ip), "*.csv");
                 foreach (string f in files)
                 {
                     ++i;
@@ -144,7 +144,9 @@ namespace ZK_Lymytz.IHM
                     int id = Convert.ToInt32(dgv_pointeuse.CurrentRow.Cells["ID"].Value);
                     if (id > 0)
                     {
-                        currentPointeuse = PointeuseBLL.OneById(id);
+                        currentPointeuse = Constantes.POINTEUSES.Find(x => x.Id == id);
+                        if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+                            currentPointeuse = PointeuseBLL.OneById(id);
                         btn_load_by_appareil.Text = "Charger Log (Pointeuse : " + currentPointeuse.Ip + ")";
                         LoadFileBackup();
                         dgv_log.Rows.Clear();
@@ -194,7 +196,13 @@ namespace ZK_Lymytz.IHM
                 return;
             }
             currentPointeuse.Zkemkeeper = z;
-            lIO = z.GetAllAttentdData(currentPointeuse.IMachine, currentPointeuse.Connecter);
+            Pointeuse p = Constantes.POINTEUSES.Find(x => x.Id == currentPointeuse.Id);
+            if (p != null ? p.Id > 0 : false)
+                currentPointeuse.Logs = p.Logs;
+            if (currentPointeuse.Logs != null ? currentPointeuse.Logs.Count > 0 : false)
+                lIO = currentPointeuse.Logs;
+            else
+                lIO = z.GetAllAttentdData(currentPointeuse.IMachine, currentPointeuse.Connecter);
             ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
             o.UpdateMaxBar(lIO.Count);
             LoadLogs(lIO, false);
@@ -227,31 +235,7 @@ namespace ZK_Lymytz.IHM
         {
             ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
             o.UpdateMaxBar(0);
-            Fonctions.BackupLogData(lIO, currentPointeuse.Ip, true, null);
-        }
-
-        private void dgv_backup_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgv_backup.CurrentRow.Cells["cpt"].Value != null)
-                {
-                    currentFile = Convert.ToString(dgv_backup.CurrentRow.Cells["fileName"].Value);
-                    if (currentFile != null)
-                    {
-                        btn_load_by_file.Text = "Charger Log (Fichier : " + currentFile + ")";
-                    }
-                    else
-                    {
-                        ResetDataBackup();
-                    }
-                    btn_del_doublon.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Form_Archive_Pointeuse (dgv_backup_CellContentClick) ", ex);
-            }
+            Fonctions.BackupLogData(lIO, currentPointeuse.Ip, true);
         }
 
         private void btn_load_by_file_Click(object sender, EventArgs e)
@@ -271,7 +255,7 @@ namespace ZK_Lymytz.IHM
 
         public void LoadDataFile()
         {
-            lIO_ = Logs.ReadCsv(Chemins.getCheminBackup(currentPointeuse.Ip) + currentFile);
+            lIO_ = Logs.ReadCsv(Chemins.CheminBackup(currentPointeuse.Ip) + currentFile);
             ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
             o.UpdateMaxBar(lIO.Count);
             LoadLogs(lIO_, true);
@@ -295,7 +279,7 @@ namespace ZK_Lymytz.IHM
                     }
                     else
                     {
-                        Utils.WriteLog("-- Suppression des doublons du fichier " + currentFile + " de l'appareil " + currentPointeuse.Ip+" annulée");
+                        Utils.WriteLog("-- Suppression des doublons du fichier " + currentFile + " de l'appareil " + currentPointeuse.Ip + " annulée");
                     }
                 }
                 else
@@ -312,7 +296,7 @@ namespace ZK_Lymytz.IHM
         public void DeleteDoublon()
         {
             List<IOEMDevice> l = new List<IOEMDevice>();
-            string fileName = Chemins.getCheminBackup(currentPointeuse.Ip) + currentFile;
+            string fileName = Chemins.CheminBackup(currentPointeuse.Ip) + currentFile;
             int i = 0;
             ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
             o.UpdateMaxBar(lIO_.Count);
@@ -352,6 +336,67 @@ namespace ZK_Lymytz.IHM
         private void grp_action_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void dgv_backup_MouseDown(object sender, MouseEventArgs e)
+        {
+            DataGridView.HitTestInfo info = dgv_backup.HitTest(e.X, e.Y); //get info
+            int pos = dgv_backup.HitTest(e.X, e.Y).RowIndex;
+            if (pos > -1)
+            {
+                try
+                {
+                    if (dgv_backup.Rows[pos].Cells["cpt"].Value != null)
+                    {
+                        currentFile = Convert.ToString(dgv_backup.Rows[pos].Cells["fileName"].Value);
+                        if (currentFile != null)
+                        {
+                            switch (e.Button)
+                            {
+                                case MouseButtons.Right:
+                                    {
+                                        dgv_backup.Rows[pos].Selected = true; //Select the row
+                                    }
+                                    break;
+                                default:
+                                    btn_load_by_file.Text = "Charger Log (Fichier : " + currentFile + ")";
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            ResetDataBackup();
+                        }
+                        btn_del_doublon.Enabled = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Messages.Exception("Form_Archive_Pointeuse (dgv_backup_MouseDown) ", ex);
+                }
+            }
+        }
+
+        private void supprimerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentFile != null ? currentFile.Trim().Length > 0 : false)
+            {
+                Utils.WriteLog("Demande de suppression du fichier " + currentFile + " de l'appareil " + currentPointeuse.Ip);
+                if (Messages.Question("Voulez-vous vraiment supprimer ce fichier?") == System.Windows.Forms.DialogResult.Yes)
+                {
+                    String file = Chemins.CheminBackup(currentPointeuse.Ip) + currentFile;
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                    LoadFileBackup();
+                    dgv_log.Rows.Clear();
+                }
+                else
+                {
+                    Utils.WriteLog("Suppression du fichier " + currentFile + " de l'appareil " + currentPointeuse.Ip + " annulée");
+                }
+            }
         }
     }
 }

@@ -12,6 +12,15 @@ namespace ZK_Lymytz.DAO
 {
     class CalendrierDAO
     {
+        private static Calendrier Return(NpgsqlDataReader lect)
+        {
+            Calendrier bean = new Calendrier();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Reference = lect["reference"].ToString();
+            bean.JoursOuvres = JoursOuvresDAO.getByCalendier(bean);
+            return bean;
+        }
+
         public static Calendrier getDefault()
         {
             Calendrier bean = new Calendrier();
@@ -25,9 +34,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Reference = lect["reference"].ToString();
-                        bean.JoursOuvres = JoursOuvresDAO.getByCalendier(bean);
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -39,7 +46,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -56,9 +63,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Reference = lect["reference"].ToString();
-                        bean.JoursOuvres = JoursOuvresDAO.getByCalendier(bean);
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -70,7 +75,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -86,8 +91,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -99,7 +103,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

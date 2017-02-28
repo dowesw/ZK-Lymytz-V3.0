@@ -11,21 +11,23 @@ namespace ZK_Lymytz.DAO
 {
     public class SocieteDAO
     {
-        static string chemin = Chemins.getCheminSociete();
+        static string chemin = Chemins.CheminSociete();
         static List<Societe> listeSociete = new List<Societe>();
 
-        public static bool getCreateSociete(Societe societe)
+        public static bool CreateSociete(Societe societe)
         {
-
             try
             {
-                using (RegistryKey Nkey = Registry.CurrentUser)
-                {
-                    getCreateSociete(societe, Nkey);
-                }
                 using (RegistryKey Nkey = Registry.LocalMachine)
                 {
-                    getCreateSociete(societe, Nkey);
+                    CreateSociete(societe, Nkey);
+                }
+                if (Utils.Is64BitOperatingSystem())
+                {
+                    using (RegistryKey Nkey = Registry.CurrentUser)
+                    {
+                        CreateSociete(societe, Nkey);
+                    }
                 }
                 return true;
             }
@@ -37,7 +39,7 @@ namespace ZK_Lymytz.DAO
         }
 
 
-        public static bool getCreateSociete(Societe societe, RegistryKey Nkey)
+        public static bool CreateSociete(Societe societe, RegistryKey Nkey)
         {
             try
             {
@@ -62,28 +64,16 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Societe getReturnSociete()
+        public static Societe ReturnSociete()
         {
-            RegistryKey Nkey = Registry.CurrentUser;
+            RegistryKey Nkey = Registry.LocalMachine;
             try
             {
-                Societe serveur = getReturnSociete(Nkey);
+                Societe serveur = ReturnSociete(Nkey);
                 if (serveur != null ? serveur.Id < 1 : true)
                 {
-                    RegistryKey Nkey_ = Registry.LocalMachine;
-                    try
-                    {
-                        serveur = getReturnSociete(Nkey);
-                    }
-                    catch (Exception e)
-                    {
-                        Messages.Exception("SocieteDAO (getReturnSociete) ", e);
-                        return null;
-                    }
-                    finally
-                    {
-                        Nkey_.Close();
-                    }
+                    Nkey = Registry.CurrentUser;
+                    serveur = ReturnSociete(Nkey);
                 }
                 return serveur;
             }
@@ -98,7 +88,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Societe getReturnSociete(RegistryKey Nkey)
+        public static Societe ReturnSociete(RegistryKey Nkey)
         {
             try
             {
@@ -108,7 +98,7 @@ namespace ZK_Lymytz.DAO
                 {
                     serveur.Id = 0;
                     serveur.Name = "LYMYTZ SARL";
-                    getCreateSociete(serveur);
+                    CreateSociete(serveur);
                 }
                 else
                 {
@@ -155,7 +145,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -185,7 +175,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -214,7 +204,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

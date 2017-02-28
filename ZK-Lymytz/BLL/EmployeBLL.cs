@@ -8,7 +8,7 @@ using ZK_Lymytz.DAO;
 
 namespace ZK_Lymytz.BLL
 {
-    class EmployeBLL
+    public class EmployeBLL
     {
         public static Employe OneById(int id)
         {

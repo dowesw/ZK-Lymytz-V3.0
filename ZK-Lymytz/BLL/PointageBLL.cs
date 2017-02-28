@@ -62,7 +62,19 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PointageDAO.getList(query);
+                return PointageDAO.List(query);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static List<Pointage> List(string query, string queryCount)
+        {
+            try
+            {
+                return PointageDAO.List(query, queryCount);
             }
             catch (Exception ex)
             {

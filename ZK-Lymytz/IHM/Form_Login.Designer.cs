@@ -28,21 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Login));
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_view = new System.Windows.Forms.Button();
             this.txt_pwd = new System.Windows.Forms.TextBox();
             this.txt_id = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lb_password = new System.Windows.Forms.Label();
+            this.lb_identifian = new System.Windows.Forms.Label();
+            this.lb_connexion = new System.Windows.Forms.Label();
             this.btn_annuler = new System.Windows.Forms.Button();
             this.btn_connecter = new System.Windows.Forms.Button();
             this.temps = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.p_bar = new System.Windows.Forms.ProgressBar();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -54,9 +51,9 @@
             this.panel1.Controls.Add(this.btn_view);
             this.panel1.Controls.Add(this.txt_pwd);
             this.panel1.Controls.Add(this.txt_id);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.lb_password);
+            this.panel1.Controls.Add(this.lb_identifian);
+            this.panel1.Controls.Add(this.lb_connexion);
             this.panel1.Controls.Add(this.btn_annuler);
             this.panel1.Controls.Add(this.btn_connecter);
             this.panel1.Location = new System.Drawing.Point(152, 7);
@@ -91,34 +88,34 @@
             this.txt_id.Size = new System.Drawing.Size(227, 20);
             this.txt_id.TabIndex = 6;
             // 
-            // label3
+            // lb_password
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 97);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(108, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Votre Mot de passe : ";
+            this.lb_password.AutoSize = true;
+            this.lb_password.Location = new System.Drawing.Point(13, 97);
+            this.lb_password.Name = "lb_password";
+            this.lb_password.Size = new System.Drawing.Size(108, 13);
+            this.lb_password.TabIndex = 5;
+            this.lb_password.Text = "Votre Mot de passe : ";
             // 
-            // label2
+            // lb_identifian
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 61);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Votre Identifiant : ";
+            this.lb_identifian.AutoSize = true;
+            this.lb_identifian.Location = new System.Drawing.Point(13, 61);
+            this.lb_identifian.Name = "lb_identifian";
+            this.lb_identifian.Size = new System.Drawing.Size(90, 13);
+            this.lb_identifian.TabIndex = 4;
+            this.lb_identifian.Text = "Votre Identifiant : ";
             // 
-            // label1
+            // lb_connexion
             // 
-            this.label1.AutoSize = true;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Font = new System.Drawing.Font("Algerian", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(119, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(157, 32);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Connexion";
+            this.lb_connexion.AutoSize = true;
+            this.lb_connexion.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lb_connexion.Font = new System.Drawing.Font("Algerian", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_connexion.Location = new System.Drawing.Point(119, 8);
+            this.lb_connexion.Name = "lb_connexion";
+            this.lb_connexion.Size = new System.Drawing.Size(157, 32);
+            this.lb_connexion.TabIndex = 3;
+            this.lb_connexion.Text = "Connexion";
             // 
             // btn_annuler
             // 
@@ -160,20 +157,13 @@
             this.temps.TabIndex = 12;
             this.temps.Text = "Temps Connexion";
             // 
-            // progressBar1
+            // p_bar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(7, 179);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(133, 13);
-            this.progressBar1.TabIndex = 11;
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // timer2
-            // 
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.p_bar.Location = new System.Drawing.Point(7, 179);
+            this.p_bar.Maximum = 5;
+            this.p_bar.Name = "p_bar";
+            this.p_bar.Size = new System.Drawing.Size(133, 13);
+            this.p_bar.TabIndex = 11;
             // 
             // pictureBox1
             // 
@@ -195,7 +185,7 @@
             this.ClientSize = new System.Drawing.Size(522, 198);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.temps);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.p_bar);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -217,16 +207,14 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox txt_pwd;
         public System.Windows.Forms.TextBox txt_id;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lb_password;
+        private System.Windows.Forms.Label lb_identifian;
+        private System.Windows.Forms.Label lb_connexion;
         private System.Windows.Forms.Button btn_annuler;
         private System.Windows.Forms.Button btn_connecter;
         private System.Windows.Forms.Label temps;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar p_bar;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button btn_view;
     }
 }

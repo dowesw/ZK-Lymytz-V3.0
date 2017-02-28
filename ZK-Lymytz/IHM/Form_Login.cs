@@ -15,31 +15,25 @@ namespace ZK_Lymytz.IHM
 {
     public partial class Form_Login : Form
     {
-        int i = 0, j = 0, max = 30, nbreerror = 0;
+        int nbreerror = 0;
         int form = 0;
-        bool view = false;
+        bool view = false, _died;
+
+        ObjectThread object_temps;
+        ObjectThread object_bar;
 
         public Form_Login(int _form)
         {
             InitializeComponent();
-            Configuration.Load(this);
-
-            this.label1.AutoSize = true;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Font = new System.Drawing.Font("Algerian", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(119, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(157, 32);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Connexion";
-
             form = _form;
+            object_temps = new ObjectThread(temps);
+            object_bar = new ObjectThread(p_bar);
         }
 
         private void Form_Login_Load(object sender, EventArgs e)
         {
             txt_id.Focus();
-            timer1.Enabled = true;
+            object_temps.TextLabel("Vous avez " + (p_bar.Maximum).ToString() + " essai(s)");
         }
 
         private bool IsAdministrateur(string id, string pwd)
@@ -74,6 +68,9 @@ namespace ZK_Lymytz.IHM
                     {
                         vide = true;
                         nbreerror += 1;
+                        object_temps.TextLabel("Il vous reste " + (p_bar.Maximum - nbreerror).ToString() + " essai(s)");
+                        if (p_bar.Value < p_bar.Maximum)
+                            object_bar.UpdateSimpleBar(1);
                     }
                 }
                 return vide;
@@ -105,6 +102,9 @@ namespace ZK_Lymytz.IHM
                         {
                             Messages.ShowErreur("Mots de passe incorrect! Reessayer svp");
                             nbreerror += 1;
+                            object_temps.TextLabel("Il vous reste " + (p_bar.Maximum - nbreerror).ToString() + " essai(s)");
+                            if (p_bar.Value < p_bar.Maximum)
+                                object_bar.UpdateSimpleBar(1);
                         }
                     }
                     else
@@ -125,9 +125,9 @@ namespace ZK_Lymytz.IHM
                         OpenForm();
                     }
                 }
-                if (nbreerror >= 3)
+                if (nbreerror >= p_bar.Maximum)
                 {
-                    progressBar1.Value += 100 - progressBar1.Value;
+                    object_bar.UpdateSimpleBar(p_bar.Maximum - p_bar.Value);
                     Messages.Information("Nombre d'essai epuisé. Merci");
                     this.Dispose();
                 }
@@ -141,45 +141,8 @@ namespace ZK_Lymytz.IHM
 
         public void btn_annuler_Click(object sender, EventArgs e)
         {
+            this.Close();
             this.Dispose();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (i != max)
-            {
-                ObjectThread o = new ObjectThread(temps);
-                o.TextLabel("Il reste " + (max - i).ToString() + " secondes");
-                timer1.Stop();
-                timer2.Start();
-                System.Threading.Thread.Sleep(1000);
-                i++;
-            }
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            ObjectThread o = new ObjectThread(progressBar1);
-            if (j == 3)
-            {
-                timer2.Stop();
-                timer1.Start();
-                if (i == max)
-                {
-                    o.UpdateSimpleBar(100 - progressBar1.Value);
-                    Messages.Information("Temps de connexion expiré. Merci");
-                    this.Dispose();
-                }
-                j = 0;
-            }
-            else
-            {
-                if (progressBar1.Value < progressBar1.Maximum)
-                {
-                    o.UpdateSimpleBar(1);
-                }
-                j++;
-            }
         }
 
         private void OpenForm()

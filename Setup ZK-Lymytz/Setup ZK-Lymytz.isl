@@ -342,9 +342,43 @@
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{3D24873D-0435-4703-874D-402F71189977}</td><td>DATABASEDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{51E6D7FB-F223-4C49-AC9A-F6F1B733C03D}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{67C5C0D2-8827-47CF-A86A-66EDE5C96159}</td><td>SDK1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{F0BF2594-0C75-4766-A5D4-DA759FD0D454}</td><td>LYMYTZ1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{A3439475-D715-4C93-A1B5-738706E18204}</td><td>SDK2</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{2CC317A1-EEC1-4750-BC3F-0C173FE2265F}</td><td>PersonalFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{580AD5A4-97AF-470C-90C2-9D86940AF1DC}</td><td>ZK_LYMYTZ1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{991CA455-81DB-4A29-84DD-E8DBCD1F2F44}</td><td>PING</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NewComponent1</td><td>{0D39BD68-7361-4453-97D3-CE195428CC5E}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NewComponent2</td><td>{B0D66DDD-37C0-4432-8594-994CD0B8EEC6}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ZK_Externe.Sortie_principale</td><td>{EED5B08D-B039-431B-B682-1D643CDD310A}</td><td>INSTALLDIR</td><td>2</td><td/><td>zk_externe.sortie_principale</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ZK_Lymytz.Sortie_principale</td><td>{824CAC8C-3913-4ED2-ACF9-924FA238FEC5}</td><td>INSTALLDIR</td><td>2</td><td/><td>zk_lymytz.sortie_principale</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ZK_Service.Sortie_principale</td><td>{E62955F4-0A3E-4565-A279-63C8C7037580}</td><td>INSTALLDIR</td><td>2</td><td/><td>zk_service.sortie_principale</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>commpro.dll</td><td>{6D52699A-DC0E-4091-9BE2-610F064B12FA}</td><td>SDK1</td><td>2</td><td/><td>commpro.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>commpro.dll1</td><td>{EC59B2B3-B71D-41B6-A8BD-376C05A03E9C}</td><td>SDK2</td><td>2</td><td/><td>commpro.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>comms.dll</td><td>{EBD5A41C-7AE5-4D6E-AE38-F7A007BA477D}</td><td>SDK1</td><td>2</td><td/><td>comms.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>comms.dll1</td><td>{FA03CCD3-F6F1-4811-84C8-0F36E0BC4414}</td><td>SDK2</td><td>2</td><td/><td>comms.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plcommpro.dll</td><td>{8304F741-B44C-4960-8A49-49B8F13D6886}</td><td>SDK1</td><td>2</td><td/><td>plcommpro.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plcommpro.dll1</td><td>{93F6D1BC-CBB9-49C7-A179-0FAD28C2E7FB}</td><td>SDK2</td><td>2</td><td/><td>plcommpro.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plcomms.dll</td><td>{FBF04C1B-AA89-4A5C-8592-67278848D4AA}</td><td>SDK1</td><td>2</td><td/><td>plcomms.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plcomms.dll1</td><td>{BB4C6C54-7227-4B05-AA19-A206CF38DF41}</td><td>SDK2</td><td>2</td><td/><td>plcomms.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plrscagent.dll</td><td>{4C425EC6-553F-4DA2-B3B7-86899FA5412A}</td><td>SDK1</td><td>2</td><td/><td>plrscagent.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plrscagent.dll1</td><td>{EF9F7A50-4795-4D7A-AF9B-F2747A0BD91F}</td><td>SDK2</td><td>2</td><td/><td>plrscagent.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plrscomm.dll</td><td>{2573EF60-EA09-48A0-8F4E-926FA2F579A4}</td><td>SDK1</td><td>2</td><td/><td>plrscomm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>plrscomm.dll1</td><td>{CEA41C0E-F36D-4668-9FA5-81321BDB2EC3}</td><td>SDK2</td><td>2</td><td/><td>plrscomm.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>pltcpcomm.dll</td><td>{0B37C18A-CF20-4D1A-906F-842A6A92DA16}</td><td>SDK1</td><td>2</td><td/><td>pltcpcomm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>pltcpcomm.dll1</td><td>{3EA7AA6F-4CD6-44C1-B8C5-D8611E6C2838}</td><td>SDK2</td><td>2</td><td/><td>pltcpcomm.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rscagent.dll</td><td>{378B4CF0-5E5B-4449-A8CF-1A86A153AC11}</td><td>SDK1</td><td>2</td><td/><td>rscagent.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rscagent.dll1</td><td>{0995BFB0-018E-439D-B6A2-1335DB5177A6}</td><td>SDK2</td><td>2</td><td/><td>rscagent.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rscomm.dll</td><td>{FDB7E31A-4447-4F56-990D-3CB83C3522F3}</td><td>SDK1</td><td>2</td><td/><td>rscomm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>rscomm.dll1</td><td>{969929B2-0B4A-4B0E-A57B-278BE8EEE3EB}</td><td>SDK2</td><td>2</td><td/><td>rscomm.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>tcpcomm.dll</td><td>{69BB0386-D654-402B-87AF-B6F8A339D873}</td><td>SDK1</td><td>2</td><td/><td>tcpcomm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>tcpcomm.dll1</td><td>{C268C41D-96BF-49CE-A0F4-68E819B50755}</td><td>SDK2</td><td>2</td><td/><td>tcpcomm.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>usbcomm.dll</td><td>{41917CCE-3BC3-4DD6-8249-A92A31C2379C}</td><td>SDK1</td><td>2</td><td/><td>usbcomm.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>usbcomm.dll1</td><td>{BE650C13-B129-45B9-996F-95F4229A80A0}</td><td>SDK2</td><td>2</td><td/><td>usbcomm.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>zkemkeeper.dll</td><td>{67592E60-4E61-45F4-9850-EABD3DDC0087}</td><td>SDK1</td><td>2</td><td/><td>zkemkeeper.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>zkemkeeper.dll1</td><td>{517D2368-E765-4869-8ABF-EC3BE7E31295}</td><td>SDK2</td><td>2</td><td/><td>zkemkeeper.dll1</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>zkemsdk.dll</td><td>{BF77CC78-A4D3-4D4A-9B54-7C039DF912BE}</td><td>SDK1</td><td>2</td><td/><td>zkemsdk.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>zkemsdk.dll1</td><td>{8C7C3E18-CFD2-4568-AE03-49C16D911811}</td><td>SDK2</td><td>2</td><td/><td>zkemsdk.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1058,6 +1092,10 @@
 		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent1</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent2</td></row>
+		<row><td>LYMYTZ1</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>PING</td><td>ISX_DEFAULTCOMPONENT7</td></row>
+		<row><td>PersonalFolder</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>ZK_LYMYTZ1</td><td>ISX_DEFAULTCOMPONENT6</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1073,6 +1111,7 @@
 		<row><td>ISSelfRegisterCosting</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterCosting</td><td/><td/></row>
 		<row><td>ISSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFiles</td><td/><td/></row>
 		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
+		<row><td>ISSetAllUsers</td><td>257</td><td>SetAllUsers.dll</td><td>SetAllUsers</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>LaunchProgramFileFromSetupCompleteSuccess</td><td>1</td><td>NewBinary19</td><td>LaunchProgram</td><td/><td/></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
@@ -1154,10 +1193,12 @@
 		<row><td>ISMyProductDir</td><td>ISMyCompanyDir</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>ISYourDataBaseDir</td><td>INSTALLDIR</td><td>Database</td><td/><td>0</td><td/></row>
 		<row><td>LYMYTZ</td><td>ProgramFilesFolder</td><td>Lymytz</td><td/><td>0</td><td/></row>
+		<row><td>LYMYTZ1</td><td>PersonalFolder</td><td>Lymytz</td><td/><td>0</td><td/></row>
 		<row><td>LocalAppDataFolder</td><td>TARGETDIR</td><td>.:LocalA~1|LocalAppData</td><td/><td>0</td><td/></row>
 		<row><td>MY_PRODUCT_NAME</td><td>LYMYTZ</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
 		<row><td>NetHoodFolder</td><td>TARGETDIR</td><td>.:NetHood</td><td/><td>0</td><td/></row>
+		<row><td>PING</td><td>DATABASEDIR</td><td>Ping</td><td/><td>0</td><td/></row>
 		<row><td>PersonalFolder</td><td>TARGETDIR</td><td>.:Personal</td><td/><td>0</td><td/></row>
 		<row><td>PrimaryVolumePath</td><td>TARGETDIR</td><td>.:Primar~1|PrimaryVolumePath</td><td/><td>0</td><td/></row>
 		<row><td>PrintHoodFolder</td><td>TARGETDIR</td><td>.:PRINTH~1|PrintHood</td><td/><td>0</td><td/></row>
@@ -1165,6 +1206,8 @@
 		<row><td>ProgramFilesFolder</td><td>TARGETDIR</td><td>.:PROGRA~1|program files</td><td/><td>0</td><td/></row>
 		<row><td>ProgramMenuFolder</td><td>TARGETDIR</td><td>.:Programs</td><td/><td>3</td><td/></row>
 		<row><td>RecentFolder</td><td>TARGETDIR</td><td>.:Recent</td><td/><td>0</td><td/></row>
+		<row><td>SDK1</td><td>INSTALLDIR</td><td>SDK</td><td/><td>0</td><td/></row>
+		<row><td>SDK2</td><td>ZK_LYMYTZ1</td><td>SDK</td><td/><td>0</td><td/></row>
 		<row><td>SendToFolder</td><td>TARGETDIR</td><td>.:SendTo</td><td/><td>3</td><td/></row>
 		<row><td>StartMenuFolder</td><td>TARGETDIR</td><td>.:STARTM~1|Start Menu</td><td/><td>3</td><td/></row>
 		<row><td>StartupFolder</td><td>TARGETDIR</td><td>.:StartUp</td><td/><td>3</td><td/></row>
@@ -1178,6 +1221,7 @@
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
 		<row><td>ZK_LYMYTZ</td><td>LYMYTZ</td><td>ZK-LYM~1|ZK-Lymytz</td><td/><td>0</td><td/></row>
+		<row><td>ZK_LYMYTZ1</td><td>LYMYTZ1</td><td>ZK-LYM~1|ZK-Lymytz</td><td/><td>0</td><td/></row>
 		<row><td>lymytz</td><td>ProgramMenuFolder</td><td>lymytz</td><td/><td>1</td><td/></row>
 		<row><td>nomdev_1_nom_de_votre_soci_t_</td><td>ProgramMenuFolder</td><td>NOMDEV~1|Nom de votre société</td><td/><td>1</td><td/></row>
 		<row><td>zk_lym_1_zk_lymytz</td><td>nomdev_1_nom_de_votre_soci_t_</td><td>ZK-LYM~1|ZK-Lymytz</td><td/><td>1</td><td/></row>
@@ -1875,9 +1919,43 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT4</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT6</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT7</td></row>
 		<row><td>AlwaysInstall</td><td>NewComponent1</td></row>
 		<row><td>AlwaysInstall</td><td>NewComponent2</td></row>
+		<row><td>AlwaysInstall</td><td>ZK_Externe.Sortie_principale</td></row>
 		<row><td>AlwaysInstall</td><td>ZK_Lymytz.Sortie_principale</td></row>
+		<row><td>AlwaysInstall</td><td>ZK_Service.Sortie_principale</td></row>
+		<row><td>AlwaysInstall</td><td>commpro.dll</td></row>
+		<row><td>AlwaysInstall</td><td>commpro.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>comms.dll</td></row>
+		<row><td>AlwaysInstall</td><td>comms.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>plcommpro.dll</td></row>
+		<row><td>AlwaysInstall</td><td>plcommpro.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>plcomms.dll</td></row>
+		<row><td>AlwaysInstall</td><td>plcomms.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>plrscagent.dll</td></row>
+		<row><td>AlwaysInstall</td><td>plrscagent.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>plrscomm.dll</td></row>
+		<row><td>AlwaysInstall</td><td>plrscomm.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>pltcpcomm.dll</td></row>
+		<row><td>AlwaysInstall</td><td>pltcpcomm.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>rscagent.dll</td></row>
+		<row><td>AlwaysInstall</td><td>rscagent.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>rscomm.dll</td></row>
+		<row><td>AlwaysInstall</td><td>rscomm.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>tcpcomm.dll</td></row>
+		<row><td>AlwaysInstall</td><td>tcpcomm.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>usbcomm.dll</td></row>
+		<row><td>AlwaysInstall</td><td>usbcomm.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>zkemkeeper.dll</td></row>
+		<row><td>AlwaysInstall</td><td>zkemkeeper.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>zkemsdk.dll</td></row>
+		<row><td>AlwaysInstall</td><td>zkemsdk.dll1</td></row>
 	</table>
 
 	<table name="File">
@@ -1892,7 +1970,43 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
+		<row><td>_auto_install_sdk_32.bat</td><td>ISX_DEFAULTCOMPONENT2</td><td>_AUTO-~1.BAT|_Auto-install_sdk_32.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-install_sdk_32.bat</td><td>1</td><td/></row>
+		<row><td>_auto_install_sdk_32.bat1</td><td>ISX_DEFAULTCOMPONENT4</td><td>_AUTO-~1.BAT|_Auto-install_sdk_32.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-install_sdk_32.bat</td><td>1</td><td/></row>
+		<row><td>_auto_install_sdk_64.bat</td><td>ISX_DEFAULTCOMPONENT2</td><td>_AUTO-~1.BAT|_Auto-install_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-install_sdk_64.bat</td><td>1</td><td/></row>
+		<row><td>_auto_install_sdk_64.bat1</td><td>ISX_DEFAULTCOMPONENT4</td><td>_AUTO-~1.BAT|_Auto-install_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-install_sdk_64.bat</td><td>1</td><td/></row>
+		<row><td>_auto_uninstall_sdk_32.bat</td><td>ISX_DEFAULTCOMPONENT2</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_32.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-Uninstall_sdk_32.bat</td><td>1</td><td/></row>
+		<row><td>_auto_uninstall_sdk_32.bat1</td><td>ISX_DEFAULTCOMPONENT4</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_32.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-Uninstall_sdk_32.bat</td><td>1</td><td/></row>
+		<row><td>_auto_uninstall_sdk_64.bat</td><td>ISX_DEFAULTCOMPONENT2</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-Uninstall_sdk_64.bat</td><td>1</td><td/></row>
+		<row><td>_auto_uninstall_sdk_64.bat1</td><td>ISX_DEFAULTCOMPONENT4</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\_Auto-Uninstall_sdk_64.bat</td><td>1</td><td/></row>
+		<row><td>commpro.dll</td><td>commpro.dll</td><td>commpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\commpro.dll</td><td>1</td><td/></row>
+		<row><td>commpro.dll1</td><td>commpro.dll1</td><td>commpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\commpro.dll</td><td>1</td><td/></row>
+		<row><td>comms.dll</td><td>comms.dll</td><td>comms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\comms.dll</td><td>1</td><td/></row>
+		<row><td>comms.dll1</td><td>comms.dll1</td><td>comms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\comms.dll</td><td>1</td><td/></row>
+		<row><td>plcommpro.dll</td><td>plcommpro.dll</td><td>PLCOMM~1.DLL|plcommpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plcommpro.dll</td><td>1</td><td/></row>
+		<row><td>plcommpro.dll1</td><td>plcommpro.dll1</td><td>PLCOMM~1.DLL|plcommpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plcommpro.dll</td><td>1</td><td/></row>
+		<row><td>plcomms.dll</td><td>plcomms.dll</td><td>plcomms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plcomms.dll</td><td>1</td><td/></row>
+		<row><td>plcomms.dll1</td><td>plcomms.dll1</td><td>plcomms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plcomms.dll</td><td>1</td><td/></row>
+		<row><td>plrscagent.dll</td><td>plrscagent.dll</td><td>PLRSCA~1.DLL|plrscagent.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plrscagent.dll</td><td>1</td><td/></row>
+		<row><td>plrscagent.dll1</td><td>plrscagent.dll1</td><td>PLRSCA~1.DLL|plrscagent.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plrscagent.dll</td><td>1</td><td/></row>
+		<row><td>plrscomm.dll</td><td>plrscomm.dll</td><td>plrscomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plrscomm.dll</td><td>1</td><td/></row>
+		<row><td>plrscomm.dll1</td><td>plrscomm.dll1</td><td>plrscomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\plrscomm.dll</td><td>1</td><td/></row>
+		<row><td>pltcpcomm.dll</td><td>pltcpcomm.dll</td><td>PLTCPC~1.DLL|pltcpcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\pltcpcomm.dll</td><td>1</td><td/></row>
+		<row><td>pltcpcomm.dll1</td><td>pltcpcomm.dll1</td><td>PLTCPC~1.DLL|pltcpcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\pltcpcomm.dll</td><td>1</td><td/></row>
+		<row><td>rscagent.dll</td><td>rscagent.dll</td><td>rscagent.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\rscagent.dll</td><td>1</td><td/></row>
+		<row><td>rscagent.dll1</td><td>rscagent.dll1</td><td>rscagent.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\rscagent.dll</td><td>1</td><td/></row>
+		<row><td>rscomm.dll</td><td>rscomm.dll</td><td>rscomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\rscomm.dll</td><td>1</td><td/></row>
+		<row><td>rscomm.dll1</td><td>rscomm.dll1</td><td>rscomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\rscomm.dll</td><td>1</td><td/></row>
+		<row><td>tcpcomm.dll</td><td>tcpcomm.dll</td><td>tcpcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\tcpcomm.dll</td><td>1</td><td/></row>
+		<row><td>tcpcomm.dll1</td><td>tcpcomm.dll1</td><td>tcpcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\tcpcomm.dll</td><td>1</td><td/></row>
+		<row><td>usbcomm.dll</td><td>usbcomm.dll</td><td>usbcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\usbcomm.dll</td><td>1</td><td/></row>
+		<row><td>usbcomm.dll1</td><td>usbcomm.dll1</td><td>usbcomm.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\usbcomm.dll</td><td>1</td><td/></row>
+		<row><td>zk_externe.sortie_principale</td><td>ZK_Externe.Sortie_principale</td><td>ZK-Externe.Sortie principale</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ZK-Externe&gt;|Built</td><td>3</td><td/></row>
 		<row><td>zk_lymytz.sortie_principale</td><td>ZK_Lymytz.Sortie_principale</td><td>ZK-Lymytz.Sortie principale</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ZK-Lymytz&gt;|Built</td><td>3</td><td/></row>
+		<row><td>zk_service.sortie_principale</td><td>ZK_Service.Sortie_principale</td><td>ZK-Service.Sortie principale</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;ZK-Service&gt;|Built</td><td>3</td><td/></row>
+		<row><td>zkemkeeper.dll</td><td>zkemkeeper.dll</td><td>ZKEMKE~1.DLL|zkemkeeper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\zkemkeeper.dll</td><td>1</td><td/></row>
+		<row><td>zkemkeeper.dll1</td><td>zkemkeeper.dll1</td><td>ZKEMKE~1.DLL|zkemkeeper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\zkemkeeper.dll</td><td>1</td><td/></row>
+		<row><td>zkemsdk.dll</td><td>zkemsdk.dll</td><td>zkemsdk.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\zkemsdk.dll</td><td>1</td><td/></row>
+		<row><td>zkemsdk.dll1</td><td>zkemsdk.dll1</td><td>zkemsdk.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\Tools\sdk\zkemsdk.dll</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -1910,6 +2024,7 @@
 		<col def="S255">Data</col>
 		<row><td>PROJECT_ASSISTANT_DEFAULT_FEATURE</td><td>AlwaysInstall</td></row>
 		<row><td>PROJECT_ASSISTANT_FEATURES</td><td>NonSelectable</td></row>
+		<row><td>UNINST_Uninstall_ZK_Lymytz</td><td/></row>
 		<row><td>_Built</td><td/></row>
 	</table>
 
@@ -2039,9 +2154,43 @@
 		<col def="S0">Miscellaneous</col>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_C2389119_23DA_43D1_8B63_344B9AD5DEB4_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_4929394B_15FC_4450_8175_64716D9BF07E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_5E8A7801_9649_457E_A913_7C32034B2CC0_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_F3FF3AC5_54ED_46BF_8197_1A13116E4A2F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_87444C3B_6372_4FD6_AC16_9DD8EDD9F7D5_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_09788FFC_8563_4208_B6BD_0306A4E09381_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_A9AC7902_2DD0_4F04_8981_2AD4E4DA435C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_D2D82C6B_46D6_43D6_BDD6_61A2D3CA6D07_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent1</td><td/><td/><td>_AAB3B077_8CC5_464D_BD2D_30A75AEA2AE9_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent2</td><td/><td/><td>_CB91E5CA_F581_4BAB_849C_11FBA2E87E95_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ZK_Externe.Sortie_principale</td><td/><td/><td>_80E8336E_8AA4_46E4_BD42_136D7895522B_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ZK_Lymytz.Sortie_principale</td><td/><td/><td>_6B94A605_AC56_40A3_8B9F_1C3FD1D0A2F8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ZK_Service.Sortie_principale</td><td/><td/><td>_51BF9460_8281_4406_A966_5B5BC4FCD0F9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>commpro.dll</td><td/><td/><td>_B0B9B2FF_686C_47CE_9826_ED01C1F774B4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>commpro.dll1</td><td/><td/><td>_AE89EBDE_88B1_4C9D_B790_77F5F119ABC1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>comms.dll</td><td/><td/><td>_454CF975_B838_4A33_86DE_34B2AE800A4A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>comms.dll1</td><td/><td/><td>_445E5473_F3BB_447F_A10F_BA4F9DEE24D0_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plcommpro.dll</td><td/><td/><td>_C3825570_BB88_4291_897B_6519E3799864_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plcommpro.dll1</td><td/><td/><td>_B746023C_961A_41CD_A13C_B9F2D57B8DB2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plcomms.dll</td><td/><td/><td>_1645FC24_D2B7_4ADF_B4A4_695267EA748B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plcomms.dll1</td><td/><td/><td>_7435737C_5FC1_4719_B8B3_1B5CAC57DFB7_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plrscagent.dll</td><td/><td/><td>_38E08F7A_2A81_444F_9D96_E69DEDF998D4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plrscagent.dll1</td><td/><td/><td>_DF54B827_7ABF_4E8A_A6A8_7081C6C0719A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plrscomm.dll</td><td/><td/><td>_2A7B6C4D_C088_46B6_94A8_998FCD7D5CB8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>plrscomm.dll1</td><td/><td/><td>_CA7D92E2_7C6C_438A_905E_9B38C201A9F3_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>pltcpcomm.dll</td><td/><td/><td>_28AC8E5C_4AEB_49FC_83BC_D08427C14082_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>pltcpcomm.dll1</td><td/><td/><td>_E2548EA5_93DD_4467_99C2_02ADD7383E7A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rscagent.dll</td><td/><td/><td>_70C16034_E7FE_440F_8FC4_F8D01675A0C9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rscagent.dll1</td><td/><td/><td>_DB45AB29_7E8F_4E46_A7C8_05B9A6E6A9B7_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rscomm.dll</td><td/><td/><td>_91F1174E_8DFE_4071_87CB_B2A141FD8AF8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>rscomm.dll1</td><td/><td/><td>_201B6B72_4F29_4739_800C_C00DD21F8C39_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>tcpcomm.dll</td><td/><td/><td>_67D40610_2B29_45EE_BDF6_D0D33DE17A75_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>tcpcomm.dll1</td><td/><td/><td>_9B543E4F_BA46_48FD_95DB_C362B1C5545E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>usbcomm.dll</td><td/><td/><td>_72A3EA06_CBA8_4D63_85E9_208B49ED9F5C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>usbcomm.dll1</td><td/><td/><td>_661B1D19_0A4A_4663_870E_FCCF63653236_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>zkemkeeper.dll</td><td/><td/><td>_9A7BC3A8_9659_4098_B2AA_F397BBFC4A20_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>zkemkeeper.dll1</td><td/><td/><td>_AE064D9C_E3F2_4CC2_B4DB_9072A0F2DDC9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>zkemsdk.dll</td><td/><td/><td>_5F564796_0917_4143_80FA_15060926D76A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>zkemsdk.dll1</td><td/><td/><td>_48E6DF9B_311F_45D5_A30D_91B79E564B34_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2351,8 +2500,10 @@
 		<row><td>ProgramFilesFolder</td><td/><td/><td>1</td></row>
 		<row><td>SystemFolder</td><td/><td/><td>1</td></row>
 		<row><td>WindowsFolder</td><td/><td/><td>1</td></row>
+		<row><td>ZK-Externe</td><td>ZK-Externe\ZK-Externe.csproj</td><td/><td>2</td></row>
 		<row><td>ZK-Lymytz</td><td>ZK-Lymytz\ZK-Lymytz.csproj</td><td/><td>2</td></row>
 		<row><td>ZK-LymytzService</td><td>ZK-LymytzService\ZK-LymytzService.csproj</td><td/><td>2</td></row>
+		<row><td>ZK-Service</td><td>ZK-Service\ZK-Service.csproj</td><td/><td>2</td></row>
 	</table>
 
 	<table name="ISPowerShellWrap">
@@ -2661,7 +2812,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>1036</td><td>Lymytz</td><td>0</td><td/><td>-349947538</td></row>
+		<row><td>COMPANY_NAME</td><td>1036</td><td>Lymytz</td><td>0</td><td/><td>-2044400146</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1036</td><td>Toujours installer</td><td>0</td><td/><td>1126476778</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1036</td><td>Les paramètres couleur de votre système ne sont pas adaptés à l'exécution de [ProductName].</td><td>0</td><td/><td>1126476778</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>1036</td><td>Le système d'exploitation n'est pas adapté à l'exécution de [ProductName].</td><td>0</td><td/><td>1126476778</td></row>
@@ -3763,8 +3914,8 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>1036</td><td>Le processeur n'est pas correct pour exécuter [ProductName].</td><td>0</td><td/><td>1126476778</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1036</td><td>Le taux RAM n'est pas correct pour exécuter [ProductName].</td><td>0</td><td/><td>1126476778</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1036</td><td>La résolution de l'écran n'est pas correcte pour exécuter [ProductName].</td><td>0</td><td/><td>1126476778</td></row>
-		<row><td>ID_STRING1</td><td>1036</td><td>http://www.Lymytz.com</td><td>0</td><td/><td>-349947538</td></row>
-		<row><td>ID_STRING2</td><td>1036</td><td>Lymytz</td><td>0</td><td/><td>-349947538</td></row>
+		<row><td>ID_STRING1</td><td>1036</td><td>http://www.Lymytz.com</td><td>0</td><td/><td>-2044400146</td></row>
+		<row><td>ID_STRING2</td><td>1036</td><td>Lymytz</td><td>0</td><td/><td>-2044400146</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1126458410</td></row>
 		<row><td>ID_STRING3</td><td>1036</td><td>Launch |Built</td><td>0</td><td/><td>1126458410</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1036</td><td>La fonction ne sera pas installée.</td><td>0</td><td/><td>1126476778</td></row>
@@ -3875,8 +4026,8 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;VSSolutionFolder&gt;\ZK-Lymytz\IMG\ICONES\favicon.ico</td><td>0</td></row>
-		<row><td>UNINST_Uninstall_Z_1B88F883DBD04F49BECD363E91CD9E5F.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
 		<row><td>UNINST_Uninstall_Z_5A6C32BCB2B84463A646CA400546C54A.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
+		<row><td>UNINST_Uninstall_Z_B44E816D257D4606BB2605F83A055DC5.exe</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\Uninstall.ico</td><td>0</td></row>
 		<row><td>_Built1_C87013DC63054B00AC65D2972BCC1828.exe</td><td/><td>&lt;VSSolutionFolder&gt;\ZK-Lymytz\IMG\ICONES\favicon.ico</td><td>0</td></row>
 		<row><td>_Built_8C033C4601A7412FA6D81F0E683D480C.exe</td><td/><td>&lt;VSSolutionFolder&gt;\ZK-Lymytz\IMG\ICONES\favicon.ico</td><td>0</td></row>
 	</table>
@@ -3924,6 +4075,7 @@
 		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
 		<row><td>ISSelfRegisterFiles</td><td/><td>5601</td><td/><td/></row>
 		<row><td>ISSelfRegisterFinalize</td><td/><td>6601</td><td/><td/></row>
+		<row><td>ISSetAllUsers</td><td>Not Installed</td><td>10</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
@@ -4011,7 +4163,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{A280EB1C-AA09-419B-A391-4E6495B5D50E}</td></row>
 		<row><td>ISUSSignature</td><td>{55BB9D48-175D-4E3D-B667-12A87B615F45}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppFiles</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppFiles,viewISToday,viewAppV,viewUpgradePaths,viewUpdateService,viewSetupDesign</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4041,6 +4193,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>FileCost</td><td/><td>900</td><td>FileCost</td><td/></row>
 		<row><td>FindRelatedProducts</td><td/><td>430</td><td>FindRelatedProducts</td><td/></row>
 		<row><td>ISPreventDowngrade</td><td>ISFOUNDNEWERPRODUCTVERSION</td><td>450</td><td>ISPreventDowngrade</td><td/></row>
+		<row><td>ISSetAllUsers</td><td>Not Installed</td><td>10</td><td/><td/></row>
 		<row><td>InstallWelcome</td><td>Not Installed</td><td>1210</td><td>InstallWelcome</td><td/></row>
 		<row><td>IsolateComponents</td><td/><td>950</td><td>IsolateComponents</td><td/></row>
 		<row><td>LaunchConditions</td><td>Not Installed</td><td>410</td><td>LaunchConditions</td><td/></row>
@@ -4386,7 +4539,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>PROGRAMFILETOLAUNCHATEND</td><td>[INSTALLDIR]ZK-Lymytz.Sortie principale</td><td/></row>
-		<row><td>ProductCode</td><td>{A95EC4B3-B00E-4567-B638-E1933A1D9F3A}</td><td/></row>
+		<row><td>ProductCode</td><td>{06F82DE1-EDEE-4101-A902-B94A9876ED59}</td><td/></row>
 		<row><td>ProductName</td><td>ZK-Lymytz</td><td/></row>
 		<row><td>ProductVersion</td><td>1.00.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
@@ -4404,7 +4557,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>
-		<row><td>UpgradeCode</td><td>{139043FC-F797-43F4-BA67-B95558BCF6AB}</td><td/></row>
+		<row><td>UpgradeCode</td><td>{70A18AAB-329C-4CF1-9019-26424F123017}</td><td/></row>
 		<row><td>_IsMaintenance</td><td>Change</td><td/></row>
 		<row><td>_IsSetupTypeMin</td><td>Typical</td><td/></row>
 	</table>
@@ -4554,7 +4707,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>UNINST_Uninstall_ZK_Lymytz</td><td>zk_lym_1_zk_lymytz</td><td>UNINST|Uninstall ZK-Lymytz</td><td>NewComponent1</td><td>[SystemFolder]msiexec.exe</td><td>/x {A95EC4B3-B00E-4567-B638-E1933A1D9F3A}</td><td/><td/><td>UNINST_Uninstall_Z_1B88F883DBD04F49BECD363E91CD9E5F.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>UNINST_Uninstall_ZK_Lymytz</td><td>zk_lym_1_zk_lymytz</td><td>UNINST|Uninstall ZK-Lymytz</td><td>NewComponent1</td><td>[SystemFolder]msiexec.exe</td><td>/x {A95EC4B3-B00E-4567-B638-E1933A1D9F3A}</td><td/><td/><td>UNINST_Uninstall_Z_B44E816D257D4606BB2605F83A055DC5.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>UNINST_Uninstall_ZK_Lymytz1</td><td>zk_lymytz</td><td>UNINST|Uninstall ZK-Lymytz</td><td>NewComponent2</td><td>[SystemFolder]msiexec.exe</td><td>/x {A95EC4B3-B00E-4567-B638-E1933A1D9F3A}</td><td/><td/><td>UNINST_Uninstall_Z_5A6C32BCB2B84463A646CA400546C54A.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>_Built</td><td>zk_lym_1_zk_lymytz</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>ZK_Lymytz.Sortie_principale</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built_8C033C4601A7412FA6D81F0E683D480C.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>ZK_Lymytz.Sortie_principale</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built1_C87013DC63054B00AC65D2972BCC1828.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>

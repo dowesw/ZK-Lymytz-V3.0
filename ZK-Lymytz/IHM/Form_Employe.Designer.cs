@@ -226,6 +226,8 @@
             // 
             // box_identity
             // 
+            this.box_identity.BackColor = System.Drawing.SystemColors.Window;
+            this.box_identity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.box_identity.Image = global::ZK_Lymytz.Properties.Resources.contact;
             this.box_identity.Location = new System.Drawing.Point(396, 16);
             this.box_identity.Name = "box_identity";
@@ -379,7 +381,8 @@
             this.Controls.Add(this.grp_employe);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(731, 495);
+            this.MaximumSize = new System.Drawing.Size(866, 495);
+            this.MinimumSize = new System.Drawing.Size(866, 495);
             this.Name = "Form_Employe";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion Employe";

@@ -29,9 +29,17 @@
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
 	<ItemGroup>
+		<ProjectReference Include="..\ZK-Externe\ZK-Externe.csproj">
+			<Name>ZK-Externe</Name>
+			<Project>{FB72A632-4AA7-4CA2-8BAF-0FF31FDB1F03}</Project>
+		</ProjectReference>
 		<ProjectReference Include="..\ZK-Lymytz\ZK-Lymytz.csproj">
 			<Name>ZK-Lymytz</Name>
 			<Project>{223B9870-927D-4F4A-9310-7DB8943B9DCF}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\ZK-Service\ZK-Service.csproj">
+			<Name>ZK-Service</Name>
+			<Project>{D24057D7-05EA-4D44-9DA4-A27BC6B1992A}</Project>
 		</ProjectReference>
 	</ItemGroup>
 </Project>

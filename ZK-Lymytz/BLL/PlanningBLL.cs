@@ -34,6 +34,18 @@ namespace ZK_Lymytz.BLL
             }
         }
 
+        public static Planning OneByDateEmploye(long employe, DateTime date, DateTime heure)
+        {
+            try
+            {
+                return PlanningDAO.getOneByDateEmploye(employe, date, heure);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static Planning getPlanningForJoursOuvres(JoursOuvres jour, DateTime date)
         {
             try

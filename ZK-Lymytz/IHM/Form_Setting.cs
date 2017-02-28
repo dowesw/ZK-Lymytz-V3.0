@@ -55,11 +55,15 @@ namespace ZK_Lymytz.IHM
             chk_add_enroller_auto.Checked = s.AddEnrollAuto;
             chk_auto_backup.Checked = s.AutoBackupDevice;
             chk_connect.Checked = s.CheckConnect;
+            chk_use_tampon_log.Checked = s.UseFileTamponLog;
+            chk_connect_synchro.Checked = s.AutoCheckConnectAndSynchro;
+            dtp_time_synchro_auto.Value = s.TimeSynchroAuto != null ? (!s.TimeSynchroAuto.ToShortDateString().Equals("01/01/0001") ? s.TimeSynchroAuto : DateTime.Now) : DateTime.Now;
+            dtp_time_synchro_auto.Enabled = s.AutoCheckConnectAndSynchro;
             string path = s.CheminPhoto;
             if (path != null ? path.Trim().Equals("") : true)
             {
                 //C:\Users\Administrateur\lymytz\CCOS.A\documents\docEmps\perso\photo
-                path = Chemins.getCheminUser() + "lymytz" + Constantes.FILE_SEPARATOR + txt_name.Text.Trim() + Constantes.FILE_SEPARATOR + "documents" + Constantes.FILE_SEPARATOR + "docEmps" + Constantes.FILE_SEPARATOR + "perso" + Constantes.FILE_SEPARATOR + "photo" + Constantes.FILE_SEPARATOR;
+                path = Chemins.CheminUser() + "lymytz" + Constantes.FILE_SEPARATOR + txt_name.Text.Trim() + Constantes.FILE_SEPARATOR + "documents" + Constantes.FILE_SEPARATOR + "docEmps" + Constantes.FILE_SEPARATOR + "perso" + Constantes.FILE_SEPARATOR + "photo" + Constantes.FILE_SEPARATOR;
             }
             txt_path_photo.Text = path;
         }
@@ -354,7 +358,7 @@ namespace ZK_Lymytz.IHM
         private Setting BuildSettign()
         {
             Setting i = new Setting();
-            i.Id = 1;
+            i.Vide = false;
             i.Autorun = chk_autorun.Checked;
             i.AutoSynchro = chk_auto_synchro.Checked;
             i.AutoClearAndBackup = chk_save_delete.Checked;
@@ -362,6 +366,9 @@ namespace ZK_Lymytz.IHM
             i.AddEnrollAuto = chk_add_enroller_auto.Checked;
             i.AutoBackupDevice = chk_auto_backup.Checked;
             i.CheckConnect = chk_connect.Checked;
+            i.UseFileTamponLog = chk_use_tampon_log.Checked;
+            i.AutoCheckConnectAndSynchro = chk_connect_synchro.Checked;
+            i.TimeSynchroAuto = dtp_time_synchro_auto.Value;
             i.CheminStartup = Chemins.cheminStartup;
             i.CheminPersonal = Chemins.cheminDefault;
             string path = txt_path_photo.Text.Trim();
@@ -445,7 +452,7 @@ namespace ZK_Lymytz.IHM
 
         private void txt_search_Click(object sender, EventArgs e)
         {
-            fbd_search.SelectedPath = Chemins.getCheminUser();
+            fbd_search.SelectedPath = Chemins.CheminUser();
             if (fbd_search.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -461,7 +468,7 @@ namespace ZK_Lymytz.IHM
 
         private void lnk_default_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            txt_path_photo.Text = Chemins.getCheminUser() + "lymytz" + Constantes.FILE_SEPARATOR + txt_name.Text.Trim() + Constantes.FILE_SEPARATOR + "documents" + Constantes.FILE_SEPARATOR + "docEmps" + Constantes.FILE_SEPARATOR + "perso" + Constantes.FILE_SEPARATOR + "photo" + Constantes.FILE_SEPARATOR;
+            txt_path_photo.Text = Chemins.CheminUser() + "lymytz" + Constantes.FILE_SEPARATOR + txt_name.Text.Trim() + Constantes.FILE_SEPARATOR + "documents" + Constantes.FILE_SEPARATOR + "docEmps" + Constantes.FILE_SEPARATOR + "perso" + Constantes.FILE_SEPARATOR + "photo" + Constantes.FILE_SEPARATOR;
         }
 
         private void txt_path_photo_TextChanged(object sender, EventArgs e)
@@ -510,12 +517,12 @@ namespace ZK_Lymytz.IHM
 
         private void txt_old_password_pc_TextChanged(object sender, EventArgs e)
         {
-            txt_old_password_pc.BackColor = SystemColors.Window;
+            txt_old_password_pc.BackColor = Color.FromName(Configuration.back_color_Text); 
         }
 
         private void txt_new_repassword_pc_TextChanged(object sender, EventArgs e)
         {
-            txt_new_repassword_pc.BackColor = SystemColors.Window;
+            txt_new_repassword_pc.BackColor = Color.FromName(Configuration.back_color_Text); 
             if (txt_new_repassword_pc.Text.Length < 1)
             {
                 lb_new_repassword_pc.Visible = false;
@@ -538,12 +545,12 @@ namespace ZK_Lymytz.IHM
 
         private void txt_old_password_log_TextChanged(object sender, EventArgs e)
         {
-            txt_old_password_log.BackColor = SystemColors.Window;
+            txt_old_password_log.BackColor = Color.FromName(Configuration.back_color_Text); 
         }
 
         private void txt_new_repassword_log_TextChanged(object sender, EventArgs e)
         {
-            txt_new_repassword_log.BackColor = SystemColors.Window;
+            txt_new_repassword_log.BackColor = Color.FromName(Configuration.back_color_Text); 
             if (txt_new_repassword_log.Text.Length < 1)
             {
                 lb_new_repassword_log.Visible = false;
@@ -618,6 +625,11 @@ namespace ZK_Lymytz.IHM
                     }
                 }
             }
+        }
+
+        private void chk_connect_synchro_CheckedChanged(object sender, EventArgs e)
+        {
+            dtp_time_synchro_auto.Enabled = chk_connect_synchro.Checked;
         }
     }
 }

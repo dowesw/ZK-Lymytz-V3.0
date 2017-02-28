@@ -11,6 +11,23 @@ namespace ZK_Lymytz.DAO
 {
     class PointeuseDAO
     {
+        private static Pointeuse Return(NpgsqlDataReader lect)
+        {
+            Pointeuse bean = new Pointeuse();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Ip = lect["adresse_ip"].ToString();
+            bean.Port = (Int32)((lect["port"] != null) ? (!lect["port"].ToString().Trim().Equals("") ? lect["port"] : 0) : 0);
+            bean.IMachine = (Int32)((lect["i_machine"] != null) ? (!lect["i_machine"].ToString().Trim().Equals("") ? lect["i_machine"] : 0) : 0);
+            bean.Societe = (Int64)((lect["societe"] != null) ? (!lect["societe"].ToString().Trim().Equals("") ? lect["societe"] : 0) : 0);
+            bean.Description = lect["description"].ToString();
+            bean.Emplacement = lect["emplacement"].ToString();
+            bean.Societe = Convert.ToInt32(lect["societe"].ToString());
+            bean.Connecter = (Boolean)((lect["connecter"] != null) ? (!lect["connecter"].ToString().Trim().Equals("") ? lect["connecter"] : false) : false);
+            bean.Actif = (Boolean)((lect["actif"] != null) ? (!lect["actif"].ToString().Trim().Equals("") ? lect["actif"] : false) : false);
+            bean.MultiSociete = (Boolean)((lect["multi_societe"] != null) ? (!lect["multi_societe"].ToString().Trim().Equals("") ? lect["multi_societe"] : false) : false);
+            return bean;
+        }
+
         public static Pointeuse getOneById(int id)
         {
             Pointeuse bean = new Pointeuse();
@@ -24,15 +41,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Ip = lect["adresse_ip"].ToString();
-                        bean.Port = (Int32)((lect["port"] != null) ? (!lect["port"].ToString().Trim().Equals("") ? lect["port"] : 0) : 0);
-                        bean.IMachine = (Int32)((lect["i_machine"] != null) ? (!lect["i_machine"].ToString().Trim().Equals("") ? lect["i_machine"] : 0) : 0); 
-                        bean.Description = lect["description"].ToString();
-                        bean.Emplacement = lect["emplacement"].ToString();
-                        bean.Societe = Convert.ToInt32(lect["societe"].ToString());
-                        bean.Connecter = (Boolean)((lect["connecter"] != null) ? (!lect["connecter"].ToString().Trim().Equals("") ? lect["connecter"] : false) : false);
-                        bean.Actif = (Boolean)((lect["actif"] != null) ? (!lect["actif"].ToString().Trim().Equals("") ? lect["actif"] : false) : false); 
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -44,7 +53,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -61,15 +70,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Ip = lect["adresse_ip"].ToString();
-                        bean.Port = (Int32)((lect["port"] != null) ? (!lect["port"].ToString().Trim().Equals("") ? lect["port"] : 0) : 0);
-                        bean.IMachine = (Int32)((lect["i_machine"] != null) ? (!lect["i_machine"].ToString().Trim().Equals("") ? lect["i_machine"] : 0) : 0);
-                        bean.Description = lect["description"].ToString();
-                        bean.Emplacement = lect["emplacement"].ToString();
-                        bean.Societe = Convert.ToInt32(lect["societe"].ToString());
-                        bean.Connecter = (Boolean)((lect["connecter"] != null) ? (!lect["connecter"].ToString().Trim().Equals("") ? lect["connecter"] : false) : false);
-                        bean.Actif = (Boolean)((lect["actif"] != null) ? (!lect["actif"].ToString().Trim().Equals("") ? lect["actif"] : false) : false);
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -81,32 +82,24 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
-        
+
         public static Pointeuse getOneByIp(string ip, int societe)
         {
             Pointeuse bean = new Pointeuse();
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select * from yvs_pointeuse where adresse_ip ='" + ip + "' and societe = "+societe;
+                string query = "select * from yvs_pointeuse where adresse_ip ='" + ip + "' and societe = " + societe;
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Ip = lect["adresse_ip"].ToString();
-                        bean.Port = (Int32)((lect["port"] != null) ? (!lect["port"].ToString().Trim().Equals("") ? lect["port"] : 0) : 0);
-                        bean.IMachine = (Int32)((lect["i_machine"] != null) ? (!lect["i_machine"].ToString().Trim().Equals("") ? lect["i_machine"] : 0) : 0);
-                        bean.Description = lect["description"].ToString();
-                        bean.Emplacement = lect["emplacement"].ToString();
-                        bean.Societe = Convert.ToInt32(lect["societe"].ToString());
-                        bean.Connecter = (Boolean)((lect["connecter"] != null) ? (!lect["connecter"].ToString().Trim().Equals("") ? lect["connecter"] : false) : false);
-                        bean.Actif = (Boolean)((lect["actif"] != null) ? (!lect["actif"].ToString().Trim().Equals("") ? lect["actif"] : false) : false); 
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -118,7 +111,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -134,8 +127,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -147,7 +139,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -159,8 +151,8 @@ namespace ZK_Lymytz.DAO
                 Pointeuse p = getOneByIp(bean.Ip);
                 if (p != null ? p.Id < 1 : true)
                 {
-                    string query = "insert into yvs_pointeuse(adresse_ip, port, description, emplacement, connecter, actif, i_machine, societe) values " +
-                        "('" + bean.Ip + "'," + bean.Port + ",'" + bean.Description + "','" + bean.Emplacement + "','" + bean.Connecter + "','" + bean.Actif + "'," + bean.IMachine + "," + Constantes.SOCIETE.Id + ")";
+                    string query = "insert into yvs_pointeuse(adresse_ip, port, description, emplacement, connecter, actif, i_machine, multi_societe, societe) values " +
+                        "('" + bean.Ip + "'," + bean.Port + ",'" + bean.Description + "','" + bean.Emplacement + "','" + bean.Connecter + "','" + bean.Actif + "'," + bean.IMachine + ",'" + bean.MultiSociete + "'," + Constantes.SOCIETE.Id + ")";
                     NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                     cmd.ExecuteNonQuery();
                     return true;
@@ -178,16 +170,16 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
-        public static bool getUpdate(Pointeuse bean,int id)
+        public static bool getUpdate(Pointeuse bean, int id)
         {
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "update yvs_pointeuse set adresse_ip = '" + bean.Ip + "', port = " + bean.Port + ", description = '" + bean.Description + "', emplacement = '" + bean.Emplacement + "', connecter = " + bean.Connecter + ", i_machine =" + bean.IMachine + " where id = " + id + "";
+                string query = "update yvs_pointeuse set adresse_ip = '" + bean.Ip + "', port = " + bean.Port + ", description = '" + bean.Description + "', emplacement = '" + bean.Emplacement + "', connecter = " + bean.Connecter + ", i_machine =" + bean.IMachine + ", multi_societe ='" + bean.MultiSociete + "' where id = " + id + "";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -199,7 +191,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -220,7 +212,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -244,7 +236,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -265,7 +257,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -274,7 +266,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "update yvs_pointeuse set  actif = '" + actif + "' where id = " + id + "";
+                string query = "update yvs_pointeuse set actif = '" + actif + "' where id = " + id + "";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -286,7 +278,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -295,7 +287,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "update yvs_pointeuse set  actif = '" + actif + "' where adresse_ip = '" + ip + "'";
+                string query = "update yvs_pointeuse set actif = '" + actif + "' where adresse_ip = '" + ip + "'";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -307,7 +299,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

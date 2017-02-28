@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ZK_Lymytz.ENTITE
 {
-    class Parametre
+    public class Parametre
     {
         private long id;
         public long Id

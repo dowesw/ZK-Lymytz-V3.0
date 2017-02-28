@@ -34,30 +34,43 @@
             this.dgv_pointeuse = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pointeuse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.temp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.grp_log = new System.Windows.Forms.GroupBox();
             this.dgv_log = new System.Windows.Forms.DataGridView();
             this.pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.icon = new System.Windows.Forms.DataGridViewImageColumn();
             this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.heure = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.exclus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.effacerLesLignesInseréesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insererDansUneFicheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_load = new System.Windows.Forms.Button();
             this.btn_synchro = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
             this.chk_filter = new System.Windows.Forms.CheckBox();
             this.grp_filter = new System.Windows.Forms.GroupBox();
+            this.grp_planning = new System.Windows.Forms.GroupBox();
+            this.txt_fin_plan = new System.Windows.Forms.TextBox();
+            this.txt_debut_plan = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.txt_marge_heure_fin = new System.Windows.Forms.NumericUpDown();
             this.chk_invalid_only = new System.Windows.Forms.CheckBox();
             this.txt_marge_heure_debut = new System.Windows.Forms.NumericUpDown();
             this.chk_date = new System.Windows.Forms.CheckBox();
             this.chk_employe = new System.Windows.Forms.CheckBox();
             this.txt_id = new System.Windows.Forms.TextBox();
-            this.grp_planning = new System.Windows.Forms.GroupBox();
+            this.grp_interval = new System.Windows.Forms.GroupBox();
+            this.chk_heure_fin = new System.Windows.Forms.CheckBox();
+            this.chk_heure_debut = new System.Windows.Forms.CheckBox();
             this.txt_fin = new System.Windows.Forms.TextBox();
             this.txt_debut = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.dtp_heure_fin = new System.Windows.Forms.DateTimePicker();
             this.dtp_heure_debut = new System.Windows.Forms.DateTimePicker();
             this.dtp_date_fin = new System.Windows.Forms.DateTimePicker();
@@ -88,11 +101,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
             this.grp_log.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).BeginInit();
+            this.context_log.SuspendLayout();
             this.panel1.SuspendLayout();
             this.grp_filter.SuspendLayout();
+            this.grp_planning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_fin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_debut)).BeginInit();
-            this.grp_planning.SuspendLayout();
+            this.grp_interval.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tab_app.SuspendLayout();
             this.tab_filtre.SuspendLayout();
@@ -125,7 +140,8 @@
             this.dgv_pointeuse.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_pointeuse.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
-            this.pointeuse});
+            this.pointeuse,
+            this.temp});
             this.dgv_pointeuse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_pointeuse.Location = new System.Drawing.Point(3, 16);
             this.dgv_pointeuse.Name = "dgv_pointeuse";
@@ -134,6 +150,7 @@
             this.dgv_pointeuse.Size = new System.Drawing.Size(258, 371);
             this.dgv_pointeuse.TabIndex = 0;
             this.dgv_pointeuse.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_pointeuse_CellContentClick);
+            this.dgv_pointeuse.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_pointeuse_CellFormatting);
             // 
             // id
             // 
@@ -147,6 +164,15 @@
             this.pointeuse.HeaderText = "Pointeuse";
             this.pointeuse.Name = "pointeuse";
             this.pointeuse.ReadOnly = true;
+            // 
+            // temp
+            // 
+            this.temp.FalseValue = "false";
+            this.temp.FillWeight = 10F;
+            this.temp.HeaderText = "";
+            this.temp.Name = "temp";
+            this.temp.ReadOnly = true;
+            this.temp.TrueValue = "true";
             // 
             // grp_log
             // 
@@ -167,10 +193,13 @@
             this.dgv_log.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_log.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pos,
+            this.icon,
             this.num,
             this.name,
             this.date,
-            this.heure});
+            this.heure,
+            this.exclus});
+            this.dgv_log.ContextMenuStrip = this.context_log;
             this.dgv_log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_log.Location = new System.Drawing.Point(3, 16);
             this.dgv_log.Name = "dgv_log";
@@ -179,13 +208,22 @@
             this.dgv_log.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_log.Size = new System.Drawing.Size(644, 362);
             this.dgv_log.TabIndex = 1;
+            this.dgv_log.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_log_CellContentClick);
+            this.dgv_log.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_log_MouseDown);
             // 
             // pos
             // 
-            this.pos.FillWeight = 50.76142F;
+            this.pos.FillWeight = 40.76142F;
             this.pos.HeaderText = "";
             this.pos.Name = "pos";
             this.pos.ReadOnly = true;
+            // 
+            // icon
+            // 
+            this.icon.FillWeight = 20F;
+            this.icon.HeaderText = "";
+            this.icon.Name = "icon";
+            this.icon.ReadOnly = true;
             // 
             // num
             // 
@@ -215,6 +253,37 @@
             this.heure.Name = "heure";
             this.heure.ReadOnly = true;
             // 
+            // exclus
+            // 
+            this.exclus.FillWeight = 20F;
+            this.exclus.HeaderText = "";
+            this.exclus.Name = "exclus";
+            this.exclus.ReadOnly = true;
+            // 
+            // context_log
+            // 
+            this.context_log.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.insererDansUneFicheToolStripMenuItem,
+            this.effacerLesLignesInseréesToolStripMenuItem});
+            this.context_log.Name = "context_log";
+            this.context_log.Size = new System.Drawing.Size(207, 48);
+            // 
+            // effacerLesLignesInseréesToolStripMenuItem
+            // 
+            this.effacerLesLignesInseréesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.clean;
+            this.effacerLesLignesInseréesToolStripMenuItem.Name = "effacerLesLignesInseréesToolStripMenuItem";
+            this.effacerLesLignesInseréesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.effacerLesLignesInseréesToolStripMenuItem.Text = "Effacer les lignes inserées";
+            this.effacerLesLignesInseréesToolStripMenuItem.Click += new System.EventHandler(this.effacerLesLignesInseréesToolStripMenuItem_Click);
+            // 
+            // insererDansUneFicheToolStripMenuItem
+            // 
+            this.insererDansUneFicheToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.insererDansUneFicheToolStripMenuItem.Name = "insererDansUneFicheToolStripMenuItem";
+            this.insererDansUneFicheToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.insererDansUneFicheToolStripMenuItem.Text = "Inserer dans une fiche";
+            this.insererDansUneFicheToolStripMenuItem.Click += new System.EventHandler(this.insererDansUneFicheToolStripMenuItem_Click);
+            // 
             // btn_load
             // 
             this.btn_load.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -229,7 +298,7 @@
             // btn_synchro
             // 
             this.btn_synchro.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_synchro.Location = new System.Drawing.Point(793, 381);
+            this.btn_synchro.Location = new System.Drawing.Point(794, 381);
             this.btn_synchro.Name = "btn_synchro";
             this.btn_synchro.Size = new System.Drawing.Size(156, 26);
             this.btn_synchro.TabIndex = 3;
@@ -259,20 +328,21 @@
             this.chk_filter.Location = new System.Drawing.Point(5, 2);
             this.chk_filter.Name = "chk_filter";
             this.chk_filter.Size = new System.Drawing.Size(101, 17);
-            this.chk_filter.TabIndex = 8;
+            this.chk_filter.TabIndex = 5;
             this.chk_filter.Text = "Filtrer Historique";
             this.chk_filter.UseVisualStyleBackColor = true;
             this.chk_filter.CheckedChanged += new System.EventHandler(this.chk_filter_CheckedChanged);
             // 
             // grp_filter
             // 
+            this.grp_filter.Controls.Add(this.grp_planning);
             this.grp_filter.Controls.Add(this.txt_marge_heure_fin);
             this.grp_filter.Controls.Add(this.chk_invalid_only);
             this.grp_filter.Controls.Add(this.txt_marge_heure_debut);
             this.grp_filter.Controls.Add(this.chk_date);
             this.grp_filter.Controls.Add(this.chk_employe);
             this.grp_filter.Controls.Add(this.txt_id);
-            this.grp_filter.Controls.Add(this.grp_planning);
+            this.grp_filter.Controls.Add(this.grp_interval);
             this.grp_filter.Controls.Add(this.dtp_heure_fin);
             this.grp_filter.Controls.Add(this.dtp_heure_debut);
             this.grp_filter.Controls.Add(this.dtp_date_fin);
@@ -281,12 +351,59 @@
             this.grp_filter.Controls.Add(this.label2);
             this.grp_filter.Controls.Add(this.com_employe);
             this.grp_filter.Enabled = false;
-            this.grp_filter.Location = new System.Drawing.Point(5, 25);
+            this.grp_filter.Location = new System.Drawing.Point(5, 18);
             this.grp_filter.Name = "grp_filter";
-            this.grp_filter.Size = new System.Drawing.Size(263, 371);
-            this.grp_filter.TabIndex = 7;
+            this.grp_filter.Size = new System.Drawing.Size(263, 381);
+            this.grp_filter.TabIndex = 10;
             this.grp_filter.TabStop = false;
-            this.grp_filter.Text = "Elément Filtagre";
+            this.grp_filter.Text = "Elément Filtrage";
+            // 
+            // grp_planning
+            // 
+            this.grp_planning.Controls.Add(this.txt_fin_plan);
+            this.grp_planning.Controls.Add(this.txt_debut_plan);
+            this.grp_planning.Controls.Add(this.label5);
+            this.grp_planning.Controls.Add(this.label4);
+            this.grp_planning.Location = new System.Drawing.Point(3, 257);
+            this.grp_planning.Name = "grp_planning";
+            this.grp_planning.Size = new System.Drawing.Size(254, 100);
+            this.grp_planning.TabIndex = 70;
+            this.grp_planning.TabStop = false;
+            this.grp_planning.Text = "Planning";
+            // 
+            // txt_fin_plan
+            // 
+            this.txt_fin_plan.Location = new System.Drawing.Point(16, 74);
+            this.txt_fin_plan.Name = "txt_fin_plan";
+            this.txt_fin_plan.ReadOnly = true;
+            this.txt_fin_plan.Size = new System.Drawing.Size(148, 20);
+            this.txt_fin_plan.TabIndex = 70;
+            // 
+            // txt_debut_plan
+            // 
+            this.txt_debut_plan.Location = new System.Drawing.Point(16, 37);
+            this.txt_debut_plan.Name = "txt_debut_plan";
+            this.txt_debut_plan.ReadOnly = true;
+            this.txt_debut_plan.Size = new System.Drawing.Size(148, 20);
+            this.txt_debut_plan.TabIndex = 70;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(17, 58);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(21, 13);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Fin";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(17, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Début";
             // 
             // txt_marge_heure_fin
             // 
@@ -296,24 +413,27 @@
             0,
             0,
             0});
-            this.txt_marge_heure_fin.Location = new System.Drawing.Point(216, 173);
+            this.txt_marge_heure_fin.Location = new System.Drawing.Point(209, 136);
             this.txt_marge_heure_fin.Maximum = new decimal(new int[] {
-            60,
+            1440,
             0,
             0,
             0});
             this.txt_marge_heure_fin.Name = "txt_marge_heure_fin";
-            this.txt_marge_heure_fin.Size = new System.Drawing.Size(41, 20);
-            this.txt_marge_heure_fin.TabIndex = 8;
+            this.txt_marge_heure_fin.Size = new System.Drawing.Size(50, 20);
+            this.txt_marge_heure_fin.TabIndex = 55;
             this.tt_message.SetToolTip(this.txt_marge_heure_fin, "marge supérieur sur l\'heure de fin");
+            this.txt_marge_heure_fin.ValueChanged += new System.EventHandler(this.txt_marge_heure_fin_ValueChanged);
             // 
             // chk_invalid_only
             // 
             this.chk_invalid_only.AutoSize = true;
-            this.chk_invalid_only.Location = new System.Drawing.Point(10, 346);
+            this.chk_invalid_only.Checked = true;
+            this.chk_invalid_only.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chk_invalid_only.Location = new System.Drawing.Point(10, 361);
             this.chk_invalid_only.Name = "chk_invalid_only";
             this.chk_invalid_only.Size = new System.Drawing.Size(174, 17);
-            this.chk_invalid_only.TabIndex = 8;
+            this.chk_invalid_only.TabIndex = 75;
             this.chk_invalid_only.Text = "Uniquement les fiches invalides";
             this.chk_invalid_only.UseVisualStyleBackColor = true;
             // 
@@ -326,24 +446,25 @@
             0,
             0,
             0});
-            this.txt_marge_heure_debut.Location = new System.Drawing.Point(216, 125);
+            this.txt_marge_heure_debut.Location = new System.Drawing.Point(209, 97);
             this.txt_marge_heure_debut.Maximum = new decimal(new int[] {
-            60,
+            1440,
             0,
             0,
             0});
             this.txt_marge_heure_debut.Name = "txt_marge_heure_debut";
-            this.txt_marge_heure_debut.Size = new System.Drawing.Size(41, 20);
-            this.txt_marge_heure_debut.TabIndex = 8;
+            this.txt_marge_heure_debut.Size = new System.Drawing.Size(50, 20);
+            this.txt_marge_heure_debut.TabIndex = 40;
             this.tt_message.SetToolTip(this.txt_marge_heure_debut, "marge inférieur sur l\'heure de début");
+            this.txt_marge_heure_debut.ValueChanged += new System.EventHandler(this.txt_marge_heure_debut_ValueChanged);
             // 
             // chk_date
             // 
             this.chk_date.AutoSize = true;
-            this.chk_date.Location = new System.Drawing.Point(10, 88);
+            this.chk_date.Location = new System.Drawing.Point(10, 64);
             this.chk_date.Name = "chk_date";
             this.chk_date.Size = new System.Drawing.Size(54, 17);
-            this.chk_date.TabIndex = 6;
+            this.chk_date.TabIndex = 25;
             this.chk_date.Text = "Dates";
             this.chk_date.UseVisualStyleBackColor = true;
             this.chk_date.CheckedChanged += new System.EventHandler(this.chk_date_CheckedChanged);
@@ -351,80 +472,110 @@
             // chk_employe
             // 
             this.chk_employe.AutoSize = true;
-            this.chk_employe.Location = new System.Drawing.Point(10, 24);
+            this.chk_employe.Location = new System.Drawing.Point(10, 16);
             this.chk_employe.Name = "chk_employe";
             this.chk_employe.Size = new System.Drawing.Size(66, 17);
-            this.chk_employe.TabIndex = 6;
+            this.chk_employe.TabIndex = 10;
             this.chk_employe.Text = "Employé";
             this.chk_employe.UseVisualStyleBackColor = true;
             this.chk_employe.CheckedChanged += new System.EventHandler(this.chk_employe_CheckedChanged);
             // 
             // txt_id
             // 
-            this.txt_id.Location = new System.Drawing.Point(3, 46);
+            this.txt_id.Location = new System.Drawing.Point(3, 36);
             this.txt_id.Name = "txt_id";
             this.txt_id.ReadOnly = true;
             this.txt_id.Size = new System.Drawing.Size(60, 20);
-            this.txt_id.TabIndex = 7;
+            this.txt_id.TabIndex = 15;
             this.txt_id.Text = "0";
             this.txt_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // grp_planning
+            // grp_interval
             // 
-            this.grp_planning.Controls.Add(this.txt_fin);
-            this.grp_planning.Controls.Add(this.txt_debut);
-            this.grp_planning.Controls.Add(this.label5);
-            this.grp_planning.Controls.Add(this.label4);
-            this.grp_planning.Location = new System.Drawing.Point(3, 206);
-            this.grp_planning.Name = "grp_planning";
-            this.grp_planning.Size = new System.Drawing.Size(254, 134);
-            this.grp_planning.TabIndex = 6;
-            this.grp_planning.TabStop = false;
-            this.grp_planning.Text = "Planning";
+            this.grp_interval.Controls.Add(this.chk_heure_fin);
+            this.grp_interval.Controls.Add(this.chk_heure_debut);
+            this.grp_interval.Controls.Add(this.txt_fin);
+            this.grp_interval.Controls.Add(this.txt_debut);
+            this.grp_interval.Controls.Add(this.label1);
+            this.grp_interval.Controls.Add(this.label6);
+            this.grp_interval.Location = new System.Drawing.Point(3, 157);
+            this.grp_interval.Name = "grp_interval";
+            this.grp_interval.Size = new System.Drawing.Size(254, 100);
+            this.grp_interval.TabIndex = 60;
+            this.grp_interval.TabStop = false;
+            this.grp_interval.Text = "Interval Dates";
+            // 
+            // chk_heure_fin
+            // 
+            this.chk_heure_fin.AutoSize = true;
+            this.chk_heure_fin.Checked = true;
+            this.chk_heure_fin.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chk_heure_fin.Location = new System.Drawing.Point(170, 76);
+            this.chk_heure_fin.Name = "chk_heure_fin";
+            this.chk_heure_fin.Size = new System.Drawing.Size(61, 17);
+            this.chk_heure_fin.TabIndex = 65;
+            this.chk_heure_fin.Text = "Heure?";
+            this.tt_message.SetToolTip(this.chk_heure_fin, "Tenir compte de l\'heure de fin lors de la recherche?");
+            this.chk_heure_fin.UseVisualStyleBackColor = true;
+            this.chk_heure_fin.CheckedChanged += new System.EventHandler(this.chk_heure_fin_CheckedChanged);
+            // 
+            // chk_heure_debut
+            // 
+            this.chk_heure_debut.AutoSize = true;
+            this.chk_heure_debut.Checked = true;
+            this.chk_heure_debut.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chk_heure_debut.Location = new System.Drawing.Point(170, 38);
+            this.chk_heure_debut.Name = "chk_heure_debut";
+            this.chk_heure_debut.Size = new System.Drawing.Size(61, 17);
+            this.chk_heure_debut.TabIndex = 60;
+            this.chk_heure_debut.Text = "Heure?";
+            this.tt_message.SetToolTip(this.chk_heure_debut, "Tenir compte de l\'heure de début lors de la recherche?");
+            this.chk_heure_debut.UseVisualStyleBackColor = true;
+            this.chk_heure_debut.CheckedChanged += new System.EventHandler(this.chk_heure_debut_CheckedChanged);
             // 
             // txt_fin
             // 
-            this.txt_fin.Location = new System.Drawing.Point(16, 99);
+            this.txt_fin.Location = new System.Drawing.Point(16, 74);
             this.txt_fin.Name = "txt_fin";
             this.txt_fin.ReadOnly = true;
             this.txt_fin.Size = new System.Drawing.Size(148, 20);
-            this.txt_fin.TabIndex = 5;
+            this.txt_fin.TabIndex = 70;
             // 
             // txt_debut
             // 
-            this.txt_debut.Location = new System.Drawing.Point(16, 47);
+            this.txt_debut.Location = new System.Drawing.Point(16, 36);
             this.txt_debut.Name = "txt_debut";
             this.txt_debut.ReadOnly = true;
             this.txt_debut.Size = new System.Drawing.Size(148, 20);
-            this.txt_debut.TabIndex = 4;
+            this.txt_debut.TabIndex = 70;
             // 
-            // label5
+            // label1
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(17, 82);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Heure Fin";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(17, 58);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(21, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Fin";
             // 
-            // label4
+            // label6
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Heure Début";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(17, 19);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(36, 13);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "Début";
             // 
             // dtp_heure_fin
             // 
             this.dtp_heure_fin.Enabled = false;
             this.dtp_heure_fin.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtp_heure_fin.Location = new System.Drawing.Point(124, 173);
+            this.dtp_heure_fin.Location = new System.Drawing.Point(121, 136);
             this.dtp_heure_fin.Name = "dtp_heure_fin";
             this.dtp_heure_fin.ShowUpDown = true;
             this.dtp_heure_fin.Size = new System.Drawing.Size(86, 20);
-            this.dtp_heure_fin.TabIndex = 3;
+            this.dtp_heure_fin.TabIndex = 50;
             this.dtp_heure_fin.Value = new System.DateTime(2016, 9, 6, 0, 0, 0, 0);
             this.dtp_heure_fin.ValueChanged += new System.EventHandler(this.dtp_heure_fin_ValueChanged);
             // 
@@ -433,11 +584,11 @@
             this.dtp_heure_debut.CustomFormat = "";
             this.dtp_heure_debut.Enabled = false;
             this.dtp_heure_debut.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtp_heure_debut.Location = new System.Drawing.Point(124, 125);
+            this.dtp_heure_debut.Location = new System.Drawing.Point(121, 97);
             this.dtp_heure_debut.Name = "dtp_heure_debut";
             this.dtp_heure_debut.ShowUpDown = true;
             this.dtp_heure_debut.Size = new System.Drawing.Size(86, 20);
-            this.dtp_heure_debut.TabIndex = 2;
+            this.dtp_heure_debut.TabIndex = 35;
             this.dtp_heure_debut.Value = new System.DateTime(2016, 9, 6, 0, 0, 0, 0);
             this.dtp_heure_debut.ValueChanged += new System.EventHandler(this.dtp_heure_debut_ValueChanged);
             // 
@@ -445,26 +596,26 @@
             // 
             this.dtp_date_fin.Enabled = false;
             this.dtp_date_fin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtp_date_fin.Location = new System.Drawing.Point(16, 173);
+            this.dtp_date_fin.Location = new System.Drawing.Point(16, 136);
             this.dtp_date_fin.Name = "dtp_date_fin";
             this.dtp_date_fin.Size = new System.Drawing.Size(102, 20);
-            this.dtp_date_fin.TabIndex = 3;
+            this.dtp_date_fin.TabIndex = 45;
             this.dtp_date_fin.ValueChanged += new System.EventHandler(this.dtp_fin_ValueChanged);
             // 
             // dtp_date_debut
             // 
             this.dtp_date_debut.Enabled = false;
             this.dtp_date_debut.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtp_date_debut.Location = new System.Drawing.Point(16, 125);
+            this.dtp_date_debut.Location = new System.Drawing.Point(16, 97);
             this.dtp_date_debut.Name = "dtp_date_debut";
             this.dtp_date_debut.Size = new System.Drawing.Size(102, 20);
-            this.dtp_date_debut.TabIndex = 2;
+            this.dtp_date_debut.TabIndex = 30;
             this.dtp_date_debut.ValueChanged += new System.EventHandler(this.dtp_debut_ValueChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 156);
+            this.label3.Location = new System.Drawing.Point(16, 121);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 13);
             this.label3.TabIndex = 1;
@@ -473,7 +624,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 108);
+            this.label2.Location = new System.Drawing.Point(16, 82);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 13);
             this.label2.TabIndex = 1;
@@ -483,10 +634,10 @@
             // 
             this.com_employe.Enabled = false;
             this.com_employe.FormattingEnabled = true;
-            this.com_employe.Location = new System.Drawing.Point(65, 45);
+            this.com_employe.Location = new System.Drawing.Point(65, 35);
             this.com_employe.Name = "com_employe";
             this.com_employe.Size = new System.Drawing.Size(192, 21);
-            this.com_employe.TabIndex = 0;
+            this.com_employe.TabIndex = 20;
             this.com_employe.SelectedIndexChanged += new System.EventHandler(this.com_employe_SelectedIndexChanged);
             // 
             // tabControl1
@@ -704,13 +855,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).EndInit();
             this.grp_log.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).EndInit();
+            this.context_log.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.grp_filter.ResumeLayout(false);
             this.grp_filter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_fin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_debut)).EndInit();
             this.grp_planning.ResumeLayout(false);
             this.grp_planning.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_fin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_marge_heure_debut)).EndInit();
+            this.grp_interval.ResumeLayout(false);
+            this.grp_interval.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tab_app.ResumeLayout(false);
             this.tab_filtre.ResumeLayout(false);
@@ -733,14 +887,6 @@
         private System.Windows.Forms.GroupBox grp_pointeuse;
         private System.Windows.Forms.GroupBox grp_log;
         private System.Windows.Forms.DataGridView dgv_pointeuse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pointeuse;
-        private System.Windows.Forms.DataGridView dgv_log;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn num;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn heure;
         private System.Windows.Forms.Button btn_load;
         private System.Windows.Forms.Button btn_synchro;
         private System.Windows.Forms.Panel panel1;
@@ -750,11 +896,6 @@
         private System.Windows.Forms.CheckBox chk_date;
         private System.Windows.Forms.CheckBox chk_employe;
         private System.Windows.Forms.TextBox txt_id;
-        private System.Windows.Forms.GroupBox grp_planning;
-        private System.Windows.Forms.TextBox txt_fin;
-        private System.Windows.Forms.TextBox txt_debut;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker dtp_date_fin;
         private System.Windows.Forms.DateTimePicker dtp_date_debut;
         private System.Windows.Forms.Label label3;
@@ -784,5 +925,31 @@
         private System.Windows.Forms.NumericUpDown txt_marge_heure_debut;
         private System.Windows.Forms.ToolTip tt_message;
         private System.Windows.Forms.CheckBox chk_invalid_only;
+        private System.Windows.Forms.GroupBox grp_interval;
+        private System.Windows.Forms.TextBox txt_fin;
+        private System.Windows.Forms.TextBox txt_debut;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox chk_heure_fin;
+        private System.Windows.Forms.CheckBox chk_heure_debut;
+        private System.Windows.Forms.GroupBox grp_planning;
+        private System.Windows.Forms.TextBox txt_fin_plan;
+        private System.Windows.Forms.TextBox txt_debut_plan;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.DataGridView dgv_log;
+        private System.Windows.Forms.ContextMenuStrip context_log;
+        private System.Windows.Forms.ToolStripMenuItem effacerLesLignesInseréesToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pointeuse;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn temp;
+        private System.Windows.Forms.ToolStripMenuItem insererDansUneFicheToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pos;
+        private System.Windows.Forms.DataGridViewImageColumn icon;
+        private System.Windows.Forms.DataGridViewTextBoxColumn num;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn heure;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn exclus;
     }
 }

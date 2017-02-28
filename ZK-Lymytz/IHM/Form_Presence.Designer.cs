@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Presence));
             this.label1 = new System.Windows.Forms.Label();
             this.lnk_today = new System.Windows.Forms.LinkLabel();
@@ -61,23 +62,35 @@
             this.label2 = new System.Windows.Forms.Label();
             this.grp_list_time = new System.Windows.Forms.GroupBox();
             this.dgv_pointage = new System.Windows.Forms.DataGridView();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cpt_po = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.heure_entree = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.heure_sortie = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.duree = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valider = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.supp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.context_pointage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.reorganiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fusionnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reevaluerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.box_identity = new System.Windows.Forms.PictureBox();
             this.btn_next = new System.Windows.Forms.Button();
             this.btn_prec = new System.Windows.Forms.Button();
             this.txt_id_search = new System.Windows.Forms.TextBox();
             this.com_employe = new System.Windows.Forms.ComboBox();
             this.lb_pagination = new System.Windows.Forms.Label();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.heure_entree = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.heure_sortie = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.duree = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valider = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.supp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.txt_index_of = new System.Windows.Forms.TextBox();
+            this.actualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.synchroniserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.pbar_statut = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.grp_total.SuspendLayout();
             this.grp_list_time.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointage)).BeginInit();
+            this.context_pointage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box_identity)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -147,7 +160,7 @@
             // 
             this.rbtn_no.AutoCheck = false;
             this.rbtn_no.AutoSize = true;
-            this.rbtn_no.Location = new System.Drawing.Point(568, 56);
+            this.rbtn_no.Location = new System.Drawing.Point(571, 56);
             this.rbtn_no.Name = "rbtn_no";
             this.rbtn_no.Size = new System.Drawing.Size(45, 17);
             this.rbtn_no.TabIndex = 16;
@@ -177,7 +190,7 @@
             // 
             // txt_heure_debut
             // 
-            this.txt_heure_debut.Location = new System.Drawing.Point(521, 27);
+            this.txt_heure_debut.Location = new System.Drawing.Point(524, 27);
             this.txt_heure_debut.Name = "txt_heure_debut";
             this.txt_heure_debut.ReadOnly = true;
             this.txt_heure_debut.Size = new System.Drawing.Size(117, 20);
@@ -193,7 +206,7 @@
             // 
             // txt_date_debut
             // 
-            this.txt_date_debut.Location = new System.Drawing.Point(521, 3);
+            this.txt_date_debut.Location = new System.Drawing.Point(524, 3);
             this.txt_date_debut.Name = "txt_date_debut";
             this.txt_date_debut.ReadOnly = true;
             this.txt_date_debut.Size = new System.Drawing.Size(117, 20);
@@ -217,7 +230,7 @@
             this.txt_total_suppl.Location = new System.Drawing.Point(237, 17);
             this.txt_total_suppl.Name = "txt_total_suppl";
             this.txt_total_suppl.ReadOnly = true;
-            this.txt_total_suppl.Size = new System.Drawing.Size(59, 20);
+            this.txt_total_suppl.Size = new System.Drawing.Size(67, 20);
             this.txt_total_suppl.TabIndex = 12;
             this.txt_total_suppl.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -397,11 +410,13 @@
             this.dgv_pointage.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_pointage.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
+            this.cpt_po,
             this.heure_entree,
             this.heure_sortie,
             this.duree,
             this.valider,
             this.supp});
+            this.dgv_pointage.ContextMenuStrip = this.context_pointage;
             this.dgv_pointage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_pointage.Location = new System.Drawing.Point(3, 16);
             this.dgv_pointage.Name = "dgv_pointage";
@@ -410,6 +425,90 @@
             this.dgv_pointage.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_pointage.Size = new System.Drawing.Size(740, 167);
             this.dgv_pointage.TabIndex = 0;
+            this.dgv_pointage.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_pointage_CellFormatting);
+            // 
+            // id
+            // 
+            this.id.HeaderText = "";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Visible = false;
+            // 
+            // cpt_po
+            // 
+            this.cpt_po.FillWeight = 40.90782F;
+            this.cpt_po.HeaderText = "";
+            this.cpt_po.Name = "cpt_po";
+            this.cpt_po.ReadOnly = true;
+            // 
+            // heure_entree
+            // 
+            this.heure_entree.FillWeight = 223.9961F;
+            this.heure_entree.HeaderText = "Heure Entrée";
+            this.heure_entree.Name = "heure_entree";
+            this.heure_entree.ReadOnly = true;
+            // 
+            // heure_sortie
+            // 
+            this.heure_sortie.FillWeight = 223.9961F;
+            this.heure_sortie.HeaderText = "Heure Sortie";
+            this.heure_sortie.Name = "heure_sortie";
+            this.heure_sortie.ReadOnly = true;
+            // 
+            // duree
+            // 
+            this.duree.HeaderText = "Durée";
+            this.duree.Name = "duree";
+            this.duree.ReadOnly = true;
+            // 
+            // valider
+            // 
+            this.valider.FillWeight = 40.3619F;
+            this.valider.HeaderText = "Val.";
+            this.valider.Name = "valider";
+            this.valider.ReadOnly = true;
+            // 
+            // supp
+            // 
+            this.supp.FillWeight = 40.28119F;
+            this.supp.HeaderText = "Sup.";
+            this.supp.Name = "supp";
+            this.supp.ReadOnly = true;
+            // 
+            // context_pointage
+            // 
+            this.context_pointage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.synchroniserToolStripMenuItem,
+            this.actualiserToolStripMenuItem,
+            this.reorganiserToolStripMenuItem,
+            this.reevaluerToolStripMenuItem,
+            this.fusionnerToolStripMenuItem});
+            this.context_pointage.Name = "context_pointage";
+            this.context_pointage.Size = new System.Drawing.Size(162, 114);
+            // 
+            // reorganiserToolStripMenuItem
+            // 
+            this.reorganiserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.add;
+            this.reorganiserToolStripMenuItem.Name = "reorganiserToolStripMenuItem";
+            this.reorganiserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.reorganiserToolStripMenuItem.Text = "Reorganiser";
+            this.reorganiserToolStripMenuItem.Click += new System.EventHandler(this.reorganiserToolStripMenuItem_Click);
+            // 
+            // fusionnerToolStripMenuItem
+            // 
+            this.fusionnerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.famille;
+            this.fusionnerToolStripMenuItem.Name = "fusionnerToolStripMenuItem";
+            this.fusionnerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.fusionnerToolStripMenuItem.Text = "Fusionner";
+            this.fusionnerToolStripMenuItem.Click += new System.EventHandler(this.fusionnerToolStripMenuItem_Click);
+            // 
+            // reevaluerToolStripMenuItem
+            // 
+            this.reevaluerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.db;
+            this.reevaluerToolStripMenuItem.Name = "reevaluerToolStripMenuItem";
+            this.reevaluerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.reevaluerToolStripMenuItem.Text = "Reevaluer";
+            this.reevaluerToolStripMenuItem.Click += new System.EventHandler(this.reevaluerToolStripMenuItem_Click);
             // 
             // box_identity
             // 
@@ -474,52 +573,56 @@
             this.lb_pagination.TabIndex = 6;
             this.lb_pagination.Text = "1/56";
             // 
-            // id
+            // txt_index_of
             // 
-            this.id.FillWeight = 40.90782F;
-            this.id.HeaderText = "";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
+            this.txt_index_of.Location = new System.Drawing.Point(782, 345);
+            this.txt_index_of.Name = "txt_index_of";
+            this.txt_index_of.Size = new System.Drawing.Size(35, 20);
+            this.txt_index_of.TabIndex = 8;
+            this.txt_index_of.Text = "1";
+            this.txt_index_of.Leave += new System.EventHandler(this.txt_index_of_Leave);
             // 
-            // heure_entree
+            // actualiserToolStripMenuItem
             // 
-            this.heure_entree.FillWeight = 223.9961F;
-            this.heure_entree.HeaderText = "Heure Entrée";
-            this.heure_entree.Name = "heure_entree";
-            this.heure_entree.ReadOnly = true;
+            this.actualiserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.connected;
+            this.actualiserToolStripMenuItem.Name = "actualiserToolStripMenuItem";
+            this.actualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.actualiserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.actualiserToolStripMenuItem.Text = "Actualiser";
+            this.actualiserToolStripMenuItem.Click += new System.EventHandler(this.actualiserToolStripMenuItem_Click);
             // 
-            // heure_sortie
+            // synchroniserToolStripMenuItem
             // 
-            this.heure_sortie.FillWeight = 223.9961F;
-            this.heure_sortie.HeaderText = "Heure Sortie";
-            this.heure_sortie.Name = "heure_sortie";
-            this.heure_sortie.ReadOnly = true;
+            this.synchroniserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.synchroniserToolStripMenuItem.Name = "synchroniserToolStripMenuItem";
+            this.synchroniserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.synchroniserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.synchroniserToolStripMenuItem.Text = "Synchroniser";
+            this.synchroniserToolStripMenuItem.Click += new System.EventHandler(this.synchroniserToolStripMenuItem_Click);
             // 
-            // duree
+            // panel2
             // 
-            this.duree.HeaderText = "Durée";
-            this.duree.Name = "duree";
-            this.duree.ReadOnly = true;
+            this.panel2.Controls.Add(this.pbar_statut);
+            this.panel2.Location = new System.Drawing.Point(2, 370);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(817, 19);
+            this.panel2.TabIndex = 9;
             // 
-            // valider
+            // pbar_statut
             // 
-            this.valider.FillWeight = 40.3619F;
-            this.valider.HeaderText = "Val.";
-            this.valider.Name = "valider";
-            this.valider.ReadOnly = true;
-            // 
-            // supp
-            // 
-            this.supp.FillWeight = 40.28119F;
-            this.supp.HeaderText = "Sup.";
-            this.supp.Name = "supp";
-            this.supp.ReadOnly = true;
+            this.pbar_statut.Location = new System.Drawing.Point(3, 4);
+            this.pbar_statut.Maximum = 10000;
+            this.pbar_statut.Name = "pbar_statut";
+            this.pbar_statut.Size = new System.Drawing.Size(810, 12);
+            this.pbar_statut.TabIndex = 0;
             // 
             // Form_Presence
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(821, 368);
+            this.ClientSize = new System.Drawing.Size(821, 391);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.txt_index_of);
             this.Controls.Add(this.lb_pagination);
             this.Controls.Add(this.com_employe);
             this.Controls.Add(this.txt_id_search);
@@ -528,6 +631,9 @@
             this.Controls.Add(this.lnk_today);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(837, 430);
+            this.MinimumSize = new System.Drawing.Size(837, 430);
             this.Name = "Form_Presence";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion Présence";
@@ -539,7 +645,9 @@
             this.grp_total.PerformLayout();
             this.grp_list_time.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointage)).EndInit();
+            this.context_pointage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.box_identity)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -586,10 +694,20 @@
         private System.Windows.Forms.DataGridView dgv_pointage;
         private System.Windows.Forms.Label lb_pagination;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cpt_po;
         private System.Windows.Forms.DataGridViewTextBoxColumn heure_entree;
         private System.Windows.Forms.DataGridViewTextBoxColumn heure_sortie;
         private System.Windows.Forms.DataGridViewTextBoxColumn duree;
         private System.Windows.Forms.DataGridViewCheckBoxColumn valider;
         private System.Windows.Forms.DataGridViewCheckBoxColumn supp;
+        private System.Windows.Forms.ContextMenuStrip context_pointage;
+        private System.Windows.Forms.ToolStripMenuItem reorganiserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fusionnerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reevaluerToolStripMenuItem;
+        private System.Windows.Forms.TextBox txt_index_of;
+        private System.Windows.Forms.ToolStripMenuItem actualiserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem synchroniserToolStripMenuItem;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ProgressBar pbar_statut;
     }
 }

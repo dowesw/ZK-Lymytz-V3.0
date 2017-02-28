@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ZK_Lymytz.ENTITE
 {
-    class TrancheHoraire
+    public class TrancheHoraire
     {
 
         public TrancheHoraire()

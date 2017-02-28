@@ -12,6 +12,34 @@ namespace ZK_Lymytz.DAO
 {
     class EmployeDAO
     {
+        private static Employe Return(NpgsqlDataReader lect)
+        {
+            Employe bean = new Employe();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Nom = lect["nom"].ToString();
+            bean.Prenom = lect["prenom"].ToString();
+            bean.Matricule = lect["matricule"].ToString();
+            bean.Photo = lect["photos"].ToString();
+            bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
+            string q = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true limit 1";
+            List<Contrat> lc = ContratDAO.getList(q);
+            if (lc.Count > 0)
+            {
+                bean.Contrat = lc[0];
+            }
+            q = "select * from yvs_grh_poste_employes where employe = " + bean.Id + " and actif = true and valider = true limit 1";
+            List<PosteTravail> lp = PosteTravailDAO.getList(q);
+            if (lp.Count > 0)
+            {
+                bean.Poste = lp[0];
+            }
+            if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
+            {
+                bean.Agence = AgenceDAO.getOneById(Convert.ToInt32(lect["agence"].ToString()));
+            }
+            return bean;
+        }
+
         public static Employe getOneById(int id)
         {
             Employe bean = new Employe();
@@ -25,28 +53,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Nom = lect["nom"].ToString();
-                        bean.Prenom = lect["prenom"].ToString();
-                        bean.Matricule = lect["matricule"].ToString();
-                        bean.Photo = lect["photos"].ToString();
-                        bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
-                        string q = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true limit 1";
-                        List<Contrat> lc = ContratDAO.getList(q);
-                        if (lc.Count > 0)
-                        {
-                            bean.Contrat = lc[0];
-                        }
-                        q = "select * from yvs_grh_poste_employes where employe = " + bean.Id + " and actif = true and valider = true limit 1";
-                        List<PosteTravail> lp = PosteTravailDAO.getList(q);
-                        if (lp.Count > 0)
-                        {
-                            bean.Poste = lp[0];
-                        }
-                        if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
-                        {
-                            bean.Agence = AgenceDAO.getOneById(Convert.ToInt32(lect["agence"].ToString()));
-                        }
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -58,7 +65,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
         public static Employe getOneById(int id, int societe)
@@ -74,7 +81,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -86,7 +93,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -103,7 +110,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -115,7 +122,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -132,7 +139,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = getOneById(Convert.ToInt32(lect["id"].ToString()));
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -144,7 +151,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -158,10 +165,15 @@ namespace ZK_Lymytz.DAO
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
                 {
+                    List<string> noms = new List<string>();
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        Employe e = Return(lect);
+                        string nom = e.NomPrenom;
+                        if (noms.Contains(nom))
+                            e.Prenom += "°";
+                        noms.Add(nom);
+                        list.Add(e);
                     }
                 }
                 return list;
@@ -173,7 +185,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

@@ -12,6 +12,20 @@ namespace ZK_Lymytz.DAO
 {
     class JoursOuvresDAO
     {
+        private static JoursOuvres Return(NpgsqlDataReader lect)
+        {
+            JoursOuvres bean = new JoursOuvres();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Jour = lect["jour"].ToString();
+            bean.HeureDebutTravail = (DateTime)((lect["heure_debut_travail"] != null) ? (!lect["heure_debut_travail"].ToString().Trim().Equals("") ? lect["heure_debut_travail"] : DateTime.Now) : DateTime.Now);
+            bean.HeureFinTravail = (DateTime)((lect["heure_fin_travail"] != null) ? (!lect["heure_fin_travail"].ToString().Trim().Equals("") ? lect["heure_fin_travail"] : DateTime.Now) : DateTime.Now);
+            bean.DureePause = (DateTime)((lect["duree_pause"] != null) ? (!lect["duree_pause"].ToString().Trim().Equals("") ? lect["duree_pause"] : DateTime.Now) : DateTime.Now);
+            bean.HeureDebutPause = (DateTime)((lect["heure_debut_pause"] != null) ? (!lect["heure_debut_pause"].ToString().Trim().Equals("") ? lect["heure_debut_pause"] : DateTime.Now) : DateTime.Now);
+            bean.HeureFinPause = (DateTime)((lect["heure_fin_pause"] != null) ? (!lect["heure_fin_pause"].ToString().Trim().Equals("") ? lect["heure_fin_pause"] : DateTime.Now) : DateTime.Now);
+            bean.Ouvrable = (Boolean)((lect["ouvrable"] != null) ? (!lect["ouvrable"].ToString().Trim().Equals("") ? lect["ouvrable"] : false) : false);
+            return bean;
+        }
+
         public static JoursOuvres getOneById(int id)
         {
             JoursOuvres bean = new JoursOuvres();
@@ -25,14 +39,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Jour = lect["jour"].ToString();
-                        bean.HeureDebutTravail = (DateTime)((lect["heure_debut_travail"] != null) ? (!lect["heure_debut_travail"].ToString().Trim().Equals("") ? lect["heure_debut_travail"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureFinTravail = (DateTime)((lect["heure_fin_travail"] != null) ? (!lect["heure_fin_travail"].ToString().Trim().Equals("") ? lect["heure_fin_travail"] : DateTime.Now) : DateTime.Now);
-                        bean.DureePause = (DateTime)((lect["duree_pause"] != null) ? (!lect["duree_pause"].ToString().Trim().Equals("") ? lect["duree_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureDebutPause = (DateTime)((lect["heure_debut_pause"] != null) ? (!lect["heure_debut_pause"].ToString().Trim().Equals("") ? lect["heure_debut_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureFinPause = (DateTime)((lect["heure_fin_pause"] != null) ? (!lect["heure_fin_pause"].ToString().Trim().Equals("") ? lect["heure_fin_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.Ouvrable = (Boolean)((lect["ouvrable"] != null) ? (!lect["ouvrable"].ToString().Trim().Equals("") ? lect["ouvrable"] : false) : false);
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -44,7 +51,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -61,14 +68,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Jour = lect["jour"].ToString();
-                        bean.HeureDebutTravail = (DateTime)((lect["heure_debut_travail"] != null) ? (!lect["heure_debut_travail"].ToString().Trim().Equals("") ? lect["heure_debut_travail"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureFinTravail = (DateTime)((lect["heure_fin_travail"] != null) ? (!lect["heure_fin_travail"].ToString().Trim().Equals("") ? lect["heure_fin_travail"] : DateTime.Now) : DateTime.Now);
-                        bean.DureePause = (DateTime)((lect["duree_pause"] != null) ? (!lect["duree_pause"].ToString().Trim().Equals("") ? lect["duree_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureDebutPause = (DateTime)((lect["heure_debut_pause"] != null) ? (!lect["heure_debut_pause"].ToString().Trim().Equals("") ? lect["heure_debut_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.HeureFinPause = (DateTime)((lect["heure_fin_pause"] != null) ? (!lect["heure_fin_pause"].ToString().Trim().Equals("") ? lect["heure_fin_pause"] : DateTime.Now) : DateTime.Now);
-                        bean.Ouvrable = (Boolean)((lect["ouvrable"] != null) ? (!lect["ouvrable"].ToString().Trim().Equals("") ? lect["ouvrable"] : false) : false);
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -80,7 +80,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -97,8 +97,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -110,7 +109,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -126,8 +125,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -139,7 +137,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

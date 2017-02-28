@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Empreinte));
             this.panel1 = new System.Windows.Forms.Panel();
             this.chk_via_serveur = new System.Windows.Forms.CheckBox();
@@ -58,6 +59,7 @@
             this.doigt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.grp_source.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
@@ -151,6 +153,7 @@
             this.btn_add_serveur.Name = "btn_add_serveur";
             this.btn_add_serveur.Size = new System.Drawing.Size(35, 26);
             this.btn_add_serveur.TabIndex = 2;
+            this.toolTip.SetToolTip(this.btn_add_serveur, "Télécharger les empreintes de la pointeuse vers la base de donnée");
             this.btn_add_serveur.UseVisualStyleBackColor = true;
             this.btn_add_serveur.Click += new System.EventHandler(this.btn_add_serveur_Click);
             // 
@@ -162,6 +165,7 @@
             this.btn_synchro.Name = "btn_synchro";
             this.btn_synchro.Size = new System.Drawing.Size(33, 28);
             this.btn_synchro.TabIndex = 1;
+            this.toolTip.SetToolTip(this.btn_synchro, "Ajouter les empreintes dans la pointeuse");
             this.btn_synchro.UseVisualStyleBackColor = true;
             this.btn_synchro.Click += new System.EventHandler(this.btn_synchro_Click);
             // 
@@ -428,5 +432,6 @@
         private System.Windows.Forms.Button btn_distant;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ProgressBar pbar_statut;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

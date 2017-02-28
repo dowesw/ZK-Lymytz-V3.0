@@ -10,6 +10,21 @@ namespace ZK_Lymytz.DAO
 {
     class EmpreinteDAO
     {
+        private static Empreinte Return(NpgsqlDataReader lect)
+        {
+            Empreinte bean = new Empreinte();
+            bean.Id = Convert.ToInt32(lect["id"].ToString());
+            bean.Digital = Convert.ToInt32(lect["empreinte_digital"].ToString());
+            bean.Facial = Convert.ToInt32(lect["empreinte_faciale"].ToString());
+            bean.Numerique = Convert.ToInt32(lect["empreinte_numerique"].ToString());
+            bean.Flag = Convert.ToInt32(lect["flag"].ToString());
+            bean.Longueur = Convert.ToInt32(lect["longueur"].ToString());
+            bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
+            bean.Template = Convert.FromBase64String(lect["template"].ToString());
+            bean.STemplate = lect["template"].ToString(); 
+            return bean;
+        }
+
         public static Empreinte getOneById(long id)
         {
             Empreinte bean = new Empreinte();
@@ -23,15 +38,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Digital = Convert.ToInt32(lect["empreinte_digital"].ToString());
-                        bean.Facial = Convert.ToInt32(lect["empreinte_faciale"].ToString());
-                        bean.Numerique = Convert.ToInt32(lect["empreinte_numerique"].ToString());
-                        bean.Flag = Convert.ToInt32(lect["flag"].ToString());
-                        bean.Longueur= Convert.ToInt32(lect["longueur"].ToString());
-                        bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
-                        bean.Template = Convert.FromBase64String(lect["template"].ToString());
-                        bean.STemplate = lect["template"].ToString(); 
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -43,7 +50,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -60,15 +67,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Digital = Convert.ToInt32(lect["empreinte_digital"].ToString());
-                        bean.Facial = Convert.ToInt32(lect["empreinte_faciale"].ToString());
-                        bean.Numerique = Convert.ToInt32(lect["empreinte_numerique"].ToString());
-                        bean.Flag = Convert.ToInt32(lect["flag"].ToString());
-                        bean.Longueur = Convert.ToInt32(lect["longueur"].ToString());
-                        bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
-                        bean.Template = Convert.FromBase64String(lect["template"].ToString());
-                        bean.STemplate = lect["template"].ToString(); 
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -80,7 +79,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -96,15 +95,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Digital = Convert.ToInt32(lect["empreinte_digital"].ToString());
-                        bean.Facial = Convert.ToInt32(lect["empreinte_faciale"].ToString());
-                        bean.Numerique = Convert.ToInt32(lect["empreinte_numerique"].ToString());
-                        bean.Flag = Convert.ToInt32(lect["flag"].ToString());
-                        bean.Longueur = Convert.ToInt32(lect["longueur"].ToString());
-                        bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
-                        bean.Template = Convert.FromBase64String(lect["template"].ToString());
-                        bean.STemplate = lect["template"].ToString();
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -116,7 +107,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -132,8 +123,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        int id = Convert.ToInt32(lect["id"].ToString());
-                        list.Add(getOneById(id));
+                        list.Add(Return(lect));
                     }
                 }
                 return list;
@@ -145,7 +135,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -166,7 +156,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -186,7 +176,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -207,7 +197,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -228,7 +218,7 @@ namespace ZK_Lymytz.DAO
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
     }

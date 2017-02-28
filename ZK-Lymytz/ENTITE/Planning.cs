@@ -14,6 +14,19 @@ namespace ZK_Lymytz.ENTITE
         private bool valide;
         private bool supplementaire = false;
 
+        public bool Chevauche
+        {
+            get
+            {
+                if (DateDebut != null && DateFin !=null)
+                {
+                    return DateFin > DateDebut;
+                }
+                return false;
+            }
+            set { }
+        }
+
         public bool Supplementaire
         {
             get { return supplementaire; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Timers;
+using System.Diagnostics;
 
 using ZK_Lymytz.BLL;
 using ZK_Lymytz.ENTITE;
@@ -9,7 +10,7 @@ using ZK_Lymytz.TOOLS;
 
 namespace ZK_Lymytz.TOOLS
 {
-    class JobScheduler
+    public class JobScheduler
     {
         int _day = 0;
         int _hour = 0;
@@ -26,13 +27,13 @@ namespace ZK_Lymytz.TOOLS
             this._sec = sec;
         }
 
-        public void Start()
+        public void StartBackupDataDevice()
         {
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(Run));
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(RunBackupDataDevice));
             t.Start();
         }
 
-        private void Run()
+        private void RunBackupDataDevice()
         {
             bool init_ = false;
             DateTime d = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
@@ -43,14 +44,49 @@ namespace ZK_Lymytz.TOOLS
                     System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(Fonctions.BackupLogDataDevice));
                     t.Start();
 
-                    Scheduler.Instance(1, 0, 0, 0).Start();
+                    Constantes.JOB_BACKUPDEVICE = new Scheduler(1, 0, 0, 0);
+                    Constantes.JOB_BACKUPDEVICE.StartBackupDataDevice();
                     init_ = true;
                 }
             }
         }
+
+        public void StartSynchroDevice()
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(RunSynchroDevice));
+            t.Start();
+        }
+
+        private void RunSynchroDevice()
+        {
+            bool init_ = false;
+            Setting s = SettingBLL.ReturnSetting();
+            DateTime d = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, s.TimeSynchroAuto.Hour, s.TimeSynchroAuto.Minute, s.TimeSynchroAuto.Second);
+            while (!init_)
+            {
+                if (DateTime.Now.ToLongTimeString() == d.ToLongTimeString())
+                {
+                    System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(Fonctions.CheckPingAndSynchro));
+                    t.Start();
+
+                    Constantes.JOB_SYNCHRODEVICE = new Scheduler(0, d.Hour, d.Minute, d.Second);
+                    Constantes.JOB_SYNCHRODEVICE.StartSynchroDevice();
+                    init_ = true;
+                }
+            }
+        }
+
+        public static void Stop(Scheduler scheduler)
+        {
+            if (scheduler != null)
+            {
+                scheduler.Stop();
+                scheduler = null;
+            }
+        }
     }
 
-    class Scheduler
+    public class Scheduler
     {
         int _day = 0;
         int _hour = 0;
@@ -59,75 +95,20 @@ namespace ZK_Lymytz.TOOLS
         double _milli = 0;
 
         Timer _timer;
-        static Scheduler instance;
 
-        private Scheduler(double milli)
-        {
-            this._milli = milli;
-        }
+        public Scheduler(double milli) : this(0, 0, 0, 0, milli) { }
 
-        public static Scheduler Instance(double milli)
-        {
-            if (instance == null)
-            {
-                instance = new Scheduler(milli);
-            }
-            else
-            {
-                instance._milli = milli;
-            }
-            return instance;
-        }
+        public Scheduler(int hour, int min, int sec) : this(0, hour, min, sec, 0) { }
 
-        private Scheduler(int hour, int min, int sec) : this(0, hour, min, sec) { }
+        public Scheduler(int day, int hour, int min, int sec) : this(day, hour, min, sec, 0) { }
 
-        public static Scheduler Instance(int hour, int min, int sec)
-        {
-            if (instance == null)
-            {
-                instance = new Scheduler(hour, min, sec);
-            }
-            else
-            {
-                instance._day = 0;
-                instance._hour = hour;
-                instance._min = min;
-                instance._sec = sec;
-                instance._milli = 0;
-            }
-            return instance;
-        }
-
-        private Scheduler(int day, int hour, int min, int sec)
+        public Scheduler(int day, int hour, int min, int sec, double milli)
         {
             this._day = day;
             this._hour = hour;
             this._min = min;
             this._sec = sec;
-            this._milli = 0;
-        }
-
-        public static Scheduler Instance(int day, int hour, int min, int sec)
-        {
-            if (instance == null)
-            {
-                instance = new Scheduler(day, hour, min, sec);
-            }
-            else
-            {
-                instance._day = day;
-                instance._hour = hour;
-                instance._min = min;
-                instance._sec = sec;
-                instance._milli = 0;
-            }
-            return instance;
-        }
-
-        public void Start()
-        {
-            _timer = SetTimer(_day, _hour, _min, _sec);
-            _timer.Start();
+            this._milli = milli;
         }
 
         private Timer SetTimer(int day, int hour, int min, int sec)
@@ -142,23 +123,43 @@ namespace ZK_Lymytz.TOOLS
             }
 
             Timer t = new Timer(_milli);
-            t.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
-            t.AutoReset = true;
-            t.Enabled = true;
             return t;
         }
 
-        private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        public void Stop()
+        {
+            this._timer.Stop();
+            this._timer.Dispose();
+        }
+
+        public void StartBackupDataDevice()
+        {
+            _timer = SetTimer(_day, _hour, _min, _sec);
+            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerBackupDataDevice);
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
+
+        private void OnTimerBackupDataDevice(object sender, System.Timers.ElapsedEventArgs e)
         {
             System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(Fonctions.BackupLogDataDevice));
             t.Start();
         }
 
-        public void Stop()
+        public void StartSynchroDevice()
         {
-            instance._timer.Stop();
-            instance._timer.Dispose();
-            instance = null;
+            _timer = SetTimer(_day, _hour, _min, _sec);
+            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerSynchroDevice);
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
+
+        private void OnTimerSynchroDevice(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(Fonctions.CheckPingAndSynchro));
+            t.Start();            
         }
     }
 }

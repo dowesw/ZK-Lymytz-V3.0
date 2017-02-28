@@ -246,7 +246,9 @@ namespace ZK_Lymytz.IHM
                     int id = Convert.ToInt32(dgv_pointeuse.CurrentRow.Cells["id"].Value);
                     if (id > 0)
                     {
-                        currentPointeuse = PointeuseBLL.OneById(id);
+                        currentPointeuse = Constantes.POINTEUSES.Find(x => x.Id == id);
+                        if (currentPointeuse != null ? currentPointeuse.Id > 0 : false)
+                            currentPointeuse = PointeuseBLL.OneById(id);
                         LoadDestination();
                     }
                     else
@@ -270,7 +272,9 @@ namespace ZK_Lymytz.IHM
                     int id = Convert.ToInt32(dgv_destination.CurrentRow.Cells["id_d"].Value);
                     if (id > 0)
                     {
-                        Pointeuse p = PointeuseBLL.OneById(id);
+                        Pointeuse p = Constantes.POINTEUSES.Find(x => x.Id == id);
+                        if (p != null ? p.Id > 0 : false)
+                            p = PointeuseBLL.OneById(id);
                         if (p != null ? p.Id > 0 : false)
                         {
                             int pos = Utils.GetRowData(dgv_destination, id);
@@ -510,7 +514,8 @@ namespace ZK_Lymytz.IHM
                 {
                     if (EmpreinteBLL.Insert(e))
                     {
-                        Utils.WriteLog("---- Ajout de l'empreinte de l'employé " + e.Employe.NomPrenom + " effectue!");
+                        Finger f = (Finger)Finger.Get(e.Digital);
+                        Utils.WriteLog("---- Ajout de l'empreinte Doigt(" + f.Doigt + ") Main(" + f.Main + ")  de l'employé " + e.Employe.NomPrenom + " effectue!");
                     }
                     else
                     {

@@ -42,12 +42,24 @@ namespace ZK_Lymytz.ENTITE
             get { return port; }
             set { port = value; }
         }
+
+        //public ZK_LymytzService.Serveur Recopie()
+        //{
+        //    ZK_LymytzService.Serveur s = new ZK_LymytzService.Serveur();
+        //    s.Adresse = this.Adresse;
+        //    s.Port = this.port;
+        //    s.Database = this.Database;
+        //    s.Password = this.Password;
+        //    s.User = this.User;
+        //    return s;
+        //}
+
         public static Serveur getServeurDefault()
         {
             Serveur s = new Serveur();
             s.adresse = "127.0.0.1";
             s.port = 5432;
-            s.database = "catalogue_article";
+            s.database = "lymytz_demo_0";
             s.password = "yves1910/";
             s.user = "postgres";
             return s;

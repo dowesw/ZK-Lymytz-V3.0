@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Timers;
 
 using Microsoft.Win32;
 
@@ -16,6 +17,8 @@ namespace ZK_Lymytz.TOOLS
 {
     public class Appareil
     {
+        public zkemkeeper.CZKEMClass axCZKEM = new zkemkeeper.CZKEMClass();
+
         public Pointeuse _POINTEUSE = new Pointeuse();
         public Employe _EMPLOYE = new Employe();
         public Finger _FINGER = new Finger();
@@ -29,19 +32,21 @@ namespace ZK_Lymytz.TOOLS
         public int _FLAG = 3;
         public string _S_TEMPLATE = "";
         public int _LONG_TMPL = 0;
+        public int _TIME_INTERVAL = 100; //100ms
 
+        public bool _CONNEXION_RUNNING = false;
         public bool _BIS_CONNECTED = false;
         public int _I_MACHINE_NUMBER = 1;
         public bool _VALIDER;
         public string _IP;
 
 
-        private Form_Add_Empreinte form_ = new Form_Add_Empreinte();
+        private Form_Add_Empreinte _FORM_ADD_EMPREINTE = new Form_Add_Empreinte();
         string _message = "";
         int _iCol = 0, _iRow = 0;
         bool _bIsConnected = false;
+        int _error = 3;
 
-        public zkemkeeper.CZKEMClass axCZKEM = new zkemkeeper.CZKEMClass();
 
         public Appareil()
         {
@@ -55,13 +60,32 @@ namespace ZK_Lymytz.TOOLS
 
         public Appareil(Form_Add_Empreinte form_)
         {
-            this.form_ = form_;
+            this._FORM_ADD_EMPREINTE = form_;
         }
 
         public Appareil(Form_Add_Empreinte form_, Pointeuse pointeuse)
         {
-            this.form_ = form_;
+            this._FORM_ADD_EMPREINTE = form_;
             this._POINTEUSE = pointeuse;
+        }
+
+        public Form_Add_Empreinte FORM_ADD_EMPREINTE
+        {
+            get { return _FORM_ADD_EMPREINTE; }
+            set { _FORM_ADD_EMPREINTE = value; }
+        }
+
+        public static bool Verify()
+        {
+            try
+            {
+                zkemkeeper.CZKEMClass z = new zkemkeeper.CZKEMClass();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public bool CancelOperation()
@@ -84,14 +108,142 @@ namespace ZK_Lymytz.TOOLS
             return axCZKEM.ReadAllTemplate(iMachineNumber);
         }
 
+        public bool GetSDKVersion(ref string strVersion)
+        {
+            return axCZKEM.GetSDKVersion(ref strVersion);
+        }
+
+        public bool GetVendor(ref string strVendor)
+        {
+            return axCZKEM.GetVendor(ref strVendor);
+        }
+
+        public bool QueryState(ref int State)
+        {
+            return axCZKEM.QueryState(ref State);
+        }
+
+        public bool GetFirmwareVersion(int dwMachineNumber, ref string strVersion)
+        {
+            return axCZKEM.GetFirmwareVersion(dwMachineNumber, ref strVersion);
+        }
+
+        public bool GetCardFun(int dwMachineNumber, ref int CardFun)
+        {
+            return axCZKEM.GetCardFun(dwMachineNumber, ref CardFun);
+        }
+
+        public bool GetPlatform(int dwMachineNumber, ref string Platform)
+        {
+            return axCZKEM.GetPlatform(dwMachineNumber, ref Platform);
+        }
+
+        public bool GetProductCode(int dwMachineNumber, out string lpszProductCode)
+        {
+            return axCZKEM.GetProductCode(dwMachineNumber, out lpszProductCode);
+        }
+
+        public bool GetSysOption(int dwMachineNumber, string Option, out string Value)
+        {
+            return axCZKEM.GetSysOption(dwMachineNumber, Option, out Value);
+        }
+
+        public bool GetSerialNumber(int dwMachineNumber, out string dwSerialNumber)
+        {
+            return axCZKEM.GetSerialNumber(dwMachineNumber, out dwSerialNumber);
+        }
+
+        public bool GetDeviceStrInfo(int dwMachineNumber, int dwInfo, out string Value)
+        {
+            return axCZKEM.GetDeviceStrInfo(dwMachineNumber, dwInfo, out Value);
+        }
+
+        public bool GetDeviceMAC(int dwMachineNumber, ref string sMAC)
+        {
+            return axCZKEM.GetDeviceMAC(dwMachineNumber, ref sMAC);
+        }
+
+        public bool GetDeviceIP(int dwMachineNumber, ref string IPAddr)
+        {
+            return axCZKEM.GetDeviceIP(dwMachineNumber, ref IPAddr);
+        }
+
         public bool ReadAllUserID(int iMachineNumber)
         {
             return axCZKEM.ReadAllUserID(iMachineNumber);
         }
+        public bool ConnectNet()
+        {
+            if (_POINTEUSE != null ? _POINTEUSE.Ip != null : false)
+            {
+                return ConnectNet(_POINTEUSE.Ip, 4370);
+            }
+            return false;
+        }
 
         public bool ConnectNet(string ip)
         {
-            return axCZKEM.Connect_Net(ip, 4370);
+            return ConnectNet(ip, 4370);
+        }
+
+        public bool ConnectNet(string ip, int port)
+        {
+            return ConnectNet(ip, port, !Constantes._FIRST_OPEN);
+        }
+
+        public bool ConnectNet(string ip, int port, bool view)
+        {
+            Form_Wait w = new Form_Wait();
+            try
+            {
+                if (view)
+                    w.Open();
+                return axCZKEM.Connect_Net(ip, port);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                if (view)
+                    w.Fermer();
+            }
+        }
+
+        public bool ConnectCom(int port)
+        {
+            return ConnectCom(port, 1);
+        }
+
+        public bool ConnectCom(int port, int ImachineNumber)
+        {
+            return ConnectCom(port, ImachineNumber, 115200);
+        }
+
+        public bool ConnectCom(int port, int ImachineNumber, int protocole)
+        {
+            return ConnectCom(port, ImachineNumber, protocole, !Constantes._FIRST_OPEN);
+        }
+
+        public bool ConnectCom(int port, int ImachineNumber, int protocole, bool view)
+        {
+            Form_Wait w = new Form_Wait();
+            try
+            {
+                if (view)
+                    w.Open();
+                return axCZKEM.Connect_Com(port, ImachineNumber, protocole);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                if (view)
+                    w.Fermer();
+            }
         }
 
         public bool GetAllUserID(int iMachineNumber, ref int iEnrollNumber, ref int iEMachineNumber, ref int iBackupNumber, ref int iPrivilege, ref int iEnabled)
@@ -132,16 +284,6 @@ namespace ZK_Lymytz.TOOLS
         public void RefreshData(int ImachineNumber)
         {
             axCZKEM.RefreshData(ImachineNumber);
-        }
-
-        public bool ConnectNet(string ip, int port)
-        {
-            return axCZKEM.Connect_Net(ip, port);
-        }
-
-        public bool ConnectCom(int port, int ImachineNumber, int protocoel)
-        {
-            return axCZKEM.Connect_Com(port, ImachineNumber, protocoel);
         }
 
         public bool RegEvent(int ImachineNumbre)
@@ -301,297 +443,218 @@ namespace ZK_Lymytz.TOOLS
 
         public List<IOEMDevice> GetAllAttentdData(int iMachineNumber, bool bIsConnected)
         {
-            if (bIsConnected == false)
-            {
-                Messages.ShowErreur("Please connect the device first!");
-                return new List<IOEMDevice>();
-            }
-
-            List<IOEMDevice> trans = new List<IOEMDevice>();
-            if (axCZKEM.RegEvent(iMachineNumber, 65535))
-            {
-                Cursor c = Cursors.WaitCursor;
-                axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
-                if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
-                {
-                    int idwTMachineNumber = 0;
-                    int idwEnrollNumber = 0;
-                    int idwVerifyMode = 0;
-                    int idwInOutMode = 0;
-                    int idwWorkCode = 0;
-                    int idwReserved = 0;
-                    int idwYear = 0;
-                    int idwMonth = 0;
-                    int idwDay = 0;
-                    int idwHour = 0;
-                    int idwMinute = 0;
-                    int idwSecond = 0;
-                    while (axCZKEM.GetGeneralExtLogData(iMachineNumber, ref idwEnrollNumber, ref idwVerifyMode, ref idwInOutMode,
-                             ref idwYear, ref idwMonth, ref idwDay, ref idwHour, ref idwMinute, ref idwSecond, ref idwWorkCode, ref idwReserved))//get records from the memory
-                    {
-
-                        DateTime d = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
-                        DateTime d_ = Convert.ToDateTime("31/05/2016 17:59:59");
-                        if (d > d_)
-                        {
-                            ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
-                            trans.Add(iO);
-                            Constantes.LoadPatience(false);
-                        }
-                    }
-                }
-                axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
-                c = Cursors.Default;
-                axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
-            }
-            return trans;
+            return GetAllAttentdData(iMachineNumber, bIsConnected, null, false, new DateTime(), new DateTime());
         }
 
         public List<IOEMDevice> GetAllAttentdData(int iMachineNumber, bool bIsConnected, Employe e, bool date, DateTime d, DateTime f)
         {
-            if (bIsConnected == false)
+            try
             {
-                Messages.ShowErreur("Please connect the device first!");
-                return new List<IOEMDevice>();
-            }
-            string t = d.ToShortTimeString();
-            bool heure_ = !(t.Equals("00:00:00:000") || t.Equals("00:00:00") || t.Equals("00:00") || t.Equals("00"));
-
-            List<IOEMDevice> trans = new List<IOEMDevice>();
-            if (axCZKEM.RegEvent(iMachineNumber, 65535))
-            {
-                Cursor c = Cursors.WaitCursor;
-                axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
-                if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
+                if (bIsConnected == false)
                 {
-                    int idwTMachineNumber = 0;
-                    int idwEnrollNumber = 0;
-                    int idwVerifyMode = 0;
-                    int idwInOutMode = 0;
-                    int idwWorkCode = 0;
-                    int idwReserved = 0;
-                    int idwYear = 0;
-                    int idwMonth = 0;
-                    int idwDay = 0;
-                    int idwHour = 0;
-                    int idwMinute = 0;
-                    int idwSecond = 0;
-                    while (axCZKEM.GetGeneralExtLogData(iMachineNumber, ref idwEnrollNumber, ref idwVerifyMode, ref idwInOutMode,
-                             ref idwYear, ref idwMonth, ref idwDay, ref idwHour, ref idwMinute, ref idwSecond, ref idwWorkCode, ref idwReserved))//get records from the memory
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<IOEMDevice>();
+                }
+                string hd = d.ToShortTimeString();
+                string hf = f.ToShortTimeString();
+                bool heure_ = !(hd.Equals("00:00:00:000") || hd.Equals("00:00:00") || hd.Equals("00:00") || hd.Equals("00") || hf.Equals("00:00:00:000") || hf.Equals("00:00:00") || hf.Equals("00:00") || hf.Equals("00"));
+
+                List<IOEMDevice> trans = new List<IOEMDevice>();
+                if (axCZKEM.RegEvent(iMachineNumber, 65535))
+                {
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
+                    if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
                     {
-                        DateTime h = new DateTime(idwYear, idwMonth, idwDay, 0, 0, 0);
-                        if (heure_)
+                        int idwTMachineNumber = 0;
+                        int idwEnrollNumber = 0;
+                        int idwVerifyMode = 0;
+                        int idwInOutMode = 0;
+                        int idwWorkCode = 0;
+                        int idwReserved = 0;
+                        int idwYear = 0;
+                        int idwMonth = 0;
+                        int idwDay = 0;
+                        int idwHour = 0;
+                        int idwMinute = 0;
+                        int idwSecond = 0;
+                        while (axCZKEM.GetGeneralExtLogData(iMachineNumber, ref idwEnrollNumber, ref idwVerifyMode, ref idwInOutMode,
+                                 ref idwYear, ref idwMonth, ref idwDay, ref idwHour, ref idwMinute, ref idwSecond, ref idwWorkCode, ref idwReserved))//get records from the memory
                         {
-                            h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, 0);
-                        }
-                        if (h > Convert.ToDateTime("31/05/2016 17:59:59"))
-                        {
-                            ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
-                            if (e != null ? e.Id > 0 : false)
+                            DateTime h = new DateTime(idwYear, idwMonth, idwDay, 0, 0, 0);
+                            if (heure_)
                             {
-                                if (date)
+                                h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, 0);
+                            }
+                            if (h > Convert.ToDateTime("31/05/2016 17:59:59"))
+                            {
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                if (e != null ? e.Id > 0 : false)
                                 {
-                                    if (idwEnrollNumber == e.Id && (d <= h && h <= f))
+                                    if (date)
                                     {
-                                        trans.Add(iO);
+                                        if (idwEnrollNumber == e.Id && (d <= h && h <= f))
+                                        {
+                                            trans.Add(iO);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (idwEnrollNumber == e.Id)
+                                        {
+                                            trans.Add(iO);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    if (idwEnrollNumber == e.Id)
+                                    if (date)
+                                    {
+                                        if (d <= h && h <= f)
+                                        {
+                                            trans.Add(iO);
+                                        }
+                                    }
+                                    else
                                     {
                                         trans.Add(iO);
                                     }
                                 }
+                                Constantes.LoadPatience(false);
                             }
-                            else
-                            {
-                                if (date)
-                                {
-                                    if (d <= h && h <= f)
-                                    {
-                                        trans.Add(iO);
-                                    }
-                                }
-                                else
-                                {
-                                    trans.Add(iO);
-                                }
-                            }
-                            Constantes.LoadPatience(false);
                         }
                     }
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    c = Cursors.Default;
+                    axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
                 }
-                axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
-                c = Cursors.Default;
-                axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
+                return trans;
             }
-            return trans;
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllAttentdData) ", ex);
+                return null;
+            }
         }
 
         public List<IOEMDevice> GetAllAttentdDataEx(int iMachineNumber, bool bIsConnected, List<Employe> le, DateTime[] dates)
         {
-            if (bIsConnected == false)
+            try
             {
-                Messages.ShowErreur("Please connect the device first!");
-                return new List<IOEMDevice>();
-            }
-
-            List<IOEMDevice> trans = new List<IOEMDevice>();
-            if (axCZKEM.RegEvent(iMachineNumber, 65535))
-            {
-                Cursor c = Cursors.WaitCursor;
-                axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
-                if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
+                if (bIsConnected == false)
                 {
-                    int idwTMachineNumber = 0;
-                    int idwEnrollNumber = 0;
-                    int idwVerifyMode = 0;
-                    int idwInOutMode = 0;
-                    int idwWorkCode = 0;
-                    int idwReserved = 0;
-                    int idwYear = 0;
-                    int idwMonth = 0;
-                    int idwDay = 0;
-                    int idwHour = 0;
-                    int idwMinute = 0;
-                    int idwSecond = 0;
-                    while (axCZKEM.GetGeneralExtLogData(iMachineNumber, ref idwEnrollNumber, ref idwVerifyMode, ref idwInOutMode,
-                             ref idwYear, ref idwMonth, ref idwDay, ref idwHour, ref idwMinute, ref idwSecond, ref idwWorkCode, ref idwReserved))//get records from the memory
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<IOEMDevice>();
+                }
+
+                List<IOEMDevice> trans = new List<IOEMDevice>();
+                if (axCZKEM.RegEvent(iMachineNumber, 65535))
+                {
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
+                    if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
                     {
-
-                        DateTime h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
-                        DateTime _d_ = Convert.ToDateTime("31/05/2016 17:59:59");
-                        if (h > _d_)
+                        int idwTMachineNumber = 0;
+                        int idwEnrollNumber = 0;
+                        int idwVerifyMode = 0;
+                        int idwInOutMode = 0;
+                        int idwWorkCode = 0;
+                        int idwReserved = 0;
+                        int idwYear = 0;
+                        int idwMonth = 0;
+                        int idwDay = 0;
+                        int idwHour = 0;
+                        int idwMinute = 0;
+                        int idwSecond = 0;
+                        while (axCZKEM.GetGeneralExtLogData(iMachineNumber, ref idwEnrollNumber, ref idwVerifyMode, ref idwInOutMode,
+                                 ref idwYear, ref idwMonth, ref idwDay, ref idwHour, ref idwMinute, ref idwSecond, ref idwWorkCode, ref idwReserved))//get records from the memory
                         {
-                            bool deja = false;
-                            ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
-                            DateTime _h = new DateTime(h.Year, h.Month, h.Day, 0, 0, 0);
-                            foreach (Employe e in le)
-                            {
-                                if (e != null ? e.Id > 0 : false)
-                                {
-                                    if (idwEnrollNumber == e.Id)
-                                    {
-                                        deja = true;
-                                        break;
-                                    }
-                                }
-                            }
 
-                            if (!deja)
+                            DateTime h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                            DateTime _d_ = Convert.ToDateTime("31/05/2016 17:59:59");
+                            if (h > _d_)
                             {
-                                foreach (DateTime d in dates)
+                                bool deja = false;
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                DateTime _h = new DateTime(h.Year, h.Month, h.Day, 0, 0, 0);
+                                foreach (Employe e in le)
                                 {
-                                    DateTime _d = new DateTime(d.Year, d.Month, d.Day, 0, 0, 0);
-                                    if (_d == _h)
+                                    if (e != null ? e.Id > 0 : false)
                                     {
-                                        deja = true;
-                                        break;
+                                        if (idwEnrollNumber == e.Id)
+                                        {
+                                            deja = true;
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            if (!deja)
-                            {
-                                Employe e = EmployeBLL.OneById(iO.idwSEnrollNumber, Constantes.SOCIETE.Id);
-                                if (e != null ? e.Id > 0 : false)
+
+                                if (!deja)
                                 {
-                                    trans.Add(iO);
+                                    foreach (DateTime d in dates)
+                                    {
+                                        DateTime _d = new DateTime(d.Year, d.Month, d.Day, 0, 0, 0);
+                                        if (_d == _h)
+                                        {
+                                            deja = true;
+                                            break;
+                                        }
+                                    }
                                 }
+                                if (!deja)
+                                {
+                                    Employe e = EmployeBLL.OneById(iO.idwSEnrollNumber, Constantes.SOCIETE.Id);
+                                    if (e != null ? e.Id > 0 : false)
+                                    {
+                                        trans.Add(iO);
+                                    }
+                                }
+                                Constantes.LoadPatience(false);
                             }
-                            Constantes.LoadPatience(false);
                         }
                     }
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    c = Cursors.Default;
+                    axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
                 }
-                axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
-                c = Cursors.Default;
-                axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
+                return trans;
             }
-            return trans;
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllAttentdDataEx) ", ex);
+                return null;
+            }
         }
 
         public List<Empreinte> GetAllTemplate(int iMachineNumber, bool bIsConnected)
         {
-            if (bIsConnected == false)
+            try
             {
-                Messages.ShowErreur("Please connect the device first!");
-                return new List<Empreinte>();
-            }
-
-            List<Empreinte> l = new List<Empreinte>();
-            int idwEnrollNumber = 0;
-            string sName = "";
-            string sPassword = "";
-            int iPrivilege = 0;
-            bool bEnabled = false;
-            int idwFigerIndex;
-            string sTmpData = "";
-            int iTmpLength = 0;
-
-            axCZKEM.EnableDevice(iMachineNumber, false);
-            Cursor c = Cursors.WaitCursor;
-
-            axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
-            axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
-            axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
-            int i = 0;
-
-            while (axCZKEM.GetAllUserInfo(iMachineNumber, ref idwEnrollNumber, ref sName, ref sPassword, ref iPrivilege, ref bEnabled))//get all the users' information from the memory
-            {
-                for (idwFigerIndex = 0; idwFigerIndex < 10; idwFigerIndex++)
+                if (bIsConnected == false)
                 {
-                    int iFlag = 0;
-                    if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
-                    {
-                        ++i;
-                        Empreinte e = new Empreinte();
-                        e.Id = i;
-                        e.Employe = new Employe(idwEnrollNumber, sName);
-                        e.Digital = idwFigerIndex;
-                        e.STemplate = sTmpData;
-                        e.Privilege = iPrivilege;
-                        e.Longueur = iTmpLength;
-                        e.Flag = iFlag;
-                        l.Add(e);
-                    }
-                    Constantes.LoadPatience(false);
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
                 }
-            }
-            axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
-            axCZKEM.EnableDevice(iMachineNumber, true);
-            c = Cursors.Default;
-            return l;
-        }
 
-        public List<Empreinte> GetAllTemplate(int iMachineNumber, int idEmploye, bool bIsConnected)
-        {
-            if (bIsConnected == false)
-            {
-                Messages.ShowErreur("Please connect the device first!");
-                return new List<Empreinte>();
-            }
+                List<Empreinte> l = new List<Empreinte>();
+                int idwEnrollNumber = 0;
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int idwFigerIndex;
+                string sTmpData = "";
+                int iTmpLength = 0;
 
-            List<Empreinte> l = new List<Empreinte>();
-            int idwEnrollNumber = 0;
-            string sName = "";
-            string sPassword = "";
-            int iPrivilege = 0;
-            bool bEnabled = false;
-            int idwFigerIndex;
-            string sTmpData = "";
-            int iTmpLength = 0;
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
 
-            axCZKEM.EnableDevice(iMachineNumber, false);
-            Cursor c = Cursors.WaitCursor;
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
 
-            axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
-            axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
-            axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
-            int i = 0;
-
-            while (axCZKEM.GetAllUserInfo(iMachineNumber, ref idwEnrollNumber, ref sName, ref sPassword, ref iPrivilege, ref bEnabled))//get all the users' information from the memory
-            {
-                if (idwEnrollNumber == idEmploye)
+                while (axCZKEM.GetAllUserInfo(iMachineNumber, ref idwEnrollNumber, ref sName, ref sPassword, ref iPrivilege, ref bEnabled))//get all the users' information from the memory
                 {
                     for (idwFigerIndex = 0; idwFigerIndex < 10; idwFigerIndex++)
                     {
@@ -612,11 +675,80 @@ namespace ZK_Lymytz.TOOLS
                         Constantes.LoadPatience(false);
                     }
                 }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
             }
-            axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
-            axCZKEM.EnableDevice(iMachineNumber, true);
-            c = Cursors.Default;
-            return l;
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllTemplate) ", ex);
+                return null;
+            }
+        }
+
+        public List<Empreinte> GetAllTemplate(int iMachineNumber, int idEmploye, bool bIsConnected)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
+                }
+
+                List<Empreinte> l = new List<Empreinte>();
+                int idwEnrollNumber = 0;
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int idwFigerIndex;
+                string sTmpData = "";
+                int iTmpLength = 0;
+
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
+
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
+
+                while (axCZKEM.GetAllUserInfo(iMachineNumber, ref idwEnrollNumber, ref sName, ref sPassword, ref iPrivilege, ref bEnabled))//get all the users' information from the memory
+                {
+                    if (idwEnrollNumber == idEmploye)
+                    {
+                        for (idwFigerIndex = 0; idwFigerIndex < 10; idwFigerIndex++)
+                        {
+                            int iFlag = 0;
+                            if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
+                            {
+                                ++i;
+                                Empreinte e = new Empreinte();
+                                e.Id = i;
+                                e.Employe = new Employe(idwEnrollNumber, sName);
+                                e.Digital = idwFigerIndex;
+                                e.STemplate = sTmpData;
+                                e.Privilege = iPrivilege;
+                                e.Longueur = iTmpLength;
+                                e.Flag = iFlag;
+                                l.Add(e);
+                            }
+                            Constantes.LoadPatience(false);
+                        }
+                    }
+                }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllTemplate) ", ex);
+                return null;
+            }
         }
 
         public int SetAllTemplate(List<Empreinte> l, int iMachineNumber, bool bIsConnected)
@@ -695,115 +827,26 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public bool StartTestEmpreint()
+        public bool OnEmpreintTesting(bool starting)
         {
             try
             {
-                this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify_);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Zkemkeeper (StartTestEmpreint) ", ex);
-                return false;
-            }
-        }
-
-        public bool StopOneDirect()
-        {
-            try
-            {
-                this.axCZKEM.OnFinger += null;
-                this.axCZKEM.OnVerify += null;
-                this.axCZKEM.OnAttTransactionEx += null;
-                this.axCZKEM.OnFingerFeature += null;
-                this.axCZKEM.OnEnrollFingerEx += null;
-                this.axCZKEM.OnDeleteTemplate += null;
-                this.axCZKEM.OnNewUser += null;
-                this.axCZKEM.OnHIDNum += null;
-                this.axCZKEM.OnAlarm += null;
-                this.axCZKEM.OnDoor += null;
-                this.axCZKEM.OnWriteCard += null;
-                this.axCZKEM.OnEmptyCard += null;
-                this.axCZKEM.OnKeyPress += null;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Zkemkeeper (StopOneDirect) ", ex);
-                return false;
-            }
-        }
-
-        public bool StartOneDirect()
-        {
-            try
-            {
-                this.axCZKEM.OnFinger += new zkemkeeper._IZKEMEvents_OnFingerEventHandler(axCZKEM1_OnFinger);
-                this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
-                this.axCZKEM.OnAttTransactionEx += new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
-                this.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(axCZKEM1_OnFingerFeature);
-                this.axCZKEM.OnEnrollFingerEx += new zkemkeeper._IZKEMEvents_OnEnrollFingerExEventHandler(axCZKEM1_OnEnrollFingerEx);
-                this.axCZKEM.OnDeleteTemplate += new zkemkeeper._IZKEMEvents_OnDeleteTemplateEventHandler(axCZKEM1_OnDeleteTemplate);
-                this.axCZKEM.OnNewUser += new zkemkeeper._IZKEMEvents_OnNewUserEventHandler(axCZKEM1_OnNewUser);
-                this.axCZKEM.OnHIDNum += new zkemkeeper._IZKEMEvents_OnHIDNumEventHandler(axCZKEM1_OnHIDNum);
-                this.axCZKEM.OnAlarm += new zkemkeeper._IZKEMEvents_OnAlarmEventHandler(axCZKEM1_OnAlarm);
-                this.axCZKEM.OnDoor += new zkemkeeper._IZKEMEvents_OnDoorEventHandler(axCZKEM1_OnDoor);
-                this.axCZKEM.OnWriteCard += new zkemkeeper._IZKEMEvents_OnWriteCardEventHandler(axCZKEM1_OnWriteCard);
-                this.axCZKEM.OnEmptyCard += new zkemkeeper._IZKEMEvents_OnEmptyCardEventHandler(axCZKEM1_OnEmptyCard);
-                this.axCZKEM.OnKeyPress += new zkemkeeper._IZKEMEvents_OnKeyPressEventHandler(axCZKEM1_OnKeyPress);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Zkemkeeper (StartOneDirect) ", ex);
-                return false;
-            }
-        }
-
-        public bool StartOne(int id, String ip)
-        {
-            try
-            {
-                int idwErrorCode = 0;
-                bool bIsConnected = axCZKEM.Connect_Net(ip, 4370);
-                if (bIsConnected == true)
+                _EMPLOYE = null;
+                if (starting)
                 {
-                    _I_MACHINE_NUMBER = 1;//In fact,when you are using the tcp/ip communication,this parameter will be ignored,that is any integer will all right.Here we use 1.
-                    if (axCZKEM.RegEvent(_I_MACHINE_NUMBER, 65535))//Here you can register the realtime events that you want to be triggered(the parameters 65535 means registering all)
-                    {
-                        if (PointeuseBLL.Connect(id, _I_MACHINE_NUMBER))
-                        {
-                            this.axCZKEM.OnFinger += new zkemkeeper._IZKEMEvents_OnFingerEventHandler(axCZKEM1_OnFinger);
-                            this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
-                            this.axCZKEM.OnAttTransactionEx += new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
-                            this.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(axCZKEM1_OnFingerFeature);
-                            this.axCZKEM.OnEnrollFingerEx += new zkemkeeper._IZKEMEvents_OnEnrollFingerExEventHandler(axCZKEM1_OnEnrollFingerEx);
-                            this.axCZKEM.OnDeleteTemplate += new zkemkeeper._IZKEMEvents_OnDeleteTemplateEventHandler(axCZKEM1_OnDeleteTemplate);
-                            this.axCZKEM.OnNewUser += new zkemkeeper._IZKEMEvents_OnNewUserEventHandler(axCZKEM1_OnNewUser);
-                            this.axCZKEM.OnHIDNum += new zkemkeeper._IZKEMEvents_OnHIDNumEventHandler(axCZKEM1_OnHIDNum);
-                            this.axCZKEM.OnAlarm += new zkemkeeper._IZKEMEvents_OnAlarmEventHandler(axCZKEM1_OnAlarm);
-                            this.axCZKEM.OnDoor += new zkemkeeper._IZKEMEvents_OnDoorEventHandler(axCZKEM1_OnDoor);
-                            this.axCZKEM.OnWriteCard += new zkemkeeper._IZKEMEvents_OnWriteCardEventHandler(axCZKEM1_OnWriteCard);
-                            this.axCZKEM.OnEmptyCard += new zkemkeeper._IZKEMEvents_OnEmptyCardEventHandler(axCZKEM1_OnEmptyCard);
-                            this.axCZKEM.OnKeyPress += new zkemkeeper._IZKEMEvents_OnKeyPressEventHandler(axCZKEM1_OnKeyPress);
-                            Utils.WriteLog("Connexion à l'appareil ip " + ip + " établie");
-
-                            return true;
-                        }
-                    }
+                    this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerifyOne);
+                    this.axCZKEM.OnVerify -= new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
                 }
                 else
                 {
-                    axCZKEM.GetLastError(ref idwErrorCode);
-                    Utils.WriteLog("Impossible de se connecter à l'appareil " + ip + ", ErrorCode=" + idwErrorCode.ToString());
-
+                    this.axCZKEM.OnVerify -= new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerifyOne);
+                    this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
                 }
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
-                Messages.Exception("Zkemkeeper (StartOne) ", ex);
+                Messages.Exception("Zkemkeeper (OnEmpreintTesting) ", ex);
                 return false;
             }
         }
@@ -885,6 +928,129 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
+        private void zkTimer1_Tick(Object source, ElapsedEventArgs e)
+        {
+            try
+            {
+                _I_MACHINE_NUMBER = 1;//In fact,when you are using the tcp/ip communication,this parameter will be ignored,that is any integer will all right.Here we use 1.
+                if (this.axCZKEM.RegEvent(_I_MACHINE_NUMBER, 65535))//Here you can register the realtime events that you want to be triggered(the parameters 65535 means registering all)
+                {
+                    this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
+                    this.axCZKEM.OnAttTransactionEx += new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (zkTimer1_Tick) ", ex);
+            }
+        }
+
+        public bool StopOneDirect()
+        {
+            try
+            {
+                this.axCZKEM.OnFinger -= new zkemkeeper._IZKEMEvents_OnFingerEventHandler(axCZKEM1_OnFinger);
+                this.axCZKEM.OnVerify -= new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
+                this.axCZKEM.OnAttTransactionEx -= new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
+                this.axCZKEM.OnFingerFeature -= new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(axCZKEM1_OnFingerFeature);
+                this.axCZKEM.OnEnrollFingerEx -= new zkemkeeper._IZKEMEvents_OnEnrollFingerExEventHandler(axCZKEM1_OnEnrollFingerEx);
+                this.axCZKEM.OnDeleteTemplate -= new zkemkeeper._IZKEMEvents_OnDeleteTemplateEventHandler(axCZKEM1_OnDeleteTemplate);
+                this.axCZKEM.OnNewUser -= new zkemkeeper._IZKEMEvents_OnNewUserEventHandler(axCZKEM1_OnNewUser);
+                this.axCZKEM.OnHIDNum -= new zkemkeeper._IZKEMEvents_OnHIDNumEventHandler(axCZKEM1_OnHIDNum);
+                this.axCZKEM.OnAlarm -= new zkemkeeper._IZKEMEvents_OnAlarmEventHandler(axCZKEM1_OnAlarm);
+                this.axCZKEM.OnDoor -= new zkemkeeper._IZKEMEvents_OnDoorEventHandler(axCZKEM1_OnDoor);
+                this.axCZKEM.OnWriteCard -= new zkemkeeper._IZKEMEvents_OnWriteCardEventHandler(axCZKEM1_OnWriteCard);
+                this.axCZKEM.OnEmptyCard -= new zkemkeeper._IZKEMEvents_OnEmptyCardEventHandler(axCZKEM1_OnEmptyCard);
+                this.axCZKEM.OnKeyPress -= new zkemkeeper._IZKEMEvents_OnKeyPressEventHandler(axCZKEM1_OnKeyPress);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (StopOneDirect) ", ex);
+                return false;
+            }
+        }
+
+        public bool StartOneDirect()
+        {
+            try
+            {
+                _I_MACHINE_NUMBER = 1;//In fact,when you are using the tcp/ip communication,this parameter will be ignored,that is any integer will all right.Here we use 1.
+                if (this.axCZKEM.RegEvent(_I_MACHINE_NUMBER, 65535))//Here you can register the realtime events that you want to be triggered(the parameters 65535 means registering all)
+                {
+                    this.axCZKEM.OnFinger += new zkemkeeper._IZKEMEvents_OnFingerEventHandler(axCZKEM1_OnFinger);
+                    this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
+                    this.axCZKEM.OnAttTransactionEx += new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
+                    this.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(axCZKEM1_OnFingerFeature);
+                    this.axCZKEM.OnEnrollFingerEx += new zkemkeeper._IZKEMEvents_OnEnrollFingerExEventHandler(axCZKEM1_OnEnrollFingerEx);
+                    this.axCZKEM.OnDeleteTemplate += new zkemkeeper._IZKEMEvents_OnDeleteTemplateEventHandler(axCZKEM1_OnDeleteTemplate);
+                    this.axCZKEM.OnNewUser += new zkemkeeper._IZKEMEvents_OnNewUserEventHandler(axCZKEM1_OnNewUser);
+                    this.axCZKEM.OnHIDNum += new zkemkeeper._IZKEMEvents_OnHIDNumEventHandler(axCZKEM1_OnHIDNum);
+                    this.axCZKEM.OnAlarm += new zkemkeeper._IZKEMEvents_OnAlarmEventHandler(axCZKEM1_OnAlarm);
+                    this.axCZKEM.OnDoor += new zkemkeeper._IZKEMEvents_OnDoorEventHandler(axCZKEM1_OnDoor);
+                    this.axCZKEM.OnWriteCard += new zkemkeeper._IZKEMEvents_OnWriteCardEventHandler(axCZKEM1_OnWriteCard);
+                    this.axCZKEM.OnEmptyCard += new zkemkeeper._IZKEMEvents_OnEmptyCardEventHandler(axCZKEM1_OnEmptyCard);
+                    this.axCZKEM.OnKeyPress += new zkemkeeper._IZKEMEvents_OnKeyPressEventHandler(axCZKEM1_OnKeyPress);
+
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (StartOneDirect) ", ex);
+                return false;
+            }
+        }
+
+        public bool StartOne(int id, String ip)
+        {
+            try
+            {
+                int idwErrorCode = 0;
+                bool bIsConnected = axCZKEM.Connect_Net(ip, 4370);
+                if (bIsConnected == true)
+                {
+                    _I_MACHINE_NUMBER = 1;//In fact,when you are using the tcp/ip communication,this parameter will be ignored,that is any integer will all right.Here we use 1.
+                    if (this.axCZKEM.RegEvent(_I_MACHINE_NUMBER, 65535))//Here you can register the realtime events that you want to be triggered(the parameters 65535 means registering all)
+                    {
+                        if (PointeuseBLL.Connect(id, _I_MACHINE_NUMBER))
+                        {
+                            this.axCZKEM.OnFinger += new zkemkeeper._IZKEMEvents_OnFingerEventHandler(axCZKEM1_OnFinger);
+                            this.axCZKEM.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(axCZKEM1_OnVerify);
+                            this.axCZKEM.OnAttTransactionEx += new zkemkeeper._IZKEMEvents_OnAttTransactionExEventHandler(axCZKEM1_OnAttTransactionEx);
+                            this.axCZKEM.OnFingerFeature += new zkemkeeper._IZKEMEvents_OnFingerFeatureEventHandler(axCZKEM1_OnFingerFeature);
+                            this.axCZKEM.OnEnrollFingerEx += new zkemkeeper._IZKEMEvents_OnEnrollFingerExEventHandler(axCZKEM1_OnEnrollFingerEx);
+                            this.axCZKEM.OnDeleteTemplate += new zkemkeeper._IZKEMEvents_OnDeleteTemplateEventHandler(axCZKEM1_OnDeleteTemplate);
+                            this.axCZKEM.OnNewUser += new zkemkeeper._IZKEMEvents_OnNewUserEventHandler(axCZKEM1_OnNewUser);
+                            this.axCZKEM.OnHIDNum += new zkemkeeper._IZKEMEvents_OnHIDNumEventHandler(axCZKEM1_OnHIDNum);
+                            this.axCZKEM.OnAlarm += new zkemkeeper._IZKEMEvents_OnAlarmEventHandler(axCZKEM1_OnAlarm);
+                            this.axCZKEM.OnDoor += new zkemkeeper._IZKEMEvents_OnDoorEventHandler(axCZKEM1_OnDoor);
+                            this.axCZKEM.OnWriteCard += new zkemkeeper._IZKEMEvents_OnWriteCardEventHandler(axCZKEM1_OnWriteCard);
+                            this.axCZKEM.OnEmptyCard += new zkemkeeper._IZKEMEvents_OnEmptyCardEventHandler(axCZKEM1_OnEmptyCard);
+                            this.axCZKEM.OnKeyPress += new zkemkeeper._IZKEMEvents_OnKeyPressEventHandler(axCZKEM1_OnKeyPress);
+
+                            Utils.WriteLog("Connexion à l'appareil ip " + ip + " établie");
+
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    axCZKEM.GetLastError(ref idwErrorCode);
+                    Utils.WriteLog("Impossible de se connecter à l'appareil " + ip + ", ErrorCode=" + idwErrorCode.ToString());
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (StartOne) ", ex);
+                return false;
+            }
+        }
+
         #region RealTime Events
 
         //When you place your finger on sensor of the device,this event will be triggered
@@ -909,11 +1075,11 @@ namespace ZK_Lymytz.TOOLS
 
             }
         }
-        private void axCZKEM1_OnVerify_(int iUserID)
+        private void axCZKEM1_OnVerifyOne(int iUserID)
         {
             _EMPLOYE = EmployeBLL.OneById(Convert.ToInt32(iUserID));
             Utils.WriteLog("-- Vérification identitée demandée...");
-            if (iUserID < 0)
+            if (iUserID < 0 || (_EMPLOYE != null ? _EMPLOYE.Id < 1 : true))
             {
                 Utils.WriteLog("--- Vérification echouée... ");
                 return;
@@ -929,93 +1095,99 @@ namespace ZK_Lymytz.TOOLS
         //If your fingerprint(or your card) passes the verification,this event will be triggered
         private void axCZKEM1_OnAttTransactionEx(string sEnrollNumber, int iIsInValid, int iAttState, int iVerifyMethod, int iYear, int iMonth, int iDay, int iHour, int iMinute, int iSecond, int iWorkCode)
         {
-            Cursor c;
-            Utils.WriteLog("Identification reussie...");
-            Utils.WriteLog("... pour l'employé : " + _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
-            Utils.WriteLog("... pour la date : " + iYear.ToString() + "-" + iMonth.ToString() + "-" + iDay.ToString() + " " + iHour.ToString() + ":" + iMinute.ToString() + ":" + iSecond.ToString());
-            DateTime current_time = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
-            DateTime current_date = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
-            if (Fonctions.OnSavePointage(_EMPLOYE, current_time, current_date, _POINTEUSE))
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
-                c = Cursors.WaitCursor;
-                Utils.WriteLog("Pointage enregistré avec succes...");
-
-                IOEMDevice iO = new IOEMDevice();
-                iO.iMachineNumber = _I_MACHINE_NUMBER;
-                iO.iParams1 = (int)_EMPLOYE.Id;
-                iO.iParams2 = 0;
-                iO.iParams3 = 0;
-                iO.iParams4 = 0;
-                iO.idwManipulation = 6;
-                iO.idwYear = iYear;
-                iO.idwMonth = iMonth;
-                iO.idwDay = iDay;
-                iO.idwHour = iHour;
-                iO.idwMinute = iMinute;
-                iO.idwSecond = iSecond;
-                Logs.WriteCsv((IOEMDevice)iO);
-
-                ClearLCD(true);
-                if (_PLANNING.Valide)
+                Cursor c;
+                Utils.WriteLog("Identification reussie...");
+                Utils.WriteLog("... pour l'employé : " + _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                Utils.WriteLog("... pour la date : " + iYear.ToString() + "-" + iMonth.ToString() + "-" + iDay.ToString() + " " + iHour.ToString() + ":" + iMinute.ToString() + ":" + iSecond.ToString());
+                DateTime current_time = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
+                DateTime current_date = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
+                if (Fonctions.OnSavePointage(_EMPLOYE, current_time, current_date, _POINTEUSE))
                 {
-                    WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
-                    WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                    c = Cursors.WaitCursor;
+                    Utils.WriteLog("Pointage enregistré avec succes...");
+
+                    IOEMDevice iO = new IOEMDevice();
+                    iO.iMachineNumber = _I_MACHINE_NUMBER;
+                    iO.iParams1 = (int)_EMPLOYE.Id;
+                    iO.iParams2 = 0;
+                    iO.iParams3 = 0;
+                    iO.iParams4 = 0;
+                    iO.idwManipulation = 6;
+                    iO.idwYear = iYear;
+                    iO.idwMonth = iMonth;
+                    iO.idwDay = iDay;
+                    iO.idwHour = iHour;
+                    iO.idwMinute = iMinute;
+                    iO.idwSecond = iSecond;
+                    Logs.WriteCsv((IOEMDevice)iO);
+
+                    ClearLCD(true);
+                    if (_PLANNING.Valide)
+                    {
+                        WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
+                        WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                    }
+                    else
+                    {
+                        WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
+                        WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                        WriteLCD(true, 2, 0, "Vous n'êtes pas programmé");
+                    }
+                    Fonctions.DefaultLCD(true);
                 }
-                else
-                {
-                    WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
-                    WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
-                    WriteLCD(true, 2, 0, "Vous n'êtes pas programmé");
-                }
-                Fonctions.DefaultLCD(true);
+                c = Cursors.Default;
             }
-            c = Cursors.Default;
         }
 
         //When you have enrolled your finger,this event will be triggered and return the quality of the fingerprint you have enrolled
         public void axCZKEM1_OnFingerFeature(int iScore)
         {
-            _FINGER_IN -= 1;
-            if (iScore < 0)
+            if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
-                Utils.WriteLog("---- La qualité de l'empreinte digitale de l'employe " + _EMPLOYE.NomPrenom + " est mauvaise");
-                return;
-            }
-            else
-            {
-                Utils.WriteLog("---- Empreinte de l'employe " + _EMPLOYE.NomPrenom + " en cours de traitement.... (" + _FINGER_IN + " essai(e) restant)");
-            }
-            if (_FINGER_IN == 2)
-            {
-                form_.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte02;
-            }
-            else if (_FINGER_IN == 1)
-            {
-                form_.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte03;
-            }
-            else
-            {
-                form_.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte;
-            }
-
-            if (_FINGER_IN == 0 && iScore > -1)
-            {
-                if (Fonctions.StartSave(this, _POINTEUSE.Ip))
+                _FINGER_IN -= 1;
+                if (iScore < 0)
                 {
-                    form_.ResetEmploye();
-                    form_.ResetDoigt();
-                    form_.txt_result.BackColor = Color.Green;
-                    form_.txt_result.Text = "Correct";
+                    Utils.WriteLog("---- La qualité de l'empreinte digitale de l'employe " + _EMPLOYE.NomPrenom + " est mauvaise");
+                    return;
                 }
                 else
                 {
-                    form_.txt_result.BackColor = Color.Red;
-                    form_.txt_result.Text = "Incorrect";
+                    Utils.WriteLog("---- Empreinte de l'employe " + _EMPLOYE.NomPrenom + " en cours de traitement.... (" + _FINGER_IN + " essai(e) restant)");
                 }
-                form_.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte;
-                _FINGER_IN = 3;
-                _FLAG = 3;
-                Utils.WriteLog("Fin de l'enregistrement de l'empreinte, Employe " + _EMPLOYE.NomPrenom + ", Doigt (" + _FINGER.Doigt + ") - Main (" + _FINGER.Doigt + ")");
+                if (_FINGER_IN == 2)
+                {
+                    _FORM_ADD_EMPREINTE.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte02;
+                }
+                else if (_FINGER_IN == 1)
+                {
+                    _FORM_ADD_EMPREINTE.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte03;
+                }
+                else
+                {
+                    _FORM_ADD_EMPREINTE.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte;
+                }
+
+                if (_FINGER_IN == 0 && iScore > -1)
+                {
+                    if (Fonctions.StartSave(this, _POINTEUSE.Ip))
+                    {
+                        _FORM_ADD_EMPREINTE.ResetEmploye();
+                        _FORM_ADD_EMPREINTE.ResetDoigt();
+                        _FORM_ADD_EMPREINTE.txt_result.BackColor = Color.Green;
+                        _FORM_ADD_EMPREINTE.txt_result.Text = "Correct";
+                    }
+                    else
+                    {
+                        _FORM_ADD_EMPREINTE.txt_result.BackColor = Color.Red;
+                        _FORM_ADD_EMPREINTE.txt_result.Text = "Incorrect";
+                    }
+                    _FORM_ADD_EMPREINTE.box_doigt.Image = global::ZK_Lymytz.Properties.Resources.empreinte;
+                    _FINGER_IN = 3;
+                    _FLAG = 3;
+                    Utils.WriteLog("Fin de l'enregistrement de l'empreinte, Employe " + _EMPLOYE.NomPrenom + ", Doigt (" + _FINGER.Doigt + ") - Main (" + _FINGER.Main + ")");
+                }
             }
         }
 

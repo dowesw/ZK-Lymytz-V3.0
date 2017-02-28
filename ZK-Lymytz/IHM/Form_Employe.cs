@@ -19,16 +19,22 @@ namespace ZK_Lymytz.IHM
     {
         Employe employe = new Employe();
         public Pointeuse pointeuse = new Pointeuse();
-        public bool all = true;
-        Appareil z;
+        public bool vue_all_employe = true;
+        Appareil appareil;
         int fingerID = -1;
 
-        public Form_Employe(Pointeuse pointeuse, bool _all)
+        ObjectThread object_employe;
+        ObjectThread object_empreinte;
+
+        public Form_Employe(Pointeuse pointeuse, bool vue_all_employe)
         {
             InitializeComponent();
             Configuration.Load(this);
+            object_employe = new ObjectThread(dgv_employe);
+            object_empreinte = new ObjectThread(dgv_empreinte);
+
             this.pointeuse = pointeuse;
-            this.all = _all;
+            this.vue_all_employe = vue_all_employe;
         }
 
         private void Form_Employe_FormClosed(object sender, FormClosedEventArgs e)
@@ -46,6 +52,8 @@ namespace ZK_Lymytz.IHM
 
         private void _ResetText()
         {
+            Exit();
+
             txt_id.ResetText();
             txt_names.ResetText();
             txt_password.ResetText();
@@ -58,61 +66,50 @@ namespace ZK_Lymytz.IHM
         private void ChangeFonction()
         {
             _ResetText();
-            if (all)
+            if (vue_all_employe)  
             {
                 this.box_connect.Image = global::ZK_Lymytz.Properties.Resources.unconnecte;
                 btn_change_fct.Text = "Passer en mode testing";
-                z.Deconnect();
-                z = null;
-                Utils.VerifyZkemkeeper(ref z, ref pointeuse);
-                pointeuse.Zkemkeeper = z;
-
+                appareil.OnEmpreintTesting(false);
                 LoadEmploye();
             }
             else
             {
                 this.box_connect.Image = global::ZK_Lymytz.Properties.Resources.connecte;
                 btn_change_fct.Text = "Passer en mode gestion";
-                pointeuse.Connecter = false;
-                Utils.SetZkemkeeper(ref pointeuse);
-                z = pointeuse.Zkemkeeper;
-                z.StartTestEmpreint();
+                appareil.OnEmpreintTesting(true);
 
-                ObjectThread o = new ObjectThread(dgv_employe);
-                o.ClearDataGridView(true);
-                o = new ObjectThread(dgv_empreinte);
-                o.ClearDataGridView(true);
+                object_employe.ClearDataGridView(true);
+                object_empreinte.ClearDataGridView(true);
             }
-            all = !all;
+            vue_all_employe = !vue_all_employe;
         }
 
         public void VerifyPointeuse()
         {
             if (pointeuse != null ? pointeuse.Id > 0 : false)
             {
-                if (!all)
+                appareil = Utils.ReturnAppareil(pointeuse);
+                if (appareil == null)
                 {
-                    pointeuse.Connecter = false;
                     Utils.SetZkemkeeper(ref pointeuse);
-                    z = pointeuse.Zkemkeeper;
-                    z.StartTestEmpreint();
+                    appareil = pointeuse.Zkemkeeper;
                 }
-                else
-                {
-                    z = Utils.ReturnAppareil(pointeuse);
-                    Utils.VerifyZkemkeeper(ref z, ref pointeuse);
-                    pointeuse.Zkemkeeper = z;
-                }
-                if (z == null)
-                {
-                    Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
-                    Constantes.FORM_EMPLOYE = null;
-                    this.Dispose();
-                }
+                Exit();
                 this.Text += " (Pointeuse : " + pointeuse.Ip + ")";
             }
             else
             {
+                Constantes.FORM_EMPLOYE = null;
+                this.Dispose();
+            }
+        }
+
+        private void Exit()
+        {
+            if (appareil == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
                 Constantes.FORM_EMPLOYE = null;
                 this.Dispose();
             }
@@ -133,14 +130,12 @@ namespace ZK_Lymytz.IHM
         private void ResetEmpreinte()
         {
             fingerID = -1;
-            ObjectThread o = new ObjectThread(dgv_empreinte);
-            o.ClearDataGridView(true);
+            object_empreinte.ClearDataGridView(true);
         }
 
         private void LoadEmploye()
         {
-            ObjectThread o = new ObjectThread(dgv_employe);
-            o.ClearDataGridView(true);
+            object_employe.ClearDataGridView(true);
 
             int iEnrollNumber = 0;
             int iEMachineNumber = 0;
@@ -148,18 +143,18 @@ namespace ZK_Lymytz.IHM
             int iPrivilege = 0;
             int iEnabled = 0;
 
-            z.EnableDevice(pointeuse.IMachine, false);
-            z.ReadAllUserID(pointeuse.IMachine);//read all the user information to the memory
-            while (z.GetAllUserID(pointeuse.IMachine, ref iEnrollNumber, ref iEMachineNumber, ref iBackupNumber, ref iPrivilege, ref iEnabled))
+            appareil.EnableDevice(pointeuse.IMachine, false);
+            appareil.ReadAllUserID(pointeuse.IMachine);//read all the user information to the memory
+            while (appareil.GetAllUserID(pointeuse.IMachine, ref iEnrollNumber, ref iEMachineNumber, ref iBackupNumber, ref iPrivilege, ref iEnabled))
             {
                 Employe e = EmployeBLL.OneById(iEnrollNumber);
                 if (e != null ? e.Id < 1 : true)
                 {
                     e = new Employe(iEnrollNumber, iEnrollNumber.ToString(), "");
                 }
-                o.WriteDataGridView(new object[] { e.Id, e.NomPrenom });
+                object_employe.WriteDataGridView(new object[] { e.Id, e.NomPrenom });
             }
-            z.EnableDevice(pointeuse.IMachine, true);
+            appareil.EnableDevice(pointeuse.IMachine, true);
             ResetEmploye();
         }
 
@@ -187,17 +182,17 @@ namespace ZK_Lymytz.IHM
 
         private void LoadInfos()
         {
-            if (z.EnableDevice(pointeuse.IMachine, false))
+            if (appareil.EnableDevice(pointeuse.IMachine, false))
             {
                 Cursor c = Cursors.WaitCursor;
-                if (z.ReadAllTemplate(pointeuse.IMachine))
+                if (appareil.ReadAllTemplate(pointeuse.IMachine))
                 {
                     string names = "";
                     string password = "";
                     int privilege = 0;
                     bool bEnabled = false;
 
-                    if (z.GetUserInfo(pointeuse.IMachine, (int)employe.Id, ref names, ref password, ref privilege, ref bEnabled))//upload user information to the memory
+                    if (appareil.GetUserInfo(pointeuse.IMachine, (int)employe.Id, ref names, ref password, ref privilege, ref bEnabled))//upload user information to the memory
                     {
                         employe.Nom = names;
                         employe.Password = password;
@@ -207,8 +202,8 @@ namespace ZK_Lymytz.IHM
                         LoadOnView(employe);
                     }
                 }
-                z.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                z.EnableDevice(pointeuse.IMachine, true);
+                appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                appareil.EnableDevice(pointeuse.IMachine, true);
                 c = Cursors.Default;
             }
         }
@@ -230,26 +225,25 @@ namespace ZK_Lymytz.IHM
 
         private void LoadEmpreinte()
         {
-            if (z.EnableDevice(pointeuse.IMachine, false))
+            if (appareil.EnableDevice(pointeuse.IMachine, false))
             {
                 Cursor c = Cursors.WaitCursor;
-                if (z.ReadAllTemplate(pointeuse.IMachine))
+                if (appareil.ReadAllTemplate(pointeuse.IMachine))
                 {
                     string sTemplate = "";
                     int longTmps = 0;
                     int flag_ = 0;
-                    ObjectThread o = new ObjectThread(dgv_empreinte);
 
                     foreach (Finger f in Utils.Fingers())
                     {
-                        if (z.GetUserTmpExStr(pointeuse.IMachine, employe.Id.ToString(), f.Index, out flag_, out sTemplate, out longTmps))
+                        if (appareil.GetUserTmpExStr(pointeuse.IMachine, employe.Id.ToString(), f.Index, out flag_, out sTemplate, out longTmps))
                         {
-                            o.WriteDataGridView(new object[] { f.Index, f.Main, f.Doigt, flag_ });
+                            object_empreinte.WriteDataGridView(new object[] { f.Index, f.Main, f.Doigt, flag_ });
                         }
                     }
                 }
-                z.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                z.EnableDevice(pointeuse.IMachine, true);
+                appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                appareil.EnableDevice(pointeuse.IMachine, true);
                 c = Cursors.Default;
             }
         }
@@ -298,21 +292,20 @@ namespace ZK_Lymytz.IHM
         {
             if (employe != null ? employe.Id > 0 : false)
             {
-                if (z.EnableDevice(pointeuse.IMachine, false))
+                if (appareil.EnableDevice(pointeuse.IMachine, false))
                 {
                     Cursor c = Cursors.WaitCursor;
-                    if (z.DeleteUserInfoEx(pointeuse.IMachine, (int)employe.Id))//upload user information to the memory
+                    if (appareil.DeleteUserInfoEx(pointeuse.IMachine, (int)employe.Id))//upload user information to the memory
                     {
                         Utils.WriteLog("Supppression de l'employe " + employe.Id + " [" + employe.Nom + "] effectuée");
-                        ObjectThread o = new ObjectThread(dgv_employe);
-                        o.RemoveDataGridView(Utils.GetRowData(dgv_employe, employe.Id));
+                        object_employe.RemoveDataGridView(Utils.GetRowData(dgv_employe, employe.Id));
                     }
                     else
                     {
                         Utils.WriteLog("Supppression de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
                     }
-                    z.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                    z.EnableDevice(pointeuse.IMachine, true);
+                    appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                    appareil.EnableDevice(pointeuse.IMachine, true);
                     c = Cursors.Default;
                 }
                 else
@@ -346,12 +339,12 @@ namespace ZK_Lymytz.IHM
 
         public void Update()
         {
-            if (z.EnableDevice(pointeuse.IMachine, false))
+            if (appareil.EnableDevice(pointeuse.IMachine, false))
             {
                 Cursor c = Cursors.WaitCursor;
-                if (z.ReadAllTemplate(pointeuse.IMachine))
+                if (appareil.ReadAllTemplate(pointeuse.IMachine))
                 {
-                    if (z.SetUserInfo(pointeuse.IMachine, (int)employe.Id, employe.Nom, employe.Password, employe.Privilege, employe.BEnabled))//upload user information to the memory
+                    if (appareil.SetUserInfo(pointeuse.IMachine, (int)employe.Id, employe.Nom, employe.Password, employe.Privilege, employe.BEnabled))//upload user information to the memory
                     {
                         Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] effectuée");
                     }
@@ -364,8 +357,8 @@ namespace ZK_Lymytz.IHM
                 {
                     Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
                 }
-                z.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                z.EnableDevice(pointeuse.IMachine, true);
+                appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                appareil.EnableDevice(pointeuse.IMachine, true);
                 c = Cursors.Default;
             }
             else
@@ -409,16 +402,15 @@ namespace ZK_Lymytz.IHM
         {
             if (fingerID > -1)
             {
-                if (z.EnableDevice(pointeuse.IMachine, false))
+                if (appareil.EnableDevice(pointeuse.IMachine, false))
                 {
                     Cursor c = Cursors.WaitCursor;
-                    if (z.ReadAllTemplate(pointeuse.IMachine))
+                    if (appareil.ReadAllTemplate(pointeuse.IMachine))
                     {
-                        if (z.DelUserTmp(pointeuse.IMachine, (int)employe.Id, fingerID))//upload user information to the memory
+                        if (appareil.DelUserTmp(pointeuse.IMachine, (int)employe.Id, fingerID))//upload user information to the memory
                         {
                             Utils.WriteLog("-- Supppression de l'empreinte de l'employe " + employe.Id + " [" + employe.Nom + "] effectuée");
-                            ObjectThread o = new ObjectThread(dgv_empreinte);
-                            o.RemoveDataGridView(Utils.GetRowData(dgv_empreinte, (long)fingerID));
+                            object_empreinte.RemoveDataGridView(Utils.GetRowData(dgv_empreinte, (long)fingerID));
                         }
                         else
                         {
@@ -429,8 +421,8 @@ namespace ZK_Lymytz.IHM
                     {
                         Utils.WriteLog("-- Supppression de l'empreinte de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
                     }
-                    z.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                    z.EnableDevice(pointeuse.IMachine, true);
+                    appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                    appareil.EnableDevice(pointeuse.IMachine, true);
                     c = Cursors.Default;
                 }
                 else
@@ -444,10 +436,9 @@ namespace ZK_Lymytz.IHM
         {
             if (e != null ? e.Id > 0 : false)
             {
-                ObjectThread o = new ObjectThread(dgv_employe);
-                o.ClearDataGridView(true);
-                o.WriteDataGridView(new object[] { e.Id, e.NomPrenom });
-                z.EnableDevice(pointeuse.IMachine, true);
+                object_employe.ClearDataGridView(true);
+                object_employe.WriteDataGridView(new object[] { e.Id, e.NomPrenom });
+                appareil.EnableDevice(pointeuse.IMachine, true);
                 ResetEmploye();
 
                 employe = e;

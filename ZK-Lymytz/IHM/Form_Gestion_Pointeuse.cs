@@ -369,5 +369,253 @@ namespace ZK_Lymytz.IHM
             z.ClearLCD(true);
             z.WriteLCD(true, 2, 7, "OK");
         }
+
+        private void btnGetDeviceStrInfo_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            int idwInfo = 1;//the only possible value
+            string sValue = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetDeviceStrInfo(pointeuse.IMachine, idwInfo, out sValue))
+            {
+                txt_valeur.Text = sValue;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture des information de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetDeviceMAC_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sMAC = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetDeviceMAC(pointeuse.IMachine, ref sMAC))
+            {
+                txt_valeur.Text = sMAC;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture de l'adresse MAC de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetDeviceIP_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sIP = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetDeviceIP(pointeuse.IMachine, ref sIP))
+            {
+                txt_valeur.Text = sIP;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture de l'adresse IP de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetSerialNumber_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sdwSerialNumber = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetSerialNumber(pointeuse.IMachine, out sdwSerialNumber))
+            {
+                txt_valeur.Text = sdwSerialNumber;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture du numéro de serie de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetSysOption_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sOption = "~PIN2Width";//You should input this parameter by yourself . 
+            string sValue = "";
+
+            Cursor = Cursors.WaitCursor;
+            if (z.GetSysOption(pointeuse.IMachine, sOption, out sValue))
+            {
+                txt_valeur.Text = sValue;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture des options systèmes de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetProductCode_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sProductCode = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetProductCode(pointeuse.IMachine, out sProductCode))
+            {
+                txt_valeur.Text = sProductCode;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture du code du produit de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetFirmwareVersion_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sVersion = "";
+            Cursor = Cursors.WaitCursor;
+            if (z.GetFirmwareVersion(pointeuse.IMachine, ref sVersion))
+            {
+                txt_valeur.Text = sVersion;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture de la version du produit de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetPlatform_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sPlatform = "";
+
+            Cursor = Cursors.WaitCursor;
+            if (z.GetPlatform(pointeuse.IMachine, ref sPlatform))
+            {
+                txt_valeur.Text = sPlatform;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture de la platforme de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetCardFun_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            int iCardFun = 0;
+
+            Cursor = Cursors.WaitCursor;
+            if (z.GetCardFun(pointeuse.IMachine, ref iCardFun))
+            {
+                txt_valeur.Text = iCardFun.ToString();
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture du lecteur de carte de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetSDKVersion_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sVersion = "";
+
+            Cursor = Cursors.WaitCursor;
+            if (z.GetSDKVersion(ref sVersion))
+            {
+                txt_valeur.Text = sVersion;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture de la version de la SDK de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnQueryState_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            int iState = 0;
+
+            Cursor = Cursors.WaitCursor;
+            if (z.QueryState(ref iState))
+            {
+                txt_valeur.Text = iState.ToString();
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture du statut des requetes de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void btnGetVendor_Click(object sender, EventArgs e)
+        {
+            if (z == null)
+            {
+                Utils.WriteLog("La liaison avec l'appareil " + pointeuse.Ip + " est corrompue");
+                return;
+            }
+            string sVendor = "";
+
+            Cursor = Cursors.WaitCursor;
+            if (z.GetVendor(ref sVendor))
+            {
+                txt_valeur.Text = sVendor;
+            }
+            else
+            {
+                Utils.WriteLog("-- Lecture du concepteur de l'appareil " + pointeuse.Ip + " impossible");
+            }
+            Cursor = Cursors.Default;
+        }
     }
 }

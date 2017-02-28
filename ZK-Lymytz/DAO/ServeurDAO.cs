@@ -13,19 +13,22 @@ namespace ZK_Lymytz.DAO
 {
     class ServeurDAO
     {
-        static string chemin = Chemins.getCheminServeur();
+        static string chemin = Chemins.CheminServeur();
 
-        public static bool getCreateServeur(Serveur serveur)
+        public static bool CreateServeur(Serveur serveur)
         {
             try
             {
-                using (RegistryKey Nkey = Registry.CurrentUser)
-                {
-                    getCreateServeur(serveur, Nkey);
-                }
                 using (RegistryKey Nkey = Registry.LocalMachine)
                 {
-                    getCreateServeur(serveur, Nkey);
+                    CreateServeur(serveur, Nkey);
+                }
+                if (Utils.Is64BitOperatingSystem())
+                {
+                    using (RegistryKey Nkey = Registry.CurrentUser)
+                    {
+                        CreateServeur(serveur, Nkey);
+                    }
                 }
             }
             catch (Exception e)
@@ -36,7 +39,7 @@ namespace ZK_Lymytz.DAO
             return true;
         }
 
-        public static bool getCreateServeur(Serveur serveur, RegistryKey Nkey)
+        public static bool CreateServeur(Serveur serveur, RegistryKey Nkey)
         {
             try
             {
@@ -64,28 +67,16 @@ namespace ZK_Lymytz.DAO
             return true;
         }
 
-        public static Serveur getReturnServeur()
+        public static Serveur ReturnServeur()
         {
-            RegistryKey Nkey = Registry.CurrentUser;
+            RegistryKey Nkey = Registry.LocalMachine;
             try
             {
-                Serveur serveur = getReturnServeur(Nkey);
+                Serveur serveur = ReturnServeur(Nkey);
                 if (serveur != null ? (serveur.Adresse != null ? serveur.Adresse.Trim().Length < 1 : true) : true)
                 {
-                    RegistryKey Nkey_ = Registry.CurrentUser;
-                    try
-                    {
-                        serveur = getReturnServeur(Nkey_);
-                    }
-                    catch (Exception e)
-                    {
-                        Messages.Exception("ServeurDAO (getReturnServeur)", e);
-                        return null;
-                    }
-                    finally
-                    {
-                        Nkey_.Close();
-                    }
+                    Nkey = Registry.CurrentUser;
+                    serveur = ReturnServeur(Nkey);
                 }
                 return serveur;
             }
@@ -100,7 +91,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Serveur getReturnServeur(RegistryKey Nkey)
+        public static Serveur ReturnServeur(RegistryKey Nkey)
         {
             try
             {
@@ -113,7 +104,7 @@ namespace ZK_Lymytz.DAO
                     serveur.Database = "lymytz_demo_0";
                     serveur.User = "postgres";
                     serveur.Password = "yves1910/";
-                    getCreateServeur(serveur);
+                    CreateServeur(serveur);
                 }
                 else
                 {

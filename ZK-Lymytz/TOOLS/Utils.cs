@@ -16,6 +16,7 @@ using System.Security.Principal;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Net;
 
 using Microsoft.Win32;
 
@@ -80,6 +81,154 @@ namespace ZK_Lymytz.TOOLS
             public long dwWaitHint;
         };
 
+        public static void Load()
+        {
+            Constantes.SOCIETE = SocieteBLL.ReturnSociete();
+            Constantes.SETTING = SettingBLL.ReturnSetting();
+            Constantes.USERS = UsersBLL.ReturnUsers();
+            Constantes.PARAMETRE = ParametreBLL.OneBySociete(Constantes.SOCIETE.Id);
+            Constantes.POINTEUSES = PointeuseBLL.List("select * from yvs_pointeuse where societe = " + Constantes.SOCIETE.Id + " or multi_societe is true order by adresse_ip");
+        }
+
+        // Cacher tous les formulaires actifs
+        public static void CloseForm()
+        {
+
+            if (Constantes.FORM_ADD_EMPREINTE != null)
+            {
+                Constantes.FORM_ADD_EMPREINTE.Hide();
+            }
+            if (Constantes.FORM_SERVEUR != null)
+            {
+                Constantes.FORM_SERVEUR.Hide();
+            }
+            if (Constantes.FORM_SETTING != null)
+            {
+                Constantes.FORM_SETTING.Hide();
+            }
+            if (Constantes.FORM_ADD_POINTEUSE != null)
+            {
+                Constantes.FORM_ADD_POINTEUSE.Hide();
+            }
+            if (Constantes.FORM_UPD_POINTEUSE != null)
+            {
+                Constantes.FORM_UPD_POINTEUSE.Hide();
+            }
+            if (Constantes.FORM_ARCHIVE_POINTEUSE != null)
+            {
+                Constantes.FORM_ARCHIVE_POINTEUSE.Hide();
+            }
+            if (Constantes.FORM_ARCHIVE_SERVEUR != null)
+            {
+                Constantes.FORM_ARCHIVE_SERVEUR.Hide();
+            }
+            if (Constantes.FORM_VIEW_RESULT != null)
+            {
+                Constantes.FORM_VIEW_RESULT.Hide();
+            }
+            if (Constantes.FORM_VIEW_LOG != null)
+            {
+                Constantes.FORM_VIEW_LOG.Hide();
+            }
+            if (Constantes.FORM_GESTION_POINTEUSE != null)
+            {
+                Constantes.FORM_GESTION_POINTEUSE.Hide();
+            }
+            if (Constantes.FORM_EVENEMENT != null)
+            {
+                Constantes.FORM_EVENEMENT.Hide();
+            }
+            if (Constantes.FORM_EMPLOYE != null)
+            {
+                Constantes.FORM_EMPLOYE.Hide();
+            }
+            if (Constantes.FORM_EMPREINTE != null)
+            {
+                Constantes.FORM_EMPREINTE.Hide();
+            }
+            if (Constantes.FORM_PRESENCE != null)
+            {
+                Constantes.FORM_PRESENCE.Hide();
+            }
+            if (Constantes.FORM_FIND_POINTEUSE != null)
+            {
+                Constantes.FORM_FIND_POINTEUSE.Hide();
+            }
+            if (Constantes.FORM_PING_APPAREIL != null)
+            {
+                Constantes.FORM_PING_APPAREIL.Hide();
+            }
+        }
+
+        // Afficher tous les formulaires cachés
+        public static void OpenForm()
+        {
+            if (Constantes.FORM_ADD_EMPREINTE != null)
+            {
+                Constantes.FORM_ADD_EMPREINTE.Show();
+            }
+            if (Constantes.FORM_SERVEUR != null)
+            {
+                Constantes.FORM_SERVEUR.Show();
+            }
+            if (Constantes.FORM_SETTING != null)
+            {
+                Constantes.FORM_SETTING.Show();
+            }
+            if (Constantes.FORM_ADD_POINTEUSE != null)
+            {
+                Constantes.FORM_ADD_POINTEUSE.Show();
+            }
+            if (Constantes.FORM_UPD_POINTEUSE != null)
+            {
+                Constantes.FORM_UPD_POINTEUSE.Show();
+            }
+            if (Constantes.FORM_ARCHIVE_POINTEUSE != null)
+            {
+                Constantes.FORM_ARCHIVE_POINTEUSE.Show();
+            }
+            if (Constantes.FORM_ARCHIVE_SERVEUR != null)
+            {
+                Constantes.FORM_ARCHIVE_SERVEUR.Show();
+            }
+            if (Constantes.FORM_VIEW_RESULT != null)
+            {
+                Constantes.FORM_VIEW_RESULT.Show();
+            }
+            if (Constantes.FORM_VIEW_LOG != null)
+            {
+                Constantes.FORM_VIEW_LOG.Show();
+            }
+            if (Constantes.FORM_GESTION_POINTEUSE != null)
+            {
+                Constantes.FORM_GESTION_POINTEUSE.Show();
+            }
+            if (Constantes.FORM_EVENEMENT != null)
+            {
+                Constantes.FORM_EVENEMENT.Show();
+            }
+            if (Constantes.FORM_EMPLOYE != null)
+            {
+                Constantes.FORM_EMPLOYE.Show();
+            }
+            if (Constantes.FORM_EMPREINTE != null)
+            {
+                Constantes.FORM_EMPREINTE.Show();
+            }
+            if (Constantes.FORM_PRESENCE != null)
+            {
+                Constantes.FORM_PRESENCE.Show();
+            }
+            if (Constantes.FORM_FIND_POINTEUSE != null)
+            {
+                Constantes.FORM_FIND_POINTEUSE.Show();
+            }
+            if (Constantes.FORM_PING_APPAREIL != null)
+            {
+                Constantes.FORM_PING_APPAREIL.Show();
+            }
+        }
+
         public static string jourSemaine(DateTime date)
         {
             string jour = date.ToString("dddd", new CultureInfo("fr-FR").DateTimeFormat);
@@ -88,18 +237,24 @@ namespace ZK_Lymytz.TOOLS
 
         public static void WriteLog(string logMessage)
         {
-            ListBox lv = Constantes.FORM_PARENT.lv_report;
-            string text = DateTime.Now.ToString() + " : ";
-            if (lv == null)
+            if (Constantes.FORM_PARENT != null)
             {
-                text += "Formulaire principal fermé";
-                Logs.WriteTxt("");
-                return;
+                if (Constantes.FORM_PARENT.lv_report != null)
+                {
+                    ListBox lv = Constantes.FORM_PARENT.lv_report;
+                    string text = DateTime.Now.ToString() + " : ";
+                    if (lv == null)
+                    {
+                        text += "Formulaire principal fermé";
+                        Logs.WriteTxt("");
+                        return;
+                    }
+                    ObjectThread o = new ObjectThread(lv);
+                    text += logMessage;
+                    o.WriteListBox(text);
+                    Logs.WriteTxt(text);
+                }
             }
-            ObjectThread o = new ObjectThread(lv);
-            text += logMessage;
-            o.WriteListBox(text);
-            Logs.WriteTxt(text);
         }
 
         public static void WriteLog(ListBox lv, string logMessage)
@@ -136,16 +291,6 @@ namespace ZK_Lymytz.TOOLS
 
         public static void StartWithWindows()
         {
-            //RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            //if (rk != null)
-            //{
-            //    String key = (String)rk.GetValue(Constantes.APP_NAME);
-            //    if (key != null ? key.Trim().Equals("") : true)
-            //    {
-            //        rk.SetValue(Constantes.APP_NAME, "\"" + Application.ExecutablePath.ToString() + "\" /autostart");
-            //    }
-            //}
-
             RegistryKey rk_ = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (rk_ != null)
             {
@@ -155,30 +300,74 @@ namespace ZK_Lymytz.TOOLS
                     rk_.SetValue(Constantes.APP_NAME, "\"" + Application.ExecutablePath.ToString() + "\" /autostart");
                 }
             }
-            //string chemin = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce";
-            //RegistryKey rk_ = Registry.LocalMachine.OpenSubKey(@chemin, true);
-            //if (rk_ != null)
-            //{
-            //    eventId = 0;
-            //    String key = (String)rk_.GetValue(Constantes.APP_NAME);
-            //    if (key != null ? key.Trim().Equals("") : true)
-            //    {
-            //        rk_.SetValue(Constantes.APP_NAME, "\"" + Application.ExecutablePath.ToString() + "\" /silent");
-            //    }
-            //}
-            //else
-            //{
-            //    Registry.LocalMachine.CreateSubKey(@chemin);
-            //    if (eventId < 3)
-            //    {
-            //        StartWithWindows();
-            //    }
-            //    else
-            //    {
-            //        Environment.Exit(0);
-            //    }
-            //    eventId++;
-            //}
+        }
+
+        public static void CreateRegistreDLL64Bits()
+        {
+            try
+            {
+                using (RegistryKey Nkey = Registry.ClassesRoot)
+                {
+                    string chemin = "Wow6432Node\\CLSID\\" + Constantes.GUID_ZK + "";
+                    RegistryKey rk = Nkey.OpenSubKey(@chemin, true);
+                    if (rk == null)
+                    {
+                        Nkey.CreateSubKey(@chemin);
+                        rk = Nkey.OpenSubKey(@chemin, true);
+                    }
+                    if (rk != null)
+                    {
+                        String key = (String)rk.GetValue("AppID");
+                        if (key != null ? key.Trim().Equals("") : true)
+                        {
+                            rk.SetValue("AppID", Constantes.GUID_ZK);
+                        }
+                        else
+                        {
+                            if (!key.Equals(Constantes.GUID_ZK))
+                                rk.SetValue("AppID", Constantes.GUID_ZK);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Utils (CreateRegistreDLL64Bits) ", ex);
+            }
+        }
+
+        public static void CreateRegistreDLL32Bits()
+        {
+            try
+            {
+                using (RegistryKey Nkey = Registry.ClassesRoot)
+                {
+                    string chemin = "CLSID\\" + Constantes.GUID_ZK + "";
+                    RegistryKey rk = Nkey.OpenSubKey(@chemin, true);
+                    if (rk == null)
+                    {
+                        Nkey.CreateSubKey(@chemin);
+                        rk = Nkey.OpenSubKey(@chemin, true);
+                    }
+                    if (rk != null)
+                    {
+                        String key = (String)rk.GetValue("AppID");
+                        if (key != null ? key.Trim().Equals("") : true)
+                        {
+                            rk.SetValue("AppID", Constantes.GUID_ZK);
+                        }
+                        else
+                        {
+                            if (!key.Equals(Constantes.GUID_ZK))
+                                rk.SetValue("AppID", Constantes.GUID_ZK);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Utils (CreateRegistreDLL64Bits) ", ex);
+            }
         }
 
         public static bool IsAuthenticated(string username, string passwd)
@@ -230,6 +419,24 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
+        public static void RunService()
+        {
+            if (!Utils.VerifyService("Zk-LymytzService"))
+            {
+                string service = Application.StartupPath + "\\Zk-Service.exe";
+                if (File.Exists(service))
+                {
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo.FileName = service;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        process.Start();
+                    }
+                }
+            }
+        }
+
         public static bool VerifyProcess(String name)
         {
             if (name == null || name.Trim().Equals(""))
@@ -239,32 +446,6 @@ namespace ZK_Lymytz.TOOLS
             Process[] processesList = Process.GetProcessesByName(name);
             bool r = processesList.Length > 0;
             return r;
-        }
-
-        public static void InstallService()
-        {
-            ENTITE.Users u = UsersBLL.ReturnUsers();
-            if (u != null ? u.Name != null : false)
-            {
-                string service = "Zk_LymytzService";
-                string mySc = "ZK-Lymytz.exe";
-                if (!VerifyService(service))
-                {
-                    //InstallService(mySc);
-                    CreateService(service, Application.ExecutablePath.ToString());
-                }
-                else
-                {
-                    if (UninstallService(mySc))
-                    {
-                        InstallService(mySc);
-                    }
-                }
-            }
-            else
-            {
-                new IHM.Form_Users().ShowDialog();
-            }
         }
 
         public static bool VerifyService(String name)
@@ -285,77 +466,191 @@ namespace ZK_Lymytz.TOOLS
             return false;
         }
 
-        public static void ExecuteService()
+        public static void InstallService(string service)
         {
-            Thread.Sleep(300000);
-            Program.StartProgram(false);
+            ENTITE.Users u = UsersBLL.ReturnUsers();
+            if (u != null ? u.Name != null : false)
+            {
+                CreateService(service, service, Application.ExecutablePath, "", "", "auto");
+                Thread.Sleep(1000);
+                StartService(service);
+            }
+            else
+            {
+                new IHM.Form_Users().ShowDialog();
+            }
+            if (!CheckRunningService(service))
+                System.ServiceProcess.ServiceBase.Run(new System.ServiceProcess.ServiceBase());
         }
 
-        public static void InstallService(string ExeFilename)
+        public static void InstallService(string service, System.ServiceProcess.ServiceBase _base)
         {
-            try
+            ENTITE.Users u = UsersBLL.ReturnUsers();
+            if (u != null ? u.Name != null : false)
             {
-                System.Configuration.Install.AssemblyInstaller Installer = new System.Configuration.Install.AssemblyInstaller(ExeFilename, commandLineOptions);
-                Installer.UseNewContext = true;
-                Installer.Install(null);
-                Installer.Commit(null);
+                CreateService(service, service, Application.ExecutablePath, "", "", "auto");
+                Thread.Sleep(1000);
+                StartService(service);
             }
-            catch (Exception ex)
+            else
             {
-                Messages.Exception("Utils (InstallService) ", ex);
+                new IHM.Form_Users().ShowDialog();
             }
+            if (!CheckRunningService(service))
+                System.ServiceProcess.ServiceBase.Run(_base);
         }
 
-        public static bool UninstallService(string ExeFilename)
+        public static void InstallService()
         {
-            try
-            {
-                System.Configuration.Install.AssemblyInstaller Installer = new System.Configuration.Install.AssemblyInstaller(ExeFilename, commandLineOptions);
-                Installer.UseNewContext = true;
-                Installer.Uninstall(null);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Utils (UninstallService) ", ex);
-                return false;
-            }
+            InstallService("Zk-LymytzService");
         }
 
-        public static void CreateService(string service, string path)
+        public static void InstallService(System.ServiceProcess.ServiceBase _base)
         {
-            string cmd = "create " + service + " binPath = " + path + " start = auto";
-            Process.Start(@"C:\Windows\system32\sc.exe", cmd);
+            InstallService(_base.ServiceName, _base);
         }
 
-        public static void DeleteService_(string service)
+        public static void DeleteService(string service)
         {
             Process.Start(@"C:\Windows\system32\sc.exe", "delete " + service);
         }
 
-        public static bool DeleteService(string service)
+        public static void Cmd(string[] args)
         {
-            string chemin = "SYSTEM/CurrentControlSet/Services/" + service;
-            RegistryKey Nkey = Registry.LocalMachine;
-            try
+            if (args != null ? args.Length > 0 : false)
             {
-                RegistryKey valKey = Nkey.OpenSubKey(@chemin, true);
-                if (valKey != null)
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < args.Length; i++)
                 {
-                    Nkey.DeleteSubKey(@chemin);
-                    return true;
+                    builder.AppendFormat("{" + i + "} ", args[i]);
                 }
-                return false;
+                using (Process process = new Process())
+                {
+                    process.StartInfo.FileName = @"C:\Windows\system32\cmd.exe";
+                    process.StartInfo.Arguments = builder.ToString();
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                }
             }
-            catch (Exception e)
+        }
+
+        public static void Cmd(string commande)
+        {
+            Process.Start(@"C:\Windows\system32\cmd.exe", commande);
+        }
+
+        public static void StartService(string service)
+        {
+            if (VerifyService(service))
             {
-                Messages.Exception("Utils (DeleteService) ", e);
-                return false;
+                ServiceController[] scServices;
+                scServices = ServiceController.GetServices();
+                foreach (ServiceController scTemp in scServices)
+                {
+                    if (scTemp.ServiceName == service)
+                    {
+                        if (scTemp.Status != ServiceControllerStatus.Running)
+                        {
+                            StringBuilder builder = new StringBuilder();
+                            builder.AppendFormat("{0} {1} ", "Start", service);
+                            using (Process process = new Process())
+                            {
+                                process.StartInfo.FileName = @"C:\Windows\system32\sc.exe";
+                                process.StartInfo.Arguments = builder.ToString();
+                                process.StartInfo.CreateNoWindow = true;
+                                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                process.Start();
+                            }
+                        }
+                        break;
+                    }
+                }
             }
-            finally
+        }
+
+
+        public static bool CheckRunningService(string name)
+        {
+            if (VerifyService(name))
             {
-                Nkey.Close();
+                ServiceController[] scServices;
+                scServices = ServiceController.GetServices();
+                foreach (ServiceController scTemp in scServices)
+                {
+                    if (scTemp.ServiceName == name)
+                    {
+                        if (scTemp.Status == ServiceControllerStatus.Running)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
+            return false;
+        }
+
+        public static void CreateService(string name, string displayName, string binPath, string userName, string unecryptedPassword, string startupType)
+        {
+            // Determine statuptype
+            string startupTypeConverted = string.Empty;
+            switch (startupType)
+            {
+                case "Automatic":
+                    startupTypeConverted = "auto";
+                    break;
+                case "Disabled":
+                    startupTypeConverted = "disabled";
+                    break;
+                case "Manual":
+                    startupTypeConverted = "demand";
+                    break;
+                default:
+                    startupTypeConverted = "auto";
+                    break;
+            }
+            // Determine if service has to be created (Create) or edited (Config)
+            StringBuilder builder = new StringBuilder();
+            if (VerifyService(name))
+            {
+                if (CheckRunningService(name))
+                {
+                    return;
+                }
+                builder.AppendFormat("{0} {1} ", "Config", name);
+            }
+            else
+            {
+                builder.AppendFormat("{0} {1} ", "Create", name);
+            }
+            builder.AppendFormat("binPath= \"{0}\"  ", binPath);
+            builder.AppendFormat("displayName= \"{0}\"  ", displayName);
+            // Only add "obj" when username is not empty. If omitted the "Local System" account will be used
+            if (!string.IsNullOrEmpty(userName))
+            {
+                builder.AppendFormat("obj= \"{0}\"  ", userName);
+            }
+            // Only add password when unecryptedPassword it is not empty and user name is not "NT AUTHORITY\Local Service" or NT AUTHORITY\NetworkService
+            if (!string.IsNullOrEmpty(unecryptedPassword) && !unecryptedPassword.Equals(@"NT AUTHORITY\Local Service") && !unecryptedPassword.Equals(@"NT AUTHORITY\NetworkService"))
+            {
+                builder.AppendFormat("password= \"{0}\"  ", unecryptedPassword);
+            }
+            builder.AppendFormat("start= \"{0}\"  ", startupTypeConverted);
+            // Execute sc.exe commando
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = @"C:\Windows\system32\sc.exe";
+                process.StartInfo.Arguments = builder.ToString();
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+            }
+        }
+
+        public static void ExecuteService()
+        {
+            Thread.Sleep(300000);
+            Program.StartProgram(false);
         }
 
         public static double ParsedMaxDouble(String value)
@@ -439,9 +734,9 @@ namespace ZK_Lymytz.TOOLS
 
         public static bool ExecuteScript()
         {
-            if (!File.Exists(TOOLS.Chemins.cheminSystem32 + "\\zkemkeeper.dll"))
+            if (!File.Exists(TOOLS.Chemins.cheminSystem32 + Constantes.FILE_SEPARATOR + Constantes.DLL))
             {
-                if (!File.Exists(TOOLS.Chemins.cheminSystem64 + "\\zkemkeeper.dll"))
+                if (!File.Exists(TOOLS.Chemins.cheminSystem64 + Constantes.FILE_SEPARATOR + Constantes.DLL))
                 {
                     return false;
                 }
@@ -449,7 +744,30 @@ namespace ZK_Lymytz.TOOLS
             return true;
         }
 
+        //Retourne l'instance de l'appareil si elle est connecté
+        public static Appareil ReturnAppareil(Pointeuse p)
+        {
+            if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
+            {
+                p = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p.Id);
+                if (p != null ? p.Id > 0 : false)
+                {
+                    if (p.Zkemkeeper != null)
+                    {
+                        p.Zkemkeeper._POINTEUSE = p;
+                        return p.Zkemkeeper;
+                    }
+                }
+            }
+            return null;
+        }
+
         public static void SetZkemkeeper()
+        {
+            SetZkemkeeper(0);
+        }
+
+        public static void SetZkemkeeper(int view)
         {
             if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
             {
@@ -458,7 +776,11 @@ namespace ZK_Lymytz.TOOLS
                     if (!p.Connecter)
                     {
                         Appareil z = new Appareil();
-                        bool b = z.ConnectNet(p.Ip, p.Port);
+                        bool b = false;
+                        if (view > 0)
+                            b = z.ConnectNet(p.Ip, p.Port, view == 1);
+                        else
+                            b = z.ConnectNet(p.Ip, p.Port);
                         if (b)
                         {
                             if (z.RegEvent(p.IMachine))
@@ -476,73 +798,74 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public static void SetZkemkeeper(ref Pointeuse p)
+        public static bool SetZkemkeeper(ref Pointeuse p)
+        {
+            return SetZkemkeeper(ref p, 0);
+        }
+
+        public static bool SetZkemkeeper(ref Pointeuse p, int view)
         {
             if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
             {
                 if (!p.Connecter)
                 {
-                    Appareil z = new Appareil();
-                    bool b = z.ConnectNet(p.Ip, p.Port);
-                    if (b)
+                    if (p.Zkemkeeper != null ? p.Zkemkeeper._CONNEXION_RUNNING : true)
                     {
-                        if (z.RegEvent(p.IMachine))
+                        Appareil z = new Appareil();
+                        z._CONNEXION_RUNNING = true;
+                        if (view > 0)
+                            z._BIS_CONNECTED = z.ConnectNet(p.Ip, p.Port, view == 1);
+                        else
+                            z._BIS_CONNECTED = z.ConnectNet(p.Ip, p.Port);
+                        if (z._BIS_CONNECTED)
                         {
-                            Pointeuse p_ = p;
-                            z._POINTEUSE = p;
-                            Constantes.POINTEUSES.Find(x => x.Id == p_.Id).Zkemkeeper = z;
-                            p.Zkemkeeper = z;
+                            z._CONNEXION_RUNNING = false;
+                            if (z.RegEvent(p.IMachine))
+                            {
+                                z._POINTEUSE = p;
+                                int id = p.Id;
+                                if (PointeuseBLL.Connect(id, z._I_MACHINE_NUMBER))
+                                {
+                                    p.Connecter = true;
+                                    p.Zkemkeeper = z;
+
+                                    int idx = Constantes.POINTEUSES.FindIndex(x => x.Id == id);
+                                    if (idx > -1)
+                                    {
+                                        Constantes.POINTEUSES[idx] = p;
+                                    }
+                                    return true;
+                                }
+                            }
                         }
                     }
-                }
-            }
-        }
-
-        //Retourne l'instance de l'appareil si elle est connecté
-        public static Appareil ReturnAppareil(Pointeuse p)
-        {
-            if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
-            {
-                p = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p.Id);
-                if (p != null ? p.Id > 0 : false)
-                {
-                    if (p.Zkemkeeper != null)
+                    else
                     {
-                        return p.Zkemkeeper;
+                        Messages.ShowWarning("Pattientez svp...");
                     }
                 }
             }
-            return null;
+            return false;
         }
 
         public static void VerifyZkemkeeper(ref Appareil z, ref Pointeuse p)
         {
+            VerifyZkemkeeper(ref z, ref p, 0);
+        }
+
+        public static void VerifyZkemkeeper(ref Appareil z, ref Pointeuse p, int view)
+        {
             if (z == null && p != null)
             {
                 z = new TOOLS.Appareil(p);
-                bool b = z.ConnectNet(p.Ip, p.Port);
+                bool b = false;
+                if (view > 0)
+                    b = z.ConnectNet(p.Ip, p.Port, view == 1);
+                else
+                    b = z.ConnectNet(p.Ip, p.Port);
                 if (b)
                 {
-                    z.RegEvent(z._I_MACHINE_NUMBER);
-                    if (PointeuseBLL.Connect(p.Id, z._I_MACHINE_NUMBER))
-                    {
-                        p.IMachine = z._I_MACHINE_NUMBER;
-                        p.Zkemkeeper = z;
-
-                        Utils.WriteLog("Connexion de l'appareil : " + p.Ip + " effectuée");
-                        if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
-                        {
-                            Pointeuse p_ = p;
-                            p_ = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p_.Id);
-                            if (p_ != null ? p_.Id > 0 : false)
-                            {
-                                p_ = p;
-                                z._POINTEUSE = p;
-                                Constantes.POINTEUSES.Find(x => x.Id == p_.Id).Zkemkeeper = z;
-                            }
-                        }
-                        return;
-                    }
+                    RegEventAppareil(ref z, ref p);
                 }
                 else
                 {
@@ -554,32 +877,22 @@ namespace ZK_Lymytz.TOOLS
 
         public static void VerifyZkemkeeper(ref Appareil z, ref Pointeuse p, Form_Add_Empreinte form)
         {
+            VerifyZkemkeeper(ref z, ref p, form, 0);
+        }
+
+        public static void VerifyZkemkeeper(ref Appareil z, ref Pointeuse p, Form_Add_Empreinte form, int view)
+        {
             if (z == null && p != null && form != null)
             {
                 z = new TOOLS.Appareil(form, p);
-                bool b = z.ConnectNet(p.Ip, p.Port);
+                bool b = false;
+                if (view > 0)
+                    b = z.ConnectNet(p.Ip, p.Port, view == 1);
+                else
+                    b = z.ConnectNet(p.Ip, p.Port);
                 if (b)
                 {
-                    z.RegEvent(z._I_MACHINE_NUMBER);
-                    if (PointeuseBLL.Connect(p.Id, z._I_MACHINE_NUMBER))
-                    {
-                        p.IMachine = z._I_MACHINE_NUMBER;
-                        p.Zkemkeeper = z;
-
-                        Utils.WriteLog("Connexion de l'appareil : " + p.Ip + " effectuée");
-                        if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
-                        {
-                            Pointeuse p_ = p;
-                            p_ = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p_.Id);
-                            if (p_ != null ? p_.Id > 0 : false)
-                            {
-                                p_ = p;
-                                z._POINTEUSE = p;
-                                Constantes.POINTEUSES.Find(x => x.Id == p_.Id).Zkemkeeper = z;
-                            }
-                        }
-                        return;
-                    }
+                    RegEventAppareil(ref z, ref p);
                 }
                 else
                 {
@@ -591,37 +904,54 @@ namespace ZK_Lymytz.TOOLS
 
         public static void VerifyZkemkeeper_(ref Appareil z, ref Pointeuse p, Form_Parent form)
         {
+            VerifyZkemkeeper_(ref z, ref p, form, 0);
+        }
+
+        public static void VerifyZkemkeeper_(ref Appareil z, ref Pointeuse p, Form_Parent form, int view)
+        {
             if (z == null && p != null && form != null)
             {
                 z = new TOOLS.Appareil(p);
-                bool b = z.ConnectNet(p.Ip, p.Port);
+                bool b = false;
+                if (view > 0)
+                    b = z.ConnectNet(p.Ip, p.Port, view == 1);
+                else
+                    b = z.ConnectNet(p.Ip, p.Port);
                 if (b)
                 {
-                    z.RegEvent(z._I_MACHINE_NUMBER);
-                    if (PointeuseBLL.Connect(p.Id, z._I_MACHINE_NUMBER))
-                    {
-                        p.IMachine = z._I_MACHINE_NUMBER;
-                        p.Zkemkeeper = z;
-
-                        Utils.WriteLog("Connexion de l'appareil : " + p.Ip + " effectuée");
-                        if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
-                        {
-                            Pointeuse p_ = p;
-                            p_ = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p_.Id);
-                            if (p_ != null ? p_.Id > 0 : false)
-                            {
-                                p_ = p;
-                                z._POINTEUSE = p;
-                                Constantes.POINTEUSES.Find(x => x.Id == p_.Id).Zkemkeeper = z;
-                            }
-                        }
-                        return;
-                    }
+                    RegEventAppareil(ref z, ref p);
                 }
                 else
                 {
                     z = null;
                     Utils.WriteLog("Connexion de l'appareil : " + p.Ip + " impossible");
+                }
+            }
+        }
+
+        private static void RegEventAppareil(ref Appareil z, ref Pointeuse p)
+        {
+            if (z.RegEvent(z._I_MACHINE_NUMBER))
+            {
+                z._POINTEUSE = p;
+                int id = p.Id;
+                if (PointeuseBLL.Connect(p.Id, z._I_MACHINE_NUMBER))
+                {
+                    p.IMachine = z._I_MACHINE_NUMBER;
+                    p.Zkemkeeper = z;
+                    p.Connecter = true;
+                    p.Zkemkeeper = z;
+
+                    Utils.WriteLog("Connexion de l'appareil : " + p.Ip + " effectuée");
+                    if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
+                    {
+                        int idx = Constantes.POINTEUSES.FindIndex(x => x.Id == id);
+                        if (idx > -1)
+                        {
+                            Constantes.POINTEUSES[idx] = p;
+                        }
+                    }
+                    return;
                 }
             }
         }
@@ -661,7 +991,7 @@ namespace ZK_Lymytz.TOOLS
             return list;
         }
 
-        public static DateTime SetTimeStamp(DateTime date, DateTime heure)
+        public static DateTime AddTimeInDate(DateTime date, DateTime heure)
         {
             DateTime d = date;
             d = d.AddHours(heure.Hour);
@@ -670,11 +1000,33 @@ namespace ZK_Lymytz.TOOLS
             return d;
         }
 
+        public static DateTime RemoveTimeInDate(DateTime date, DateTime heure)
+        {
+            DateTime d = date;
+            d = d.AddHours(-heure.Hour);
+            d = d.AddMinutes(-heure.Minute);
+            d = d.AddSeconds(-heure.Second);
+            return d;
+        }
+
+        public static DateTime TimeStamp(DateTime date, DateTime heure)
+        {
+            if (date != null)
+            {
+                if (heure != null)
+                {
+                    return new DateTime(date.Year, date.Month, date.Day, heure.Hour, heure.Minute, heure.Second);
+                }
+                return new DateTime(date.Year, date.Month, date.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            }
+            return DateTime.Now;
+        }
+
         public static DateTime GetTimeStamp(DateTime date, DateTime heure)
         {
             DateTime d = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second);
             DateTime f = new DateTime(date.Year, date.Month, date.Day, heure.Hour, heure.Minute, heure.Second);
-            if (f < d)
+            if (f <= d)
             {
                 d = f;
                 d = d.AddDays(1.0);
@@ -684,6 +1036,25 @@ namespace ZK_Lymytz.TOOLS
                 d = f;
             }
             return d;
+        }
+
+        public static bool VerifyDateHeure(Planning p, DateTime h)
+        {
+            DateTime dateD = new DateTime(p.DateDebut.Year, p.DateDebut.Month, p.DateDebut.Day, 0, 0, 0);
+            DateTime dateF = new DateTime(p.DateFin.Year, p.DateFin.Month, p.DateFin.Day, 0, 0, 0);
+            DateTime heureD = p.HeureDebut;
+            DateTime heureF = p.HeureFin;
+
+            DateTime heure_debut = new DateTime(dateD.Year, dateD.Month, dateD.Day, heureD.Hour, heureD.Minute, 0);
+            DateTime heure_fin = new DateTime(dateF.Year, dateF.Month, dateF.Day, heureF.Hour, heureF.Minute, 0);
+
+            heure_debut = Utils.RemoveTimeInDate(heure_debut, Constantes.PARAMETRE.TimeMargeAvance);
+            heure_fin = Utils.AddTimeInDate(heure_fin, Constantes.PARAMETRE.TimeMargeAvance);
+            if (heure_debut <= h && h <= heure_fin)
+            {
+                return true;
+            }
+            return false;
         }
 
         public static string GetTime(double valeur)
@@ -718,22 +1089,7 @@ namespace ZK_Lymytz.TOOLS
 
         public static bool RequeteLibre(string query)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
-            try
-            {
-                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
-                int i = Lcmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Utils (RequeteLibre) ", ex);
-                return false;
-            }
-            finally
-            {
-                connect.Close();
-            }
+            return Connexion.RequeteLibre(query);
         }
 
         public static List<DateTime> TimeEmployeNotSystem(long employe_, DateTime dateDebut_, DateTime dateFin_)
@@ -765,7 +1121,7 @@ namespace ZK_Lymytz.TOOLS
             }
             finally
             {
-                connect.Close();
+                Connexion.Close(connect);
             }
         }
 
@@ -812,6 +1168,303 @@ namespace ZK_Lymytz.TOOLS
                 }
             }
             return true;
+        }
+
+        public static bool Is64BitOperatingSystem()
+        {
+            if (Directory.Exists(Chemins.cheminSystem64))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static void InstallSDK(bool copie)
+        {
+            string chemin = Chemins.CheminSDK();
+            string path = (Is64BitOperatingSystem() ? Chemins.cheminSystem64 : Chemins.cheminSystem32) + Constantes.FILE_SEPARATOR;
+            if (copie)
+            {
+                foreach (string dll in Constantes.DLL_SDK)
+                {
+                    if (File.Exists(chemin + dll) && !File.Exists(path + dll))
+                    {
+                        File.Copy(chemin + dll, path + dll);
+                    }
+                }
+            }
+            if (File.Exists(path + Constantes.DLL))
+            {
+                string cmd = (Is64BitOperatingSystem() ? Chemins.cheminSystem64 : Chemins.cheminSystem32) + Constantes.FILE_SEPARATOR;
+                Process.Start(@cmd + "regsvr32.exe", "/s " + (path + Constantes.DLL));
+            }
+        }
+
+        public static void UnInstallSDK(bool remove)
+        {
+            string path = (Is64BitOperatingSystem() ? Chemins.cheminSystem64 : Chemins.cheminSystem32) + Constantes.FILE_SEPARATOR;
+            if (remove)
+            {
+                if (File.Exists(path + Constantes.DLL))
+                {
+                    string cmd = (Is64BitOperatingSystem() ? Chemins.cheminSystem64 : Chemins.cheminSystem32) + Constantes.FILE_SEPARATOR;
+                    Process.Start(@cmd + "regsvr32.exe", "-u " + (path + Constantes.DLL));
+                }
+            }
+            foreach (string dll in Constantes.DLL_SDK)
+            {
+                if (File.Exists(path + dll))
+                {
+                    File.Delete(path + dll);
+                }
+            }
+        }
+
+        public static List<IOEMDevice> FindLogsInFileTamponLogs(List<IOEMDevice> temporaires, Employe e, bool date, DateTime d, DateTime f)
+        {
+            bool with_time = !(d.ToShortTimeString().Equals("00:00:00:000") || d.ToShortTimeString().Equals("00:00:00") || d.ToShortTimeString().Equals("00:00") || d.ToShortTimeString().Equals("00"));
+            List<IOEMDevice> logs = new List<IOEMDevice>();
+            if (e != null ? e.Id > 0 : false)
+            {
+                if (date)
+                    logs = temporaires.FindAll(x => (x.idwSEnrollNumber == e.Id && (d <= (with_time ? x.CurrentDateTime : x.CurrentDate) && (with_time ? x.CurrentDateTime : x.CurrentDate) <= f)));
+                else
+                    logs = temporaires.FindAll(x => x.idwSEnrollNumber == e.Id);
+            }
+            else
+            {
+                if (date)
+                    logs = temporaires.FindAll(x => (d <= (with_time ? x.CurrentDateTime : x.CurrentDate) && (with_time ? x.CurrentDateTime : x.CurrentDate) <= f));
+                else
+                    logs = temporaires;
+            }
+            return logs;
+        }
+
+        public static List<IOEMDevice> FindLogsInFileTamponLogsEx(List<IOEMDevice> temporaires, List<Employe> le, DateTime[] dates)
+        {
+            List<IOEMDevice> logs = new List<IOEMDevice>();
+            if ((le != null ? le.Count > 0 : false) && (dates != null ? dates.Length > 0 : false))
+            {
+                if (le != null ? le.Count > 0 : false)
+                {
+                    if (dates != null ? dates.Length > 0 : false)
+                    {
+                        logs = temporaires.FindAll(x => (le.FindIndex(e => e.Id == x.idwSEnrollNumber) < 0 && !(new List<DateTime>(dates)).Contains(x.CurrentDate)));
+                    }
+                    else
+                    {
+                        logs = temporaires.FindAll(x => (le.FindIndex(e => e.Id == x.idwSEnrollNumber) < 0));
+                    }
+                }
+                else
+                {
+                    if (dates != null ? dates.Length > 0 : false)
+                    {
+                        logs = temporaires.FindAll(x => (!(new List<DateTime>(dates)).Contains(x.CurrentDate)));
+                    }
+                    else
+                    {
+                        logs = FindLogsInFileTamponLogs(temporaires, null, false, new DateTime(), new DateTime());
+                    }
+                }
+            }
+            else
+            {
+                logs = FindLogsInFileTamponLogs(temporaires, null, false, new DateTime(), new DateTime());
+            }
+            return logs;
+        }
+
+        public static List<IOEMDevice> OLD_FindLogsInFileTamponLogs(List<IOEMDevice> temporaires, Employe e, bool date, DateTime d, DateTime f, bool load)
+        {
+            List<IOEMDevice> logs = new List<IOEMDevice>();
+            string t = d.ToShortTimeString();
+            bool heure_ = !(t.Equals("00:00:00:000") || t.Equals("00:00:00") || t.Equals("00:00") || t.Equals("00"));
+            List<IOEMDevice> list = new List<IOEMDevice>(temporaires);
+            if (e != null ? e.Id > 0 : false)
+            {
+                list = temporaires.FindAll(x => x.idwSEnrollNumber == e.Id);
+            }
+            foreach (IOEMDevice temp in list)
+            {
+                DateTime h = new DateTime(temp.idwYear, temp.idwMonth, temp.idwDay, 0, 0, 0);
+                if (heure_)
+                {
+                    h = new DateTime(temp.idwYear, temp.idwMonth, temp.idwDay, temp.idwHour, temp.idwMinute, 0);
+                }
+                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(temp.pointeuse, temp.iMachineNumber, temp.idwTMachineNumber, temp.idwSEnrollNumber, temp.idwYear, temp.idwMonth, temp.idwDay, temp.idwHour, temp.idwMinute, temp.idwSecond);
+                if (e != null ? e.Id > 0 : false)
+                {
+                    if (date)
+                    {
+                        if (temp.idwSEnrollNumber == e.Id && (d <= h && h <= f))
+                        {
+                            logs.Add(iO);
+                        }
+                    }
+                    else
+                    {
+                        if (temp.idwSEnrollNumber == e.Id)
+                        {
+                            logs.Add(iO);
+                        }
+                    }
+                }
+                else
+                {
+                    if (date)
+                    {
+                        if (d <= h && h <= f)
+                        {
+                            logs.Add(iO);
+                        }
+                    }
+                    else
+                    {
+                        logs.Add(iO);
+                    }
+                }
+                if (load)
+                {
+                    Constantes.LoadPatience(false);
+                }
+            }
+            return logs;
+        }
+
+        public static string ObjectToString(object o)
+        {
+            return o.ToString();
+        }
+
+        public static DateTime StringToDate(string o)
+        {
+            try
+            {
+                DateTime d = Convert.ToDateTime(o); ;
+                return d;
+            }
+            catch (Exception ex)
+            {
+                return new DateTime();
+            }
+        }
+
+        public static bool StringToAdress(string ip, ref string[] adresse)
+        {
+            try
+            {
+                if (ip != null ? ip.Trim().Length > 0 : false)
+                {
+                    ip = ip.Trim();
+                    IPAddress address = IPAddress.Parse(ip);
+                    adresse = ip.Split(new char[] { '.' });
+                    if (4 > adresse.Length)
+                    {
+                        string[] temp = adresse;
+                        adresse = new string[4];
+                        for (int i = 0; i < temp.Length; i++)
+                        {
+                            adresse[i] = temp[i];
+                        }
+                        for (int i = temp.Length; i < 4; i++)
+                        {
+                            adresse[i] = "255";
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public static List<string> Adresses(string[] debut, string[] fin)
+        {
+            List<string> ips = new List<string>();
+            int i = Convert.ToString(debut[0] + debut[1] + debut[2] + debut[3]).CompareTo(Convert.ToString(fin[0] + fin[1] + fin[2] + fin[3]));
+            bool invers = i > 0;
+
+            int d1 = invers ? Convert.ToInt16(fin[0]) : Convert.ToInt16(debut[0]);
+            int d2 = invers ? Convert.ToInt16(fin[1]) : Convert.ToInt16(debut[1]);
+            int d3 = invers ? Convert.ToInt16(fin[2]) : Convert.ToInt16(debut[2]);
+            int d4 = invers ? Convert.ToInt16(fin[3]) : Convert.ToInt16(debut[3]);
+
+            int f1 = invers ? Convert.ToInt16(debut[0]) : Convert.ToInt16(fin[0]);
+            int f2 = invers ? Convert.ToInt16(debut[1]) : Convert.ToInt16(fin[1]);
+            int f3 = invers ? Convert.ToInt16(debut[2]) : Convert.ToInt16(fin[2]);
+            int f4 = invers ? Convert.ToInt16(debut[3]) : Convert.ToInt16(fin[3]);
+
+            for (int un = d1; un < (d1 > f1 ? 256 : (f1 + 1)); un++)
+            {
+                for (int deux = d2; deux < (d2 > f2 ? 256 : (f2 + 1)); deux++)
+                {
+                    for (int trois = d3; trois < (d3 > f3 ? 256 : (f3 + 1)); trois++)
+                    {
+                        for (int quatre = d4; quatre < (d4 > f4 ? 256 : (f4 + 1)); quatre++)
+                        {
+                            ips.Add(un + "." + deux + "." + trois + "." + quatre);
+                        }
+                        d4 = 1;
+                    }
+                    d3 = 1;
+                }
+                d2 = 1;
+            }
+            return ips;
+        }
+
+        public static bool PingAdresse(string adresse, ref Appareil z)
+        {
+            try
+            {
+                if (z == null)
+                    z = new Appareil();
+                if (z.ConnectNet(adresse, 4370, false))
+                    return true;
+                return false;
+            }
+            catch (Exception ex) { return false; }
+        }
+
+        public static string SearchforCom()//modify by Dowes on Fev.14 2017
+        {
+            string sComValue;
+            string sTmpara;
+            RegistryKey myReg = Registry.LocalMachine.OpenSubKey("HARDWARE\\DEVICEMAP\\SERIALCOMM");
+            string[] sComNames = myReg.GetValueNames();//strings array composed of the key name holded by the subkey "SERIALCOMM"
+            for (int i = 0; i < sComNames.Length; i++)
+            {
+                sComValue = "";
+                sComValue = myReg.GetValue(sComNames[i]).ToString();//obtain the key value of the corresponding key name
+                if (sComValue == "")
+                {
+                    continue;
+                }
+
+                if (sComNames[i] == "\\Device\\USBSER000")//find the virtual serial port created by usbclient
+                {
+                    for (int j = 0; j <= 10; j++)
+                    {
+                        sTmpara = "";
+                        RegistryKey myReg2 = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USB\VID_1B55&PID_B400\" + j.ToString() + @"\Device Parameters");//find the plug and play USB device
+                        if (myReg2 != null)//modify by Dowes on Fev.14 2017
+                        {
+                            sTmpara = myReg2.GetValue("PortName").ToString();
+
+                            if (sComValue == sTmpara)
+                            {
+                                return sTmpara;//modify by Dowes on Fev.14 2017
+                            }
+                        }
+                    }
+                }
+            }
+            return null;//modify by Dowes on Fev.14 2017
         }
     }
 }

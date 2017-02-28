@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
+using ZK_Lymytz.TOOLS;
+
 namespace ZK_Lymytz.ENTITE
 {
-    class Pointage
+    public class Pointage
     {
 
         private long id;
         private Presence presence = new Presence();
+        private bool entreeNull = false;
         private DateTime heure_entree;
+        private bool sortieNull = false;
         private DateTime heure_sortie;
         private bool valider;
         private Pointeuse pointeuse_in = new Pointeuse();
@@ -23,6 +27,18 @@ namespace ZK_Lymytz.ENTITE
         {
             get { return ((heure_sortie - heure_entree).TotalHours) > 0 ? ((heure_sortie - heure_entree).TotalHours) : 0; }
             set { }
+        }
+
+        public bool SortieNull
+        {
+            get { return sortieNull; }
+            set { sortieNull = value; }
+        }
+
+        public bool EntreeNull
+        {
+            get { return entreeNull; }
+            set { entreeNull = value; }
         }
 
         public bool Supplementaire
@@ -61,10 +77,26 @@ namespace ZK_Lymytz.ENTITE
             set { heure_entree = value; }
         }
 
+        public Object _HeureEntree()
+        {
+            if (heure_entree.ToString() != "01/01/0001 00:00:00")
+                return heure_entree;
+            else
+                return null;
+        }
+
         public DateTime HeureSortie
         {
             get { return heure_sortie; }
             set { heure_sortie = value; }
+        }
+
+        public Object _HeureSortie()
+        {
+            if (heure_sortie.ToString() != "01/01/0001 00:00:00")
+                return heure_sortie;
+            else
+                return null;
         }
 
         public bool Valider

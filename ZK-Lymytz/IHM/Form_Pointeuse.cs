@@ -15,77 +15,79 @@ namespace ZK_Lymytz.IHM
 {
     public partial class Form_Pointeuse : Form
     {
-       public bool actif;
-       public Pointeuse pointeuse = new Pointeuse();
-       Pointeuse bean;
+        public bool actif;
+        public Pointeuse pointeuse = new Pointeuse();
+        Pointeuse bean;
 
-       public Form_Pointeuse()
-       {
-           InitializeComponent();
-           Configuration.Load(this);
-       }
+        public Form_Pointeuse()
+        {
+            InitializeComponent();
+            Configuration.Load(this);
+        }
 
-       public Form_Pointeuse(Pointeuse pointeuse)
-       {
-           InitializeComponent();
-           Configuration.Load(this);
-           this.pointeuse = pointeuse;
-       }
+        public Form_Pointeuse(Pointeuse pointeuse)
+        {
+            InitializeComponent();
+            Configuration.Load(this);
+            this.pointeuse = pointeuse;
+        }
 
-       private void Form_Infos_Pointeuse_FormClosing(object sender, FormClosingEventArgs e)
-       {
-           bool update = pointeuse != null ? pointeuse.Id > 0 : false;
-           if (update)
-           {
-               Constantes.FORM_UPD_POINTEUSE = null;
-               pointeuse = null;
-               Utils.removeFrom("Form_Pointeuse_U");
-           }
-           else
-           {
-               Constantes.FORM_ADD_POINTEUSE = null;
-               Utils.removeFrom("Form_Pointeuse_I");
-           }
-           Utils.WriteLog("Fermeture page (" + (update ? "Modification Appareil" : "Ajout Appareil") + ")");
-       }
+        private void Form_Infos_Pointeuse_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bool update = pointeuse != null ? pointeuse.Id > 0 : false;
+            if (update)
+            {
+                Constantes.FORM_UPD_POINTEUSE = null;
+                pointeuse = null;
+                Utils.removeFrom("Form_Pointeuse_U");
+            }
+            else
+            {
+                Constantes.FORM_ADD_POINTEUSE = null;
+                Utils.removeFrom("Form_Pointeuse_I");
+            }
+            Utils.WriteLog("Fermeture page (" + (update ? "Modification Appareil" : "Ajout Appareil") + ")");
+        }
 
-       private void Form_Infos_Pointeuse_Load(object sender, EventArgs e)
-       {
-           LoadCurrent();
-           rbtn_non.Checked = !actif;
-           rbtn_oui.Checked = actif;
-       }
+        private void Form_Infos_Pointeuse_Load(object sender, EventArgs e)
+        {
+            LoadCurrent();
+            rbtn_non.Checked = !actif;
+            rbtn_oui.Checked = actif;
+        }
 
-       public void LoadCurrent()
-       {
-           if (pointeuse != null ? pointeuse.Id > 0 : false)
-           {
-               txt_description.Text = pointeuse.Description;
-               txt_emplacement.Text = pointeuse.Emplacement;
-               txt_ip.Text = pointeuse.Ip;
-               txt_port.Text = pointeuse.Port.ToString() ;
-               actif = pointeuse.Actif;
-           }
-       }
+        public void LoadCurrent()
+        {
+            if (pointeuse != null)
+            {
+                txt_description.Text = pointeuse.Description;
+                txt_emplacement.Text = pointeuse.Emplacement;
+                txt_ip.Text = pointeuse.Ip;
+                txt_port.Text = pointeuse.Port.ToString();
+                actif = pointeuse.Actif;
+                rbtn_multi.Checked = pointeuse.MultiSociete;
+            }
+        }
 
-       private Pointeuse Pointeuse_()
-       {
-           return Pointeuse_(0);
-       }
+        private Pointeuse Pointeuse_()
+        {
+            return Pointeuse_(0);
+        }
 
-       private Pointeuse Pointeuse_(int id)
-       {
-           Pointeuse bean = new Pointeuse();
-           bean.Id = id;
-           bean.Connecter = false;
-           bean.Description = (txt_description.Text.Trim() != "") ? txt_description.Text.Replace("'", "''") : "";
-           bean.Emplacement = txt_emplacement.Text;
-           bean.Ip = txt_ip.Text;
-           bean.Port = Convert.ToInt32(txt_port.Text.Trim());
-           bean.Actif = actif;
-           bean.IMachine = 1;
-           return bean;
-       }
+        private Pointeuse Pointeuse_(int id)
+        {
+            Pointeuse bean = new Pointeuse();
+            bean.Id = id;
+            bean.Connecter = false;
+            bean.Description = (txt_description.Text.Trim() != "") ? txt_description.Text.Replace("'", "''") : "";
+            bean.Emplacement = txt_emplacement.Text;
+            bean.Ip = txt_ip.Text;
+            bean.Port = Convert.ToInt32(txt_port.Text.Trim());
+            bean.Actif = actif;
+            bean.MultiSociete = rbtn_multi.Checked;
+            bean.IMachine = 1;
+            return bean;
+        }
 
         private void btn_appliquer_Click(object sender, EventArgs e)
         {
@@ -115,53 +117,48 @@ namespace ZK_Lymytz.IHM
             }
             else
             {
-                string sIP_a = pointeuse.Ip;
-                if (sIP_a.Trim() == "") 
-                {
-                    Utils.WriteLog("La pointeuse selectionnée est mal paramètrée!");                    
-                    return;
-                }
-
                 string sIP = txt_ip.Text.Trim();
-
-                Pointeuse old_ = PointeuseBLL.OneByIp(sIP_a);
-                if (old_ != null ? old_.Id > 0 : false)
+                Pointeuse new_ = PointeuseBLL.OneByIp(sIP);
+                if (new_ != null ? (new_.Id > 0 ? (new_.Id.Equals(pointeuse.Id)) : true) : true)
                 {
-                    if (!pointeuse.Connecter)
+                    Utils.WriteLog("Demande de modification de l'appareil " + pointeuse.Ip + "");
+                    if (Messages.Confirmation_Infos("modifier") == System.Windows.Forms.DialogResult.Yes)
                     {
-                        Utils.WriteLog("Vous devez connecter l'appareil " + sIP_a);
-                        return;
-                    }
-
-                    Pointeuse new_ = PointeuseBLL.OneByIp(sIP);
-                    if (new_ != null ? new_.Id < 1 : true)
-                    {
-                        Utils.WriteLog("Demande de modification de l'appareil " + sIP_a + "");
-                        if (Messages.Confirmation_Infos("modifier") == System.Windows.Forms.DialogResult.Yes)
+                        bean = Pointeuse_(pointeuse.Id);
+                        if (pointeuse.Ip.Equals(sIP))
                         {
-
+                            Utils.WriteLog("-- Modification des informations l'appareil " + pointeuse.Ip + "");
+                            if (PointeuseBLL.Update(bean, pointeuse.Id))
+                            {
+                                Utils.WriteLog("---- Modification des informations l'appareil " + pointeuse.Ip + " effectuée");
+                                if (!bean.MultiSociete && !bean.Societe.Equals(Constantes.SOCIETE.Id))
+                                    Constantes.FORM_PARENT.DeletePointeuse(bean);
+                                else
+                                    Constantes.FORM_PARENT.UpdatePointeuse(bean);
+                                pointeuse = bean;
+                            }
+                            else
+                            {
+                                Utils.WriteLog("---- Modification des informations l'appareil " + pointeuse.Ip + " impossible");
+                            }
+                        }
+                        else
+                        {
+                            Utils.WriteLog("-- Modification de l'appareil " + pointeuse.Ip + " en " + sIP + "...Patientez svp!");
                             Cursor = Cursors.WaitCursor;
-                            Utils.WriteLog("-- Modification de l'appareil " + sIP_a + " en " + sIP + "...Patientez svp!");
-                            bean = Pointeuse_(pointeuse.Id);
                             Thread t = new Thread(new ThreadStart(Update));
                             t.Start();
                             Cursor = Cursors.Default;
                         }
-                        else
-                        {
-                            Utils.WriteLog("-- Modification de l'appareil " + sIP_a + " annulée");
-                        }
                     }
                     else
                     {
-                        Utils.WriteLog("L'appareil " + sIP + " existe deja");
-                        return;
+                        Utils.WriteLog("-- Modification de l'appareil " + pointeuse.Ip + " annulée");
                     }
                 }
                 else
                 {
-                    Utils.WriteLog("L'appareil " + sIP_a + " n'existe pas");
-                    return;
+                    Utils.WriteLog("L'appareil " + sIP + " existe deja");
                 }
             }
         }
@@ -170,29 +167,39 @@ namespace ZK_Lymytz.IHM
         {
             string sIP_a = pointeuse.Ip;
             string sIP = txt_ip.Text.Trim();
-            int Imachine = 1;
-
             Appareil z = Utils.ReturnAppareil(pointeuse);
-            z.RegEvent(Imachine, 65535);
-
-            z.SetDeviceIP(Imachine, sIP);
-            z.RefreshData(Imachine);//the data in the device should be refreshed
-
-            pointeuse.IMachine = Imachine;
-
-            if (PointeuseBLL.Update(bean, pointeuse.Id))
+            Utils.VerifyZkemkeeper(ref z, ref pointeuse);
+            if (z != null)
             {
-                Utils.WriteLog("---- Modifier de l'adresse de l'appareil" + sIP_a + " en " + sIP + " effectuée");
-                ObjectThread o = new ObjectThread(this);
-                o.WriteTextForm("Modifier Appareil : " + sIP);
-                Utils.SetZkemkeeper(ref bean);
-                Constantes.FORM_PARENT.UpdatePointeuse_(bean);
-                pointeuse = bean;
+                int Imachine = 1;
+
+                z.RegEvent(Imachine, 65535);
+
+                z.SetDeviceIP(Imachine, sIP);
+                z.RefreshData(Imachine);//the data in the device should be refreshed
+
+                pointeuse.IMachine = Imachine;
+
+                if (PointeuseBLL.Update(bean, pointeuse.Id))
+                {
+                    Utils.WriteLog("---- Modifier de l'adresse de l'appareil" + sIP_a + " en " + sIP + " effectuée");
+                    ObjectThread o = new ObjectThread(this);
+                    o.WriteTextForm("Modifier Appareil : " + sIP);
+                    Utils.SetZkemkeeper(ref bean);
+                    if (!bean.MultiSociete && !bean.Societe.Equals(Constantes.SOCIETE.Id))
+                        Constantes.FORM_PARENT.DeletePointeuse(bean);
+                    else
+                        Constantes.FORM_PARENT.UpdatePointeuse(bean);
+                    pointeuse = bean;
+                }
+                else
+                {
+                    Utils.WriteLog("---- Modifier de l'adresse de l'appareil" + sIP_a + " en " + sIP + " impossible");
+                }
             }
             else
             {
-                Utils.WriteLog("---- Modifier de l'adresse de l'appareil" + sIP_a + " en " + sIP +" impossible");
-
+                Utils.WriteLog("-- Modifier de l'adresse de l'appareil" + sIP_a + " en " + sIP + " impossible car connexion à l'appareil impossible");
             }
         }
 

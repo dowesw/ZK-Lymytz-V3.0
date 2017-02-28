@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Archive_Serveur));
             this.grp_log = new System.Windows.Forms.GroupBox();
             this.dgv_log = new System.Windows.Forms.DataGridView();
@@ -43,11 +44,14 @@
             this.btn_save = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
+            this.context_backup = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.supprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grp_log.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).BeginInit();
             this.grp_backup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_backup)).BeginInit();
             this.panel4.SuspendLayout();
+            this.context_backup.SuspendLayout();
             this.SuspendLayout();
             // 
             // grp_log
@@ -136,6 +140,7 @@
             this.dgv_backup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_backup.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.fileName});
+            this.dgv_backup.ContextMenuStrip = this.context_backup;
             this.dgv_backup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_backup.Location = new System.Drawing.Point(3, 16);
             this.dgv_backup.Name = "dgv_backup";
@@ -143,7 +148,7 @@
             this.dgv_backup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_backup.Size = new System.Drawing.Size(173, 347);
             this.dgv_backup.TabIndex = 1;
-            this.dgv_backup.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_backup_CellContentClick);
+            this.dgv_backup.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_backup_MouseDown);
             // 
             // fileName
             // 
@@ -189,6 +194,21 @@
             this.pbar_statut.Size = new System.Drawing.Size(876, 10);
             this.pbar_statut.TabIndex = 0;
             // 
+            // context_backup
+            // 
+            this.context_backup.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.supprimerToolStripMenuItem});
+            this.context_backup.Name = "context_backup";
+            this.context_backup.Size = new System.Drawing.Size(130, 26);
+            // 
+            // supprimerToolStripMenuItem
+            // 
+            this.supprimerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.delete;
+            this.supprimerToolStripMenuItem.Name = "supprimerToolStripMenuItem";
+            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.supprimerToolStripMenuItem.Text = "Supprimer";
+            this.supprimerToolStripMenuItem.Click += new System.EventHandler(this.supprimerToolStripMenuItem_Click);
+            // 
             // Form_Archive_Serveur
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -213,6 +233,7 @@
             this.grp_backup.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_backup)).EndInit();
             this.panel4.ResumeLayout(false);
+            this.context_backup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -233,5 +254,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn fileName;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ProgressBar pbar_statut;
+        private System.Windows.Forms.ContextMenuStrip context_backup;
+        private System.Windows.Forms.ToolStripMenuItem supprimerToolStripMenuItem;
     }
 }

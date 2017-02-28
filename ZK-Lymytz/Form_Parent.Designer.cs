@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Parent));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.pingToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -46,11 +47,13 @@
             this.archivesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appareilToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serveurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recherchePointeuseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.voirResultatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.employesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.présenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evenementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.empreintesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
@@ -79,6 +82,7 @@
             this.context_bubble = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.activerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.arrêterProcessusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,12 +99,15 @@
             this.imachine = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.connect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.actif = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.icon = new System.Windows.Forms.DataGridViewImageColumn();
             this.context_dgv_pointeuse = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmi_active = new System.Windows.Forms.ToolStripMenuItem();
+            this.chargerFichierTamponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_report = new System.Windows.Forms.Panel();
             this.lv_report = new System.Windows.Forms.ListBox();
             this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connexionExterneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -130,6 +137,7 @@
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pingToolStripMenuItem1,
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
             this.toolStripSeparator3,
@@ -140,13 +148,22 @@
             this.fileMenu.Size = new System.Drawing.Size(54, 20);
             this.fileMenu.Text = "&Fichier";
             // 
+            // pingToolStripMenuItem1
+            // 
+            this.pingToolStripMenuItem1.Image = global::ZK_Lymytz.Properties.Resources.pc;
+            this.pingToolStripMenuItem1.Name = "pingToolStripMenuItem1";
+            this.pingToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.pingToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.pingToolStripMenuItem1.Text = "Ping";
+            this.pingToolStripMenuItem1.Click += new System.EventHandler(this.pingToolStripMenuItem1_Click);
+            // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.newToolStripMenuItem.Text = "&Nouveau";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
@@ -155,21 +172,21 @@
             this.openToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.connected;
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.openToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.openToolStripMenuItem.Text = "&Actualiser";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.tsb_actualise_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(162, 6);
             // 
             // redémarerToolStripMenuItem1
             // 
             this.redémarerToolStripMenuItem1.Image = global::ZK_Lymytz.Properties.Resources.restart;
             this.redémarerToolStripMenuItem1.Name = "redémarerToolStripMenuItem1";
-            this.redémarerToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.redémarerToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
             this.redémarerToolStripMenuItem1.Text = "Redémarer";
             this.redémarerToolStripMenuItem1.Click += new System.EventHandler(this.redémarerToolStripMenuItem1_Click);
             // 
@@ -177,7 +194,8 @@
             // 
             this.exitToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.exitToolStripMenuItem.Text = "&Quitter";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolsStripMenuItem_Click);
             // 
@@ -215,7 +233,9 @@
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.enrollerToolStripMenuItem,
             this.optionsToolStripMenuItem,
-            this.archivesToolStripMenuItem});
+            this.archivesToolStripMenuItem,
+            this.recherchePointeuseToolStripMenuItem,
+            this.connexionExterneToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(50, 20);
             this.toolsMenu.Text = "&Outils";
@@ -224,15 +244,17 @@
             // 
             this.enrollerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.edit_user;
             this.enrollerToolStripMenuItem.Name = "enrollerToolStripMenuItem";
-            this.enrollerToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.enrollerToolStripMenuItem.Text = "Enroller";
+            this.enrollerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.enrollerToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.enrollerToolStripMenuItem.Text = "&Enroller";
             this.enrollerToolStripMenuItem.Click += new System.EventHandler(this.enrollerToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.settings;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.optionsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -243,7 +265,7 @@
             this.serveurToolStripMenuItem});
             this.archivesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.folder;
             this.archivesToolStripMenuItem.Name = "archivesToolStripMenuItem";
-            this.archivesToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.archivesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.archivesToolStripMenuItem.Text = "Archives";
             // 
             // appareilToolStripMenuItem
@@ -261,6 +283,24 @@
             this.serveurToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.serveurToolStripMenuItem.Text = "Serveur";
             this.serveurToolStripMenuItem.Click += new System.EventHandler(this.serveurToolStripMenuItem_Click);
+            // 
+            // recherchePointeuseToolStripMenuItem
+            // 
+            this.recherchePointeuseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.voirResultatToolStripMenuItem});
+            this.recherchePointeuseToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.search;
+            this.recherchePointeuseToolStripMenuItem.Name = "recherchePointeuseToolStripMenuItem";
+            this.recherchePointeuseToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.recherchePointeuseToolStripMenuItem.Text = "Recherche Pointeuse";
+            this.recherchePointeuseToolStripMenuItem.Click += new System.EventHandler(this.recherchePointeuseToolStripMenuItem_Click);
+            // 
+            // voirResultatToolStripMenuItem
+            // 
+            this.voirResultatToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.document;
+            this.voirResultatToolStripMenuItem.Name = "voirResultatToolStripMenuItem";
+            this.voirResultatToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.voirResultatToolStripMenuItem.Text = "Voir Resultat";
+            this.voirResultatToolStripMenuItem.Click += new System.EventHandler(this.voirResultatToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -282,59 +322,62 @@
             this.testerToolStripMenuItem});
             this.employesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.group_user;
             this.employesToolStripMenuItem.Name = "employesToolStripMenuItem";
-            this.employesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.employesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.employesToolStripMenuItem.Text = "Employes";
             // 
             // listeToolStripMenuItem
             // 
             this.listeToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.easymoblog;
             this.listeToolStripMenuItem.Name = "listeToolStripMenuItem";
-            this.listeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.listeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.listeToolStripMenuItem.Text = "Liste";
             this.listeToolStripMenuItem.Click += new System.EventHandler(this.listeToolStripMenuItem_Click);
-            // 
-            // testerToolStripMenuItem
-            // 
-            this.testerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.signal_1;
-            this.testerToolStripMenuItem.Name = "testerToolStripMenuItem";
-            this.testerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.testerToolStripMenuItem.Text = "Tester";
-            this.testerToolStripMenuItem.Click += new System.EventHandler(this.testerToolStripMenuItem_Click);
             // 
             // présenceToolStripMenuItem
             // 
             this.présenceToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.test;
             this.présenceToolStripMenuItem.Name = "présenceToolStripMenuItem";
-            this.présenceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.présenceToolStripMenuItem.Text = "Présence";
+            this.présenceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.présenceToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.présenceToolStripMenuItem.Text = "&Présence";
             this.présenceToolStripMenuItem.Click += new System.EventHandler(this.présenceToolStripMenuItem_Click);
+            // 
+            // testerToolStripMenuItem
+            // 
+            this.testerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.signal_1;
+            this.testerToolStripMenuItem.Name = "testerToolStripMenuItem";
+            this.testerToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.testerToolStripMenuItem.Text = "Tester";
+            this.testerToolStripMenuItem.Click += new System.EventHandler(this.testerToolStripMenuItem_Click);
             // 
             // evenementsToolStripMenuItem
             // 
             this.evenementsToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.history;
             this.evenementsToolStripMenuItem.Name = "evenementsToolStripMenuItem";
-            this.evenementsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.evenementsToolStripMenuItem.Text = "Evenements";
+            this.evenementsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.evenementsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.evenementsToolStripMenuItem.Text = "E&venements";
             this.evenementsToolStripMenuItem.Click += new System.EventHandler(this.evenementsToolStripMenuItem_Click);
             // 
             // empreintesToolStripMenuItem
             // 
             this.empreintesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.flag;
             this.empreintesToolStripMenuItem.Name = "empreintesToolStripMenuItem";
-            this.empreintesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.empreintesToolStripMenuItem.Text = "Empreintes";
+            this.empreintesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.empreintesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.empreintesToolStripMenuItem.Text = "E&mpreintes";
             this.empreintesToolStripMenuItem.Click += new System.EventHandler(this.empreintesToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(150, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(176, 6);
             // 
             // administrationToolStripMenuItem
             // 
             this.administrationToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.admin_icon;
             this.administrationToolStripMenuItem.Name = "administrationToolStripMenuItem";
-            this.administrationToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.administrationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.administrationToolStripMenuItem.Text = "Administration";
             this.administrationToolStripMenuItem.Click += new System.EventHandler(this.administrationToolStripMenuItem_Click);
             // 
@@ -553,11 +596,21 @@
             // 
             // logsToolStripMenuItem
             // 
+            this.logsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pingToolStripMenuItem});
             this.logsToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.easymoblog;
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
             this.logsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.logsToolStripMenuItem.Text = "Logs";
             this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
+            // 
+            // pingToolStripMenuItem
+            // 
+            this.pingToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.admin_icon;
+            this.pingToolStripMenuItem.Name = "pingToolStripMenuItem";
+            this.pingToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.pingToolStripMenuItem.Text = "Ping";
+            this.pingToolStripMenuItem.Click += new System.EventHandler(this.pingToolStripMenuItem_Click);
             // 
             // settingToolStripMenuItem
             // 
@@ -642,7 +695,8 @@
             this.emplacement,
             this.imachine,
             this.connect,
-            this.actif});
+            this.actif,
+            this.icon});
             this.dgv_pointeuse.ContextMenuStrip = this.context_dgv_pointeuse;
             this.dgv_pointeuse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_pointeuse.Location = new System.Drawing.Point(3, 16);
@@ -651,6 +705,7 @@
             this.dgv_pointeuse.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_pointeuse.Size = new System.Drawing.Size(624, 253);
             this.dgv_pointeuse.TabIndex = 0;
+            this.dgv_pointeuse.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_pointeuse_CellFormatting);
             this.dgv_pointeuse.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_pointeuse_MouseDown);
             // 
             // id
@@ -690,32 +745,48 @@
             // 
             // connect
             // 
-            this.connect.FillWeight = 68.15889F;
+            this.connect.FillWeight = 70F;
             this.connect.HeaderText = "Connected";
             this.connect.Name = "connect";
             this.connect.ReadOnly = true;
             // 
             // actif
             // 
-            this.actif.FillWeight = 60.9137F;
+            this.actif.FillWeight = 50F;
             this.actif.HeaderText = "Actif";
             this.actif.Name = "actif";
             this.actif.ReadOnly = true;
             // 
+            // icon
+            // 
+            this.icon.FillWeight = 20F;
+            this.icon.HeaderText = "";
+            this.icon.Name = "icon";
+            this.icon.ReadOnly = true;
+            // 
             // context_dgv_pointeuse
             // 
             this.context_dgv_pointeuse.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi_active});
+            this.tsmi_active,
+            this.chargerFichierTamponToolStripMenuItem});
             this.context_dgv_pointeuse.Name = "context_dgv_pointeuse";
-            this.context_dgv_pointeuse.Size = new System.Drawing.Size(112, 26);
+            this.context_dgv_pointeuse.Size = new System.Drawing.Size(203, 48);
             // 
             // tsmi_active
             // 
             this.tsmi_active.Image = global::ZK_Lymytz.Properties.Resources.vue;
             this.tsmi_active.Name = "tsmi_active";
-            this.tsmi_active.Size = new System.Drawing.Size(111, 22);
+            this.tsmi_active.Size = new System.Drawing.Size(202, 22);
             this.tsmi_active.Text = "Activer";
             this.tsmi_active.Click += new System.EventHandler(this.tsmi_active_Click);
+            // 
+            // chargerFichierTamponToolStripMenuItem
+            // 
+            this.chargerFichierTamponToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.chargerFichierTamponToolStripMenuItem.Name = "chargerFichierTamponToolStripMenuItem";
+            this.chargerFichierTamponToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.chargerFichierTamponToolStripMenuItem.Text = "Charger Fichier Tampon";
+            this.chargerFichierTamponToolStripMenuItem.Click += new System.EventHandler(this.chargerFichierTamponToolStripMenuItem_Click);
             // 
             // panel_report
             // 
@@ -752,6 +823,14 @@
             this.effacerToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.effacerToolStripMenuItem.Text = "Effacer";
             this.effacerToolStripMenuItem.Click += new System.EventHandler(this.effacerToolStripMenuItem_Click);
+            // 
+            // connexionExterneToolStripMenuItem
+            // 
+            this.connexionExterneToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.irkickflash;
+            this.connexionExterneToolStripMenuItem.Name = "connexionExterneToolStripMenuItem";
+            this.connexionExterneToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.connexionExterneToolStripMenuItem.Text = "Connexion Externe";
+            this.connexionExterneToolStripMenuItem.Click += new System.EventHandler(this.connexionExterneToolStripMenuItem_Click);
             // 
             // Form_Parent
             // 
@@ -835,13 +914,6 @@
         private System.Windows.Forms.ToolStripMenuItem enrollerToolStripMenuItem;
         private System.Windows.Forms.GroupBox grp_pointeuse;
         private System.Windows.Forms.DataGridView dgv_pointeuse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn adresse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn port;
-        private System.Windows.Forms.DataGridViewTextBoxColumn emplacement;
-        private System.Windows.Forms.DataGridViewTextBoxColumn imachine;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn connect;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn actif;
         private System.Windows.Forms.Panel panel_report;
         private System.Windows.Forms.ContextMenuStrip context_dgv_pointeuse;
         private System.Windows.Forms.ToolStripMenuItem tsmi_active;
@@ -863,6 +935,20 @@
         public System.Windows.Forms.ToolStripMenuItem déconnectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem présenceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pingToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn adresse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn port;
+        private System.Windows.Forms.DataGridViewTextBoxColumn emplacement;
+        private System.Windows.Forms.DataGridViewTextBoxColumn imachine;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn connect;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn actif;
+        private System.Windows.Forms.DataGridViewImageColumn icon;
+        private System.Windows.Forms.ToolStripMenuItem chargerFichierTamponToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem recherchePointeuseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem voirResultatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pingToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem connexionExterneToolStripMenuItem;
     }
 }
 

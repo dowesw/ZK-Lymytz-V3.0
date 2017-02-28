@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Archive_Pointeuse));
             this.panel_pointeuse = new System.Windows.Forms.Panel();
             this.dgv_pointeuse = new System.Windows.Forms.DataGridView();
@@ -53,6 +54,8 @@
             this.btn_load_by_appareil = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
+            this.context_backup = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.supprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_pointeuse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
             this.grp_backup.SuspendLayout();
@@ -61,6 +64,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).BeginInit();
             this.grp_action.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.context_backup.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_pointeuse
@@ -124,6 +128,7 @@
             this.fileName,
             this.dateSave,
             this.chemin});
+            this.dgv_backup.ContextMenuStrip = this.context_backup;
             this.dgv_backup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_backup.Location = new System.Drawing.Point(3, 16);
             this.dgv_backup.Name = "dgv_backup";
@@ -132,7 +137,7 @@
             this.dgv_backup.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_backup.Size = new System.Drawing.Size(692, 208);
             this.dgv_backup.TabIndex = 0;
-            this.dgv_backup.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_backup_CellContentClick);
+            this.dgv_backup.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_backup_MouseDown);
             // 
             // cpt
             // 
@@ -304,6 +309,21 @@
             this.pbar_statut.Size = new System.Drawing.Size(904, 10);
             this.pbar_statut.TabIndex = 0;
             // 
+            // context_backup
+            // 
+            this.context_backup.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.supprimerToolStripMenuItem});
+            this.context_backup.Name = "context_backup";
+            this.context_backup.Size = new System.Drawing.Size(153, 48);
+            // 
+            // supprimerToolStripMenuItem
+            // 
+            this.supprimerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.delete;
+            this.supprimerToolStripMenuItem.Name = "supprimerToolStripMenuItem";
+            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.supprimerToolStripMenuItem.Text = "Supprimer";
+            this.supprimerToolStripMenuItem.Click += new System.EventHandler(this.supprimerToolStripMenuItem_Click);
+            // 
             // Form_Archive_Pointeuse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,6 +351,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).EndInit();
             this.grp_action.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
+            this.context_backup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -361,5 +382,7 @@
         private System.Windows.Forms.Button btn_del_doublon;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ProgressBar pbar_statut;
+        private System.Windows.Forms.ContextMenuStrip context_backup;
+        private System.Windows.Forms.ToolStripMenuItem supprimerToolStripMenuItem;
     }
 }

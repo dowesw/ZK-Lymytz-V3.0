@@ -8,7 +8,7 @@ using ZK_Lymytz.DAO;
 
 namespace ZK_Lymytz.BLL
 {
-    class PointeuseBLL
+    public class PointeuseBLL
     {
         public static bool Insert(Pointeuse bean)
         {
