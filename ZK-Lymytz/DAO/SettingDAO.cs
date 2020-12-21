@@ -61,9 +61,11 @@ namespace ZK_Lymytz.DAO
                 valKey.SetValue("checkconnect", serveur.CheckConnect);
                 valKey.SetValue("autocheckconnectandsynchro", serveur.AutoCheckConnectAndSynchro);
                 valKey.SetValue("timesynchroauto", serveur.AutoCheckConnectAndSynchro ? serveur.TimeSynchroAuto : new DateTime(0001, 01, 01, 0, 0, 0));
+                valKey.SetValue("createservice", serveur.CreateService);
                 valKey.SetValue("pathpersonal", serveur.CheminPersonal);
                 valKey.SetValue("pathstartup", serveur.CheminStartup);
                 valKey.SetValue("pathpicture", serveur.CheminPhoto);
+                valKey.SetValue("pathsetup", serveur.CheminSetup);
             }
             catch (Exception e)
             {
@@ -120,9 +122,11 @@ namespace ZK_Lymytz.DAO
                     serveur.CheckConnect = false;
                     serveur.AutoCheckConnectAndSynchro = false;
                     serveur.TimeSynchroAuto = new DateTime(0001, 01, 01, 0, 0, 0);
+                    serveur.CreateService = false;
                     serveur.CheminPersonal = Chemins.cheminDefault;
                     serveur.CheminStartup = Chemins.cheminStartup;
                     serveur.CheminPhoto = "";
+                    serveur.CheminSetup = "";
                     CreateSetting(serveur);
                 }
                 else
@@ -138,9 +142,11 @@ namespace ZK_Lymytz.DAO
                     serveur.CheckConnect = Convert.ToBoolean(valKey.GetValue("checkconnect") != null ? valKey.GetValue("checkconnect") : false);
                     serveur.AutoCheckConnectAndSynchro = Convert.ToBoolean(valKey.GetValue("autocheckconnectandsynchro") != null ? valKey.GetValue("autocheckconnectandsynchro") : false);
                     serveur.TimeSynchroAuto = Convert.ToDateTime(valKey.GetValue("timesynchroauto") != null ? valKey.GetValue("timesynchroauto") : new DateTime(0001, 01, 01, 0, 0, 0));
+                    serveur.CreateService = Convert.ToBoolean(valKey.GetValue("createservice") != null ? valKey.GetValue("createservice") : false);
                     serveur.CheminPersonal = Convert.ToString(valKey.GetValue("pathpersonal") != null ? valKey.GetValue("pathpersonal") : "");
                     serveur.CheminStartup = Convert.ToString(valKey.GetValue("pathstartup") != null ? valKey.GetValue("pathstartup") : "");
                     serveur.CheminPhoto = Convert.ToString(valKey.GetValue("pathpicture") != null ? valKey.GetValue("pathpicture") : "");
+                    serveur.CheminSetup = Convert.ToString(valKey.GetValue("pathsetup") != null ? valKey.GetValue("pathsetup") : "");
                     valKey.Close();
                 }
                 return serveur;

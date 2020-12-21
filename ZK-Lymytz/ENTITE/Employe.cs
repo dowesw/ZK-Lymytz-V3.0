@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace ZK_Lymytz.ENTITE
 {
@@ -31,13 +32,35 @@ namespace ZK_Lymytz.ENTITE
         private string prenom;
         private string matricule;
         private bool horaire_dynamique;
-        private Contrat contrat = new Contrat();
-        private PosteTravail poste = new PosteTravail();
         private string password;
         private int privilege;
         private bool bEnabled;
         private string photo;
+        private string adresse;
+        private Contrat contrat = new Contrat();
+        private PosteTravail poste = new PosteTravail();
         private Agence agence = new Agence();
+        private List<Presence> presences = new List<Presence>();
+
+        public Bitmap IsPrivilege
+        {
+            get
+            {
+                switch (privilege)
+                {
+                    case (0):
+                    case (1):
+                        return global::ZK_Lymytz.Properties.Resources.edit_user;
+                    case (2):
+                        return global::ZK_Lymytz.Properties.Resources.administrateur;
+                    case (3):
+                        return global::ZK_Lymytz.Properties.Resources.personal;
+                    default:
+                        return global::ZK_Lymytz.Properties.Resources.edit_user;
+                }
+            }
+            set { }
+        }
 
         public Agence Agence
         {
@@ -106,17 +129,29 @@ namespace ZK_Lymytz.ENTITE
             set { poste = value; }
         }
 
+        public List<Presence> Presences
+        {
+            get { return presences; }
+            set { presences = value; }
+        }
+
 
         public string NomPrenom
         {
             get { return (nom != null ? nom : "") + " " + (prenom != null ? prenom : ""); }
-            set {}
+            set { }
         }
 
         public string Photo
         {
             get { return photo; }
             set { photo = value; }
+        }
+
+        public string Adresse
+        {
+            get { return adresse; }
+            set { adresse = value; }
         }
     }
 }

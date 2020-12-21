@@ -70,9 +70,11 @@
             this.valider = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.supp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.context_pointage = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.synchroniserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reorganiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fusionnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reevaluerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fusionnerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.box_identity = new System.Windows.Forms.PictureBox();
             this.btn_next = new System.Windows.Forms.Button();
             this.btn_prec = new System.Windows.Forms.Button();
@@ -80,10 +82,9 @@
             this.com_employe = new System.Windows.Forms.ComboBox();
             this.lb_pagination = new System.Windows.Forms.Label();
             this.txt_index_of = new System.Windows.Forms.TextBox();
-            this.actualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.synchroniserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
+            this.voirLesHeuresPrévuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.grp_total.SuspendLayout();
             this.grp_list_time.SuspendLayout();
@@ -480,35 +481,54 @@
             this.context_pointage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.synchroniserToolStripMenuItem,
             this.actualiserToolStripMenuItem,
+            this.voirLesHeuresPrévuesToolStripMenuItem,
             this.reorganiserToolStripMenuItem,
             this.reevaluerToolStripMenuItem,
             this.fusionnerToolStripMenuItem});
             this.context_pointage.Name = "context_pointage";
-            this.context_pointage.Size = new System.Drawing.Size(162, 114);
+            this.context_pointage.Size = new System.Drawing.Size(195, 158);
+            // 
+            // synchroniserToolStripMenuItem
+            // 
+            this.synchroniserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.synchroniserToolStripMenuItem.Name = "synchroniserToolStripMenuItem";
+            this.synchroniserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.synchroniserToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.synchroniserToolStripMenuItem.Text = "Synchroniser";
+            this.synchroniserToolStripMenuItem.Click += new System.EventHandler(this.synchroniserToolStripMenuItem_Click);
+            // 
+            // actualiserToolStripMenuItem
+            // 
+            this.actualiserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.connected;
+            this.actualiserToolStripMenuItem.Name = "actualiserToolStripMenuItem";
+            this.actualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.actualiserToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.actualiserToolStripMenuItem.Text = "Actualiser";
+            this.actualiserToolStripMenuItem.Click += new System.EventHandler(this.actualiserToolStripMenuItem_Click);
             // 
             // reorganiserToolStripMenuItem
             // 
             this.reorganiserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.add;
             this.reorganiserToolStripMenuItem.Name = "reorganiserToolStripMenuItem";
-            this.reorganiserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.reorganiserToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.reorganiserToolStripMenuItem.Text = "Reorganiser";
             this.reorganiserToolStripMenuItem.Click += new System.EventHandler(this.reorganiserToolStripMenuItem_Click);
-            // 
-            // fusionnerToolStripMenuItem
-            // 
-            this.fusionnerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.famille;
-            this.fusionnerToolStripMenuItem.Name = "fusionnerToolStripMenuItem";
-            this.fusionnerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.fusionnerToolStripMenuItem.Text = "Fusionner";
-            this.fusionnerToolStripMenuItem.Click += new System.EventHandler(this.fusionnerToolStripMenuItem_Click);
             // 
             // reevaluerToolStripMenuItem
             // 
             this.reevaluerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.db;
             this.reevaluerToolStripMenuItem.Name = "reevaluerToolStripMenuItem";
-            this.reevaluerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.reevaluerToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.reevaluerToolStripMenuItem.Text = "Reevaluer";
             this.reevaluerToolStripMenuItem.Click += new System.EventHandler(this.reevaluerToolStripMenuItem_Click);
+            // 
+            // fusionnerToolStripMenuItem
+            // 
+            this.fusionnerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.famille;
+            this.fusionnerToolStripMenuItem.Name = "fusionnerToolStripMenuItem";
+            this.fusionnerToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.fusionnerToolStripMenuItem.Text = "Fusionner";
+            this.fusionnerToolStripMenuItem.Click += new System.EventHandler(this.fusionnerToolStripMenuItem_Click);
             // 
             // box_identity
             // 
@@ -582,24 +602,6 @@
             this.txt_index_of.Text = "1";
             this.txt_index_of.Leave += new System.EventHandler(this.txt_index_of_Leave);
             // 
-            // actualiserToolStripMenuItem
-            // 
-            this.actualiserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.connected;
-            this.actualiserToolStripMenuItem.Name = "actualiserToolStripMenuItem";
-            this.actualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.actualiserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.actualiserToolStripMenuItem.Text = "Actualiser";
-            this.actualiserToolStripMenuItem.Click += new System.EventHandler(this.actualiserToolStripMenuItem_Click);
-            // 
-            // synchroniserToolStripMenuItem
-            // 
-            this.synchroniserToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
-            this.synchroniserToolStripMenuItem.Name = "synchroniserToolStripMenuItem";
-            this.synchroniserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.synchroniserToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.synchroniserToolStripMenuItem.Text = "Synchroniser";
-            this.synchroniserToolStripMenuItem.Click += new System.EventHandler(this.synchroniserToolStripMenuItem_Click);
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.pbar_statut);
@@ -615,6 +617,14 @@
             this.pbar_statut.Name = "pbar_statut";
             this.pbar_statut.Size = new System.Drawing.Size(810, 12);
             this.pbar_statut.TabIndex = 0;
+            // 
+            // voirLesHeuresPrévuesToolStripMenuItem
+            // 
+            this.voirLesHeuresPrévuesToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.vue;
+            this.voirLesHeuresPrévuesToolStripMenuItem.Name = "voirLesHeuresPrévuesToolStripMenuItem";
+            this.voirLesHeuresPrévuesToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.voirLesHeuresPrévuesToolStripMenuItem.Text = "Voir les heures prévues";
+            this.voirLesHeuresPrévuesToolStripMenuItem.Click += new System.EventHandler(this.voirLesHeuresPrévuesToolStripMenuItem_Click);
             // 
             // Form_Presence
             // 
@@ -709,5 +719,6 @@
         private System.Windows.Forms.ToolStripMenuItem synchroniserToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ProgressBar pbar_statut;
+        private System.Windows.Forms.ToolStripMenuItem voirLesHeuresPrévuesToolStripMenuItem;
     }
 }

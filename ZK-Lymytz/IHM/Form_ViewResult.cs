@@ -12,7 +12,7 @@ namespace ZK_Lymytz.IHM
 {
     public partial class Form_ViewResult : Form
     {
-		DateTime date = new DateTime();
+		DateTime date = DateTime.Now;
 		bool definedDate = false;
         string nameBtnPlus = "Voir Plus";
 

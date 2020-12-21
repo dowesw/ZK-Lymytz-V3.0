@@ -17,8 +17,8 @@ namespace ZK_Lymytz.IHM
     {
         Form_Evenement parent = null;
         Employe employe = new Employe();
-        DateTime current_time = new DateTime();
-        DateTime time_decalage = new DateTime();
+        DateTime current_time = DateTime.Now;
+        DateTime time_decalage = DateTime.Now;
         string mouvement = "ES"; int cpt_click = 0;
 
         public Dial_Insert_Pointage(Form_Evenement parent)
@@ -32,6 +32,8 @@ namespace ZK_Lymytz.IHM
         {
             if (parent != null)
             {
+                string adresse = Constantes.SOCIETE.AdresseIp;
+
                 IOEMDevice current = parent.currentPointage;
                 employe = EmployeBLL.OneById(current.idwSEnrollNumber); 
                 txt_id.Text = employe.Id.ToString();
@@ -43,7 +45,7 @@ namespace ZK_Lymytz.IHM
                     current_time = new DateTime(current.idwYear, current.idwMonth, current.idwDay, current.idwHour, current.idwMinute, current.idwSecond);
                     dtp_decalage.Value = current_time;
                     time_decalage = current_time;
-                    Presence presence = Fonctions.GetPresence(employe, current_time, true);
+                    Presence presence = Fonctions.GetPresence(employe, current_time, true, adresse);
                     if (presence != null ? presence.Id > 0 : false)
                     {
                         dtp_date_debut.Value = presence.DateDebut;
@@ -54,7 +56,7 @@ namespace ZK_Lymytz.IHM
                     }
                     else
                     {
-                        Planning planning = Fonctions.GetPlanning(employe, new DateTime(current_time.Year, current_time.Month, current_time.Day, 0, 0, 0));
+                        Planning planning = Fonctions.GetPlanning(employe, new DateTime(current_time.Year, current_time.Month, current_time.Day, 0, 0, 0), adresse);
                         dtp_date_debut.Value = planning.DateDebut;
                         dtp_date_fin.Value = planning.DateFin;
                         dtp_heure_debut.Value = planning.HeureDebut;
@@ -77,8 +79,9 @@ namespace ZK_Lymytz.IHM
 
         private void btn_inserer_Click(object sender, EventArgs e)
         {
+            string adresse = Constantes.SOCIETE.AdresseIp;
             if (parent != null)
-                parent.InsertPointageInFiche(employe, current_time, dtp_date_debut.Value, dtp_date_fin.Value, chk_decalage.Checked, time_decalage, mouvement, parent.currentPointage.pointeuse);
+                parent.InsertPointageInFiche(employe, current_time, dtp_date_debut.Value, dtp_date_fin.Value, chk_decalage.Checked, time_decalage, mouvement, parent.currentPointage.pointeuse, adresse);
             this.Dispose();
         }
 

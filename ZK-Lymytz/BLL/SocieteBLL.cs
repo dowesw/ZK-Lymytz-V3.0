@@ -34,6 +34,18 @@ namespace ZK_Lymytz.BLL
 
         }
 
+        public static bool Update(Societe bean)
+        {
+            try
+            {
+                return SocieteDAO.getUpdate(bean);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static Societe OneByName(string name)
         {
             try

@@ -34,51 +34,67 @@ namespace ZK_Lymytz.TOOLS
 
         public static void SaveCsv(string fileName, IOEMDevice iO)
         {
-            // Write sample data to CSV file
-            using (CsvFileWriter writer = new CsvFileWriter(fileName))
+            try
             {
-                List<string> row = new List<string>();
-                row.Add(iO.iMachineNumber.ToString());
-                row.Add(iO.idwTMachineNumber.ToString());
-                row.Add(iO.idwSEnrollNumber.ToString());
-                row.Add(iO.iParams4.ToString());
-                row.Add(iO.iParams1.ToString());
-                row.Add(iO.iParams2.ToString());
-                row.Add(iO.idwManipulation.ToString());
-                row.Add(iO.iParams3.ToString());
-                row.Add(iO.idwYear.ToString());
-                row.Add(iO.idwMonth.ToString());
-                row.Add(iO.idwDay.ToString());
-                row.Add(iO.idwHour.ToString());
-                row.Add(iO.idwMinute.ToString());
-                row.Add(iO.idwSecond.ToString());
+                // Write sample data to CSV file
+                using (CsvFileWriter writer = new CsvFileWriter(fileName, true, Encoding.UTF8))
+                {
+                    List<string> row = new List<string>();
+                    row.Add(iO.iMachineNumber.ToString());
+                    row.Add(iO.idwSEnrollNumber.ToString());
+                    row.Add(iO.idwVerifyMode.ToString());
+                    row.Add(iO.idwInOutMode.ToString());
+                    row.Add(iO.idwWorkCode.ToString());
+                    row.Add(iO.idwReserved.ToString());
+                    row.Add(iO.date_action.ToString("dd-MM-yyyy"));
+                    row.Add(iO.time_action.ToString("HH:mm:ss"));
+                    row.Add(iO.date_time_action.ToString("dd-MM-yyyy HH:mm:ss"));
+                    row.Add(iO.pointeuse.Id.ToString());
 
-                writer.WriteRow(row);
+                    writer.WriteRow(row);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
             }
         }
 
         public static void UpdateCsv(string fileName, IOEMDevice iO)
         {
-            // Write sample data to CSV file
-            using (CsvFileWriter writer = new CsvFileWriter(fileName, true, Encoding.UTF8))
+            try
             {
-                List<string> row = new List<string>();
-                row.Add(iO.iMachineNumber.ToString());
-                row.Add(iO.idwTMachineNumber.ToString());
-                row.Add(iO.idwSEnrollNumber.ToString());
-                row.Add(iO.iParams4.ToString());
-                row.Add(iO.iParams1.ToString());
-                row.Add(iO.iParams2.ToString());
-                row.Add(iO.idwManipulation.ToString());
-                row.Add(iO.iParams3.ToString());
-                row.Add(iO.idwYear.ToString());
-                row.Add(iO.idwMonth.ToString());
-                row.Add(iO.idwDay.ToString());
-                row.Add(iO.idwHour.ToString());
-                row.Add(iO.idwMinute.ToString());
-                row.Add(iO.idwSecond.ToString());
+                // Write sample data to CSV file
+                FileInfo file = new FileInfo(fileName);
+                if (file.Length == 8192)
+                {
+                    string destination = file.DirectoryName + Constantes.FILE_SEPARATOR + file.Name.Replace(file.Extension, "") + "_" + DateTime.Now.ToShortDateString().Replace("/", "-") + file.Extension;
+                    file.MoveTo(destination);
+                    SaveCsv(fileName, iO);
+                }
+                else
+                {
+                    using (CsvFileWriter writer = new CsvFileWriter(fileName, true, Encoding.UTF8))
+                    {
+                        List<string> row = new List<string>();
+                        row.Add(iO.iMachineNumber.ToString());
+                        row.Add(iO.idwSEnrollNumber.ToString());
+                        row.Add(iO.idwVerifyMode.ToString());
+                        row.Add(iO.idwInOutMode.ToString());
+                        row.Add(iO.idwWorkCode.ToString());
+                        row.Add(iO.idwReserved.ToString());
+                        row.Add(iO.date_action.ToString("dd-MM-yyyy"));
+                        row.Add(iO.time_action.ToString("HH:mm:ss"));
+                        row.Add(iO.date_time_action.ToString("dd-MM-yyyy HH:mm:ss"));
+                        row.Add(iO.pointeuse.Id.ToString());
 
-                writer.WriteRow(row);
+                        writer.WriteRow(row);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
             }
         }
 
@@ -89,37 +105,70 @@ namespace ZK_Lymytz.TOOLS
 
         public static List<IOEMDevice> ReadCsv(string fileName)
         {
-            if (!File.Exists(fileName))
+            try
             {
-                return new List<IOEMDevice>();
-            }
-
-            List<IOEMDevice> l = new List<IOEMDevice>();
-            // Read sample data from CSV file
-            using (CsvFileReader reader = new CsvFileReader(fileName))
-            {
-                List<string> row = new List<string>();
-                while (reader.ReadRow(row))
+                if (!File.Exists(fileName))
                 {
-                    IOEMDevice e = new IOEMDevice(Convert.ToInt32(row.Count > 0 ? row[0] : "0"));
-                    e.idwTMachineNumber = Convert.ToInt32(row.Count > 1 ? row[1] : "0");
-                    e.idwSEnrollNumber = Convert.ToInt32(row.Count > 2 ? row[2] : "0");
-                    e.iParams4 = Convert.ToInt32(row.Count > 3 ? row[3] : "0");
-                    e.iParams1 = Convert.ToInt32(row.Count > 4 ? row[4] : "0");
-                    e.iParams2 = Convert.ToInt32(row.Count > 5 ? row[5] : "0");
-                    e.idwManipulation = Convert.ToInt32(row.Count > 6 ? row[6] : "0");
-                    e.iParams3 = Convert.ToInt32(row.Count > 7 ? row[7] : "0");
-                    e.idwYear = Convert.ToInt32(row.Count > 8 ? row[8] : "0");
-                    e.idwMonth = Convert.ToInt32(row.Count > 9 ? row[9] : "0");
-                    e.idwDay = Convert.ToInt32(row.Count > 10 ? row[10] : "0");
-                    e.idwHour = Convert.ToInt32(row.Count > 11 ? row[11] : "0");
-                    e.idwMinute = Convert.ToInt32(row.Count > 12 ? row[12] : "0");
-                    e.idwSecond = Convert.ToInt32(row.Count > 13 ? row[13] : "0");
-                    l.Add(e);
-                    Constantes.LoadPatience(false);
+                    return new List<IOEMDevice>();
                 }
+
+                List<IOEMDevice> l = new List<IOEMDevice>();
+                // Read sample data from CSV file
+                using (CsvFileReader reader = new CsvFileReader(fileName))
+                {
+                    List<string> row = new List<string>();
+                    while (reader.ReadRow(row))
+                    {
+                        int i = 0;
+                        IOEMDevice e = new IOEMDevice(Convert.ToInt32(row.Count > 0 ? row[i++] : "0"));
+                        if (row.Count == 10)//Chargement de la version 2 du fichier 
+                        {
+                            e.idwSEnrollNumber = Convert.ToInt32(row.Count > 1 ? row[i++] : "0");
+                            e.idwVerifyMode = Convert.ToInt32(row.Count > 2 ? row[i++] : "0");
+                            e.idwInOutMode = Convert.ToInt32(row.Count > 3 ? row[i++] : "0");
+                            e.idwWorkCode = Convert.ToInt32(row.Count > 4 ? row[i++] : "0");
+                            e.idwReserved = Convert.ToInt32(row.Count > 5 ? row[i++] : "0");
+                            e.date_action = row.Count > 6 ? Convert.ToDateTime(row[i++]) : DateTime.Now;
+                            e.time_action = row.Count > 7 ? Convert.ToDateTime(row[i++]) : DateTime.Now; ;
+                            e.date_time_action = row.Count > 8 ? Convert.ToDateTime(row[i++]) : DateTime.Now; ;
+                            e.pointeuse = new Pointeuse(Convert.ToInt32(row.Count > 9 ? row[i++] : "0"));
+                            e.idwYear = Convert.ToInt32(e.date_action.ToString("yyyy"));
+                            e.idwMonth = Convert.ToInt32(e.date_action.ToString("MM"));
+                            e.idwDay = Convert.ToInt32(e.date_action.ToString("dd"));
+                            e.idwHour = Convert.ToInt32(e.time_action.ToString("HH"));
+                            e.idwMinute = Convert.ToInt32(e.time_action.ToString("mm"));
+                            e.idwSecond = Convert.ToInt32(e.time_action.ToString("ss"));
+                        }
+                        else//Chargement de la version 1 du fichier
+                        {
+                            e.idwTMachineNumber = Convert.ToInt32(row.Count > 1 ? row[i++] : "0");
+                            e.idwSEnrollNumber = Convert.ToInt32(row.Count > 2 ? row[i++] : "0");
+                            e.iParams4 = Convert.ToInt32(row.Count > 3 ? row[i++] : "0");
+                            e.iParams1 = Convert.ToInt32(row.Count > 4 ? row[i++] : "0");
+                            e.iParams2 = Convert.ToInt32(row.Count > 5 ? row[i++] : "0");
+                            e.idwManipulation = Convert.ToInt32(row.Count > 6 ? row[i++] : "0");
+                            e.iParams3 = Convert.ToInt32(row.Count > 7 ? row[i++] : "0");
+                            e.idwYear = Convert.ToInt32(row.Count > 8 ? row[i++] : "0");
+                            e.idwMonth = Convert.ToInt32(row.Count > 9 ? row[i++] : "0");
+                            e.idwDay = Convert.ToInt32(row.Count > 10 ? row[i++] : "0");
+                            e.idwHour = Convert.ToInt32(row.Count > 11 ? row[i++] : "0");
+                            e.idwMinute = Convert.ToInt32(row.Count > 12 ? row[i++] : "0");
+                            e.idwSecond = Convert.ToInt32(row.Count > 13 ? row[i++] : "0");
+                            e.date_action = new DateTime(e.idwYear, e.idwMonth, e.idwDay, 0, 0, 0);
+                            e.time_action = new DateTime(e.idwYear, e.idwMonth, e.idwDay, e.idwHour, e.idwMinute, 0);
+                            e.date_time_action = new DateTime(e.idwYear, e.idwMonth, e.idwDay, e.idwHour, e.idwMinute, 0);
+                        }
+                        l.Add(e);
+                        Constantes.LoadPatience(false);
+                    }
+                }
+                return l;
             }
-            return l;
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            return new List<IOEMDevice>();
         }
 
         public static void WriteTxt(string message)
@@ -150,9 +199,19 @@ namespace ZK_Lymytz.TOOLS
 
         public static void UpdateTxt(string fileName, string message)
         {
-            using (TxtFileWriter writer = new TxtFileWriter(fileName, true, Encoding.UTF8))
+            FileInfo file = new FileInfo(fileName);
+            if (file.Length == 8192)
             {
-                writer.WriteRow(message);
+                string destination = file.DirectoryName + Constantes.FILE_SEPARATOR + file.Name.Replace(file.Extension, "") + "_" + DateTime.Now.ToShortDateString().Replace("/", "-") + file.Extension;
+                file.MoveTo(destination);
+                SaveTxt(fileName, message);
+            }
+            else
+            {
+                using (TxtFileWriter writer = new TxtFileWriter(fileName, true, Encoding.UTF8))
+                {
+                    writer.WriteRow(message);
+                }
             }
         }
 

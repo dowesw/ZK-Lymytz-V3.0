@@ -20,6 +20,13 @@ namespace ZK_Lymytz.ENTITE
             set { planningDynamique = value; }
         }
 
+        private double limiteHeureSup;
+        public double LimiteHeureSup
+        {
+            get { return limiteHeureSup; }
+            set { limiteHeureSup = value; }
+        }
+
         private DateTime margeDebutTravail;
         public DateTime TimeMargeAvance
         {

@@ -12,15 +12,20 @@ namespace ZK_Lymytz.DAO
 {
     class PosteTravailDAO
     {
-        private static PosteTravail Return(NpgsqlDataReader lect)
+        private static PosteTravail Return(NpgsqlDataReader lect, bool full)
         {
             PosteTravail bean = new PosteTravail();
             bean.Id = Convert.ToInt32(lect["id"].ToString());
             bean.Poste = PosteDAO.getOneById(Convert.ToInt32(lect["poste"].ToString()));
+            bean.Poste = new Poste(Convert.ToInt32(lect["poste"].ToString()));
+            if (full)
+            {
+                bean.Poste = PosteDAO.getOneById(Convert.ToInt32(lect["poste"].ToString()));
+            }
             return bean;
         }
 
-        public static PosteTravail getOneById(int id)
+        public static PosteTravail getOneById(int id, bool full)
         {
             PosteTravail bean = new PosteTravail();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -33,7 +38,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -49,7 +54,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static List<PosteTravail> getList(string query)
+        public static List<PosteTravail> getList(string query, bool full)
         {
             List<PosteTravail> list = new List<PosteTravail>();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -61,7 +66,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        list.Add(Return(lect));
+                        list.Add(Return(lect, full));
                     }
                 }
                 return list;

@@ -11,6 +11,16 @@ namespace ZK_Lymytz.ENTITE
         private string reference;
         private List<JoursOuvres> joursOuvres = new List<JoursOuvres>();
 
+        public Calendrier()
+        {
+
+        }
+
+        public Calendrier(int id)
+        {
+            this.id = id;
+        }
+
         public int Id
         {
             get { return id; }

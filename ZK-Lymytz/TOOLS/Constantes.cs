@@ -12,7 +12,7 @@ namespace ZK_Lymytz.TOOLS
     {
         public const string APP_NAME = "ZK-Lymytz";
 
-        public const string GUID_ZK = "{00853A19-BD51-419B-9269-2DABE57EB61F}"; 
+        public const string GUID_ZK = "{00853A19-BD51-419B-9269-2DABE57EB61F}";
 
         public const string SDK_32 = "_Auto-install_sdk_32";
         public const string SDK_64 = "_Auto-install_sdk_64";
@@ -22,8 +22,16 @@ namespace ZK_Lymytz.TOOLS
 
         public static string LAST_FORM = null;
         public static List<string> FIRST_FORM = new List<string>();
+
+        public static List<Agence> AGENCES = new List<Agence>();
         public static List<Pointeuse> POINTEUSES = new List<Pointeuse>();
+        public static List<Employe> EMPLOYES = new List<Employe>();
+        public static List<TrancheHoraire> TRANCHES = new List<TrancheHoraire>();
+        public static List<JoursOuvres> JOURSOUVRES = new List<JoursOuvres>();
+
+        public static Calendrier CALENDRIER = new Calendrier();
         public static Parametre PARAMETRE = new Parametre();
+        public static Agence AGENCE = new Agence();
         public static Societe SOCIETE = new Societe();
         public static Setting SETTING = new Setting();
         public static Configuration CONFIGURATION = new Configuration();
@@ -37,6 +45,7 @@ namespace ZK_Lymytz.TOOLS
 
         public static bool ACTIVE = false;
         public static bool _FIRST_OPEN = true;
+        public static bool DEBUG = false;
         public static int TRIAL_ESSAIE = 30;
         public const int MAX_ESSAIE = 30;
 
@@ -47,7 +56,12 @@ namespace ZK_Lymytz.TOOLS
         public const string LANGUE_ANGLAIS_NAME = "English";
         public const string LANGUE_ANGLAIS = "En";
 
+        public const string TYPE_IFACE = "IFACE";
+        public const string TYPE_TFT = "TFT";
+        public const string TYPE_BLACK_WHITE = "B&W";
+
         public static Form_Serveur FORM_SERVEUR = null;
+        public static Form_Users FORM_USERS = null;
         public static Form_Setting FORM_SETTING = null;
         public static Form_Parent FORM_PARENT = null;
         public static Form_Pointeuse FORM_ADD_POINTEUSE = null;
@@ -62,15 +76,34 @@ namespace ZK_Lymytz.TOOLS
         public static Form_Employe FORM_EMPLOYE = null;
         public static Form_Presence FORM_PRESENCE = null;
         public static Form_Empreinte FORM_EMPREINTE = null;
+        public static Form_Societe FORM_SOCIETE = null;
         public static Form_Serveur_Distant FORM_SERVEUR_DISTANT = null;
-        public static Form_Search_Pointeuse FORM_FIND_POINTEUSE;
-        public static Form_Ping_Appareil FORM_PING_APPAREIL;
+        public static Form_Search_Pointeuse FORM_FIND_POINTEUSE = null;
+        public static Form_Ping_Appareil FORM_PING_APPAREIL = null;
         public static Form_Wait FORM_WAIT = null;
+        public static Form_Start FORM_START = null;
 
+        public static ObjectThread OBJECT_START = null;
+        public static System.Threading.Thread RUN_SECOND = null;
         public static ProgressBar PBAR_WAIT = null;
         public static Scheduler JOB_SYNCHRODEVICE = null;
         public static Scheduler JOB_BACKUPDEVICE = null;
 
+        public static string[] STATUS = new string[] 
+        { 
+            "Chargement des informations", 
+            "Vérification de la SDK", 
+            "Vérification de la connexion", 
+            "Création de autorun", 
+            "Création des registres", 
+            "Demarrage des pointeuses", 
+            "Chargement des fichiers tampons", 
+            "Creation du service", 
+            "Sauvegarde et synchronisation des pointeuses",
+            "Sauvegarde des pointeuses", 
+            "Synchronisation des pointeuses", 
+            "Création de l'éxecutable de la synchronisation"
+        };
         public static string[] MOIS = new string[] { "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" };
 
         public static string QUERY_EMPLOYE(Societe SOCIETE)
@@ -130,18 +163,25 @@ namespace ZK_Lymytz.TOOLS
 
         public static void LoadPatience(bool _fin)
         {
-            if (PBAR_WAIT != null)
+            try
             {
-                ObjectThread o = new ObjectThread(PBAR_WAIT);
-                if (!_fin)
+                if (PBAR_WAIT != null)
                 {
-                    o.UpdateBar(1);
+                    ObjectThread o = new ObjectThread(PBAR_WAIT);
+                    if (!_fin)
+                    {
+                        o.UpdateBar(1);
+                    }
+                    else
+                    {
+                        o.UpdateBar(PBAR_WAIT.Maximum - PBAR_WAIT.Value);
+                        PBAR_WAIT = null;
+                    }
                 }
-                else
-                {
-                    o.UpdateBar(PBAR_WAIT.Maximum - PBAR_WAIT.Value);
-                    PBAR_WAIT = null;
-                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
             }
         }
 

@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
+using ZK_Lymytz.TOOLS;
+
 namespace ZK_Lymytz.ENTITE
 {
     public class Presence
     {
+        public Presence() { }
+
+        public Presence(long id)
+        {
+            this.id = id;
+        }
 
         private long id;
         private Employe employe = new Employe();

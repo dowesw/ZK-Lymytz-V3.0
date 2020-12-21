@@ -66,5 +66,19 @@ namespace ZK_Lymytz.ENTITE
             get { return duree_pause; }
             set { duree_pause = value; }
         }
+
+        private long societe;
+        public long Societe
+        {
+            get { return societe; }
+            set { societe = value; }
+        }
+
+        private bool chevauche = false;
+        public bool Chevauche
+        {
+            get { return chevauche; }
+            set { chevauche = value; }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using NpgsqlTypes;
 using Npgsql;
 
+using ZK_Lymytz.BLL;
 using ZK_Lymytz.TOOLS;
 using ZK_Lymytz.ENTITE;
 
@@ -13,7 +14,7 @@ namespace ZK_Lymytz.DAO
 {
     class PresenceDAO
     {
-        private static Presence Return(NpgsqlDataReader lect)
+        private static Presence Return(NpgsqlDataReader lect, bool full)
         {
             Presence bean = new Presence();
             bean.Id = Convert.ToInt32(lect["id"].ToString());
@@ -25,14 +26,17 @@ namespace ZK_Lymytz.DAO
             bean.HeureFinPrevu = (DateTime)((lect["heure_fin_prevu"] != null) ? (!lect["heure_fin_prevu"].ToString().Trim().Equals("") ? lect["heure_fin_prevu"] : DateTime.Now) : DateTime.Now);
             bean.TotalPresence = (Double)((lect["total_presence"] != null) ? (!lect["total_presence"].ToString().Trim().Equals("") ? lect["total_presence"] : 0.0) : 0.0);
             bean.TotalSupplementaire = (Double)((lect["total_heure_sup"] != null) ? (!lect["total_heure_sup"].ToString().Trim().Equals("") ? lect["total_heure_sup"] : 0.0) : 0.0);
-            bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
             bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
-            //bean.Pointeuses = Connexion.LoadListObject("select DISTINCT(pointeuse_in) from yvs_grh_pointage where presence = " + bean.Id).ConvertAll(new Converter<object, string>(Utils.ObjectToString));
-            bean.Pointeuses = Connexion.LoadListObject("select DISTINCT(pointeuse_in) from yvs_grh_pointage where pointeuse_in is not null and presence = " + bean.Id);
+            bean.Employe = new Employe(Convert.ToInt32(lect["employe"].ToString()));
+            if (full)
+            {
+                bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()), false, null);
+                bean.Pointeuses = Dao.LoadListObject("select DISTINCT(pointeuse_in) from yvs_grh_pointage where pointeuse_in is not null and presence = " + bean.Id, null);
+            }
             return bean;
         }
 
-        public static Presence getOneById(int id)
+        public static Presence getOneById(int id, bool full)
         {
             Presence bean = new Presence();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -45,7 +49,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -61,7 +65,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Presence getOneByDate(Employe empl, DateTime date)
+        public static Presence getOneByDate(Employe empl, DateTime date, bool full)
         {
             Presence bean = new Presence();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -74,7 +78,11 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
+                        if (!full)
+                        {
+                            bean.Employe = empl;
+                        }
                     }
                 }
                 return bean;
@@ -90,7 +98,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Presence getOneByDates(Employe empl, DateTime dateDebut, DateTime dateFin)
+        public static Presence getOneByDates(Employe empl, DateTime dateDebut, DateTime dateFin, bool full)
         {
             Presence bean = new Presence();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -103,36 +111,11 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
-                    }
-                }
-                return bean;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("PresenceDao (getOneByDates)", ex);
-                return bean;
-            }
-            finally
-            {
-                Connexion.Close(connect);   
-            }
-        } 
-
-        public static Presence getOneByDates(Employe empl, DateTime dateDebut, DateTime dateFin, DateTime dateFinPrevu)
-        {
-            Presence bean = new Presence();
-            NpgsqlConnection connect = new Connexion().Connection();
-            try
-            {
-                string query = "select * from yvs_grh_presence where employe =" + empl.Id + " and date_debut = '" + dateDebut.ToString("dd-MM-yyyy") + "' and (date_fin = '" + dateFin.ToString("dd-MM-yyyy") + "' or date_fin_prevu = '" + dateFinPrevu.ToString("dd-MM-yyyy") + "') order by date_debut";
-                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
-                NpgsqlDataReader lect = Lcmd.ExecuteReader();
-                if (lect.HasRows)
-                {
-                    while (lect.Read())
-                    {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
+                        if (!full)
+                        {
+                            bean.Employe = empl;
+                        }
                     }
                 }
                 return bean;
@@ -148,15 +131,48 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static List<Presence> List(string query)
+        public static Presence getOneByDates(Employe empl, DateTime dateDebut, DateTime dateFin, DateTime dateFinPrevu, bool full)
         {
-            return List(query, null);
+            Presence bean = new Presence();
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                string query = "select * from yvs_grh_presence where employe =" + empl.Id + " and date_debut = '" + dateDebut.ToString("dd-MM-yyyy") + "' and (date_fin = '" + dateFin.ToString("dd-MM-yyyy") + "' or date_fin_prevu = '" + dateFinPrevu.ToString("dd-MM-yyyy") + "') order by date_debut";
+                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
+                NpgsqlDataReader lect = Lcmd.ExecuteReader();
+                if (lect.HasRows)
+                {
+                    while (lect.Read())
+                    {
+                        bean = Return(lect, full);
+                        if (!full)
+                        {
+                            bean.Employe = empl;
+                        }
+                    }
+                }
+                return bean;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("PresenceDao (getOneByDates)", ex);
+                return bean;
+            }
+            finally
+            {
+                Connexion.Close(connect);
+            }
         }
 
-        public static List<Presence> List(string query, string countQuery)
+        public static List<Presence> List(string query, bool full, string adresse)
+        {
+            return List(query, full, null, adresse);
+        }
+
+        public static List<Presence> List(string query, bool full, string countQuery, string adresse)
         {
             List<Presence> list = new List<Presence>();
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
@@ -165,13 +181,13 @@ namespace ZK_Lymytz.DAO
                 {
                     if (Constantes.PBAR_WAIT != null && (countQuery != null ? countQuery.Trim().Length > 0 : false))
                     {
-                        int count = Convert.ToInt32(Connexion.LoadOneObject(countQuery));
+                        int count = Convert.ToInt32(Bll.LoadOneObject(countQuery, adresse));
                         ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
                         o.UpdateMaxBar(count);
                     }
                     while (lect.Read())
                     {
-                        list.Add(Return(lect));
+                        list.Add(Return(lect, full));
                         Constantes.LoadPatience(false);
                     }
                 }
@@ -188,12 +204,12 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getInsert(Presence bean)
+        public static bool getInsert(Presence bean, string adresse)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
-                string query = "insert into yvs_grh_presence(date_debut, heure_debut, date_fin, heure_fin, date_fin_prevu, heure_fin_prevu, employe, valider, duree_pause, marge_approuve) values ('" + bean.DateDebut + "','" + bean.HeureDebut.ToString("HH:mm:ss") + "','" + bean.DateFin + "','" + bean.HeureFin.ToString("HH:mm:ss") + "','" + bean.DateFin + "','" + bean.HeureFin.ToString("HH:mm:ss") + "'," + bean.Employe.Id + ",false,'" + bean.DureePause.ToString("HH:mm:ss") + "', null)";
+                string query = "insert into yvs_grh_presence(date_debut, heure_debut, date_fin, heure_fin, date_fin_prevu, heure_fin_prevu, employe, valider, duree_pause, marge_approuve, author) values ('" + bean.DateDebut + "','" + bean.HeureDebut.ToString("HH:mm:ss") + "','" + bean.DateFin + "','" + bean.HeureFin.ToString("HH:mm:ss") + "','" + bean.DateFin + "','" + bean.HeureFin.ToString("HH:mm:ss") + "'," + bean.Employe.Id + ",false,'" + bean.DureePause.ToString("HH:mm:ss") + "', null," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -209,9 +225,9 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getUpdate(Presence bean)
+        public static bool getUpdate(Presence bean, string adresse)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 string query = "update yvs_grh_presence set marge_approuve = '" + bean.MargeApprouve.ToString("HH:mm:ss") + "', date_fin_prevu = '" + bean.DateFinPrevu + "' , heure_fin_prevu = '" + bean.HeureFinPrevu + "' where id = " + bean.Id;
@@ -230,13 +246,13 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Presence setInsert(Presence bean)
+        public static Presence setInsert(Presence bean, string adresse)
         {
             try
             {
-                if (getInsert(bean))
+                if (getInsert(bean, adresse))
                 {
-                    Presence new_ = List("select * from yvs_grh_presence order by id desc limit 1")[0];
+                    Presence new_ = List("select * from yvs_grh_presence order by id desc limit 1", false, adresse)[0];
                     return new_;
                 }
                 else

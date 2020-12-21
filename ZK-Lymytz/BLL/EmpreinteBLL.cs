@@ -46,6 +46,30 @@ namespace ZK_Lymytz.BLL
             }
         }
 
+        public static Empreinte OneByEmployeFacial(long employe, int facial)
+        {
+            try
+            {
+                return EmpreinteDAO.getOneByEmployeFacial(employe, facial);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static Empreinte OneByEmployeFacial(long employe, int facial, Npgsql.NpgsqlConnection connect)
+        {
+            try
+            {
+                return EmpreinteDAO.getOneByEmployeFacial(employe, facial, connect);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static List<Empreinte> List(string query)
         {
             try

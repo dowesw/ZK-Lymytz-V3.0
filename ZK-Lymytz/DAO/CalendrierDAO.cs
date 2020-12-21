@@ -23,11 +23,19 @@ namespace ZK_Lymytz.DAO
 
         public static Calendrier getDefault()
         {
+            return getDefault(Constantes.SOCIETE);
+        }
+
+        public static Calendrier getDefault(Societe societe)
+        {
+            if (societe != null ? societe.Id < 1 : true)
+                societe = Constantes.SOCIETE;
+
             Calendrier bean = new Calendrier();
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select * from yvs_calendrier where defaut = true and societe = " + Constantes.SOCIETE.Id + ";";
+                string query = "select * from yvs_calendrier where defaut = true and societe = " + societe.Id + ";";
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)

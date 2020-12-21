@@ -49,6 +49,8 @@
             this.serveurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recherchePointeuseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.voirResultatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connexionExterneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exporterCréneauToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.employesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,11 +58,13 @@
             this.testerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evenementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.empreintesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.societeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.administrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miseÀJourToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.tsb_rattach = new System.Windows.Forms.ToolStripButton();
             this.tsb_actualise = new System.Windows.Forms.ToolStripButton();
@@ -78,6 +82,8 @@
             this.tsb_off = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.panel_bottom = new System.Windows.Forms.Panel();
+            this.lb_name_societe = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.context_bubble = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.activerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,34 +95,36 @@
             this.déconnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redémarerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.miseÀJourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bubble = new System.Windows.Forms.NotifyIcon(this.components);
+            this.panel_report = new System.Windows.Forms.Panel();
+            this.lv_report = new System.Windows.Forms.ListBox();
+            this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.context_dgv_pointeuse = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmi_active = new System.Windows.Forms.ToolStripMenuItem();
+            this.chargerFichierTamponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importerDepuisUnFichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grp_pointeuse = new System.Windows.Forms.GroupBox();
             this.dgv_pointeuse = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.adresse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.port = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.emplacement = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.imachine = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.connect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.actif = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.icon = new System.Windows.Forms.DataGridViewImageColumn();
-            this.context_dgv_pointeuse = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmi_active = new System.Windows.Forms.ToolStripMenuItem();
-            this.chargerFichierTamponToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel_report = new System.Windows.Forms.Panel();
-            this.lv_report = new System.Windows.Forms.ListBox();
-            this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.connexionExterneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.panel_bottom.SuspendLayout();
             this.context_bubble.SuspendLayout();
-            this.grp_pointeuse.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
-            this.context_dgv_pointeuse.SuspendLayout();
             this.panel_report.SuspendLayout();
             this.context_log.SuspendLayout();
+            this.context_dgv_pointeuse.SuspendLayout();
+            this.grp_pointeuse.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -235,7 +243,8 @@
             this.optionsToolStripMenuItem,
             this.archivesToolStripMenuItem,
             this.recherchePointeuseToolStripMenuItem,
-            this.connexionExterneToolStripMenuItem});
+            this.connexionExterneToolStripMenuItem,
+            this.exporterCréneauToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(50, 20);
             this.toolsMenu.Text = "&Outils";
@@ -302,12 +311,29 @@
             this.voirResultatToolStripMenuItem.Text = "Voir Resultat";
             this.voirResultatToolStripMenuItem.Click += new System.EventHandler(this.voirResultatToolStripMenuItem_Click);
             // 
+            // connexionExterneToolStripMenuItem
+            // 
+            this.connexionExterneToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.irkickflash;
+            this.connexionExterneToolStripMenuItem.Name = "connexionExterneToolStripMenuItem";
+            this.connexionExterneToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.connexionExterneToolStripMenuItem.Text = "Connexion Externe";
+            this.connexionExterneToolStripMenuItem.Click += new System.EventHandler(this.connexionExterneToolStripMenuItem_Click);
+            // 
+            // exporterCréneauToolStripMenuItem
+            // 
+            this.exporterCréneauToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.database;
+            this.exporterCréneauToolStripMenuItem.Name = "exporterCréneauToolStripMenuItem";
+            this.exporterCréneauToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.exporterCréneauToolStripMenuItem.Text = "Exporter Créneau";
+            this.exporterCréneauToolStripMenuItem.Click += new System.EventHandler(this.exporterCréneauToolStripMenuItem_Click);
+            // 
             // windowsMenu
             // 
             this.windowsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.employesToolStripMenuItem,
             this.evenementsToolStripMenuItem,
             this.empreintesToolStripMenuItem,
+            this.societeToolStripMenuItem,
             this.toolStripSeparator7,
             this.administrationToolStripMenuItem});
             this.windowsMenu.Name = "windowsMenu";
@@ -368,6 +394,14 @@
             this.empreintesToolStripMenuItem.Text = "E&mpreintes";
             this.empreintesToolStripMenuItem.Click += new System.EventHandler(this.empreintesToolStripMenuItem_Click);
             // 
+            // societeToolStripMenuItem
+            // 
+            this.societeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("societeToolStripMenuItem.Image")));
+            this.societeToolStripMenuItem.Name = "societeToolStripMenuItem";
+            this.societeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.societeToolStripMenuItem.Text = "Socièté";
+            this.societeToolStripMenuItem.Click += new System.EventHandler(this.societeToolStripMenuItem_Click);
+            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
@@ -385,7 +419,8 @@
             // 
             this.helpMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator8,
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.miseÀJourToolStripMenuItem1});
             this.helpMenu.Name = "helpMenu";
             this.helpMenu.Size = new System.Drawing.Size(43, 20);
             this.helpMenu.Text = "&Aide";
@@ -402,6 +437,14 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.aboutToolStripMenuItem.Text = "&À propos de ZK Lymytz";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // miseÀJourToolStripMenuItem1
+            // 
+            this.miseÀJourToolStripMenuItem1.Image = global::ZK_Lymytz.Properties.Resources.endturn;
+            this.miseÀJourToolStripMenuItem1.Name = "miseÀJourToolStripMenuItem1";
+            this.miseÀJourToolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
+            this.miseÀJourToolStripMenuItem1.Text = "Mise à jour";
+            this.miseÀJourToolStripMenuItem1.Click += new System.EventHandler(this.miseÀJourToolStripMenuItem_Click);
             // 
             // toolStrip
             // 
@@ -553,9 +596,10 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 431);
+            this.statusStrip.Location = new System.Drawing.Point(0, 0);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(632, 22);
             this.statusStrip.TabIndex = 2;
@@ -566,6 +610,28 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(27, 17);
             this.toolStripStatusLabel.Text = "État";
+            // 
+            // panel_bottom
+            // 
+            this.panel_bottom.Controls.Add(this.lb_name_societe);
+            this.panel_bottom.Controls.Add(this.statusStrip);
+            this.panel_bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel_bottom.Location = new System.Drawing.Point(0, 431);
+            this.panel_bottom.Name = "panel_bottom";
+            this.panel_bottom.Size = new System.Drawing.Size(632, 22);
+            this.panel_bottom.TabIndex = 2;
+            // 
+            // lb_name_societe
+            // 
+            this.lb_name_societe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb_name_societe.AutoSize = true;
+            this.lb_name_societe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_name_societe.Location = new System.Drawing.Point(533, 5);
+            this.lb_name_societe.Name = "lb_name_societe";
+            this.lb_name_societe.Size = new System.Drawing.Size(87, 16);
+            this.lb_name_societe.TabIndex = 3;
+            this.lb_name_societe.Text = "Lymytz Sarl";
             // 
             // toolTip
             // 
@@ -582,9 +648,10 @@
             this.arrêterProcessusToolStripMenuItem,
             this.déconnectionToolStripMenuItem,
             this.redémarerToolStripMenuItem,
-            this.exitToolStripMenuItem1});
+            this.exitToolStripMenuItem1,
+            this.miseÀJourToolStripMenuItem});
             this.context_bubble.Name = "context_bubble";
-            this.context_bubble.Size = new System.Drawing.Size(166, 164);
+            this.context_bubble.Size = new System.Drawing.Size(166, 186);
             // 
             // activerToolStripMenuItem
             // 
@@ -658,6 +725,14 @@
             this.exitToolStripMenuItem1.Text = "Quitter";
             this.exitToolStripMenuItem1.Click += new System.EventHandler(this.ExitToolsStripMenuItem_Click);
             // 
+            // miseÀJourToolStripMenuItem
+            // 
+            this.miseÀJourToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.endturn;
+            this.miseÀJourToolStripMenuItem.Name = "miseÀJourToolStripMenuItem";
+            this.miseÀJourToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.miseÀJourToolStripMenuItem.Text = "Mise à jour";
+            this.miseÀJourToolStripMenuItem.Click += new System.EventHandler(this.miseÀJourToolStripMenuItem_Click);
+            // 
             // bubble
             // 
             this.bubble.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
@@ -668,16 +743,81 @@
             this.bubble.Visible = true;
             this.bubble.DoubleClick += new System.EventHandler(this.activerToolStripMenuItem_Click);
             // 
+            // panel_report
+            // 
+            this.panel_report.Controls.Add(this.lv_report);
+            this.panel_report.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel_report.Location = new System.Drawing.Point(0, 331);
+            this.panel_report.Name = "panel_report";
+            this.panel_report.Size = new System.Drawing.Size(632, 100);
+            this.panel_report.TabIndex = 13;
+            // 
+            // lv_report
+            // 
+            this.lv_report.ContextMenuStrip = this.context_log;
+            this.lv_report.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lv_report.FormattingEnabled = true;
+            this.lv_report.Location = new System.Drawing.Point(0, 0);
+            this.lv_report.Name = "lv_report";
+            this.lv_report.Size = new System.Drawing.Size(632, 100);
+            this.lv_report.TabIndex = 0;
+            // 
+            // context_log
+            // 
+            this.context_log.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.effacerToolStripMenuItem});
+            this.context_log.Name = "context_log";
+            this.context_log.Size = new System.Drawing.Size(111, 26);
+            // 
+            // effacerToolStripMenuItem
+            // 
+            this.effacerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.clean;
+            this.effacerToolStripMenuItem.Name = "effacerToolStripMenuItem";
+            this.effacerToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.effacerToolStripMenuItem.Text = "Effacer";
+            this.effacerToolStripMenuItem.Click += new System.EventHandler(this.effacerToolStripMenuItem_Click);
+            // 
+            // context_dgv_pointeuse
+            // 
+            this.context_dgv_pointeuse.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi_active,
+            this.chargerFichierTamponToolStripMenuItem,
+            this.importerDepuisUnFichierToolStripMenuItem});
+            this.context_dgv_pointeuse.Name = "context_dgv_pointeuse";
+            this.context_dgv_pointeuse.Size = new System.Drawing.Size(212, 70);
+            // 
+            // tsmi_active
+            // 
+            this.tsmi_active.Image = global::ZK_Lymytz.Properties.Resources.vue;
+            this.tsmi_active.Name = "tsmi_active";
+            this.tsmi_active.Size = new System.Drawing.Size(211, 22);
+            this.tsmi_active.Text = "Activer";
+            this.tsmi_active.Click += new System.EventHandler(this.tsmi_active_Click);
+            // 
+            // chargerFichierTamponToolStripMenuItem
+            // 
+            this.chargerFichierTamponToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.chargerFichierTamponToolStripMenuItem.Name = "chargerFichierTamponToolStripMenuItem";
+            this.chargerFichierTamponToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.chargerFichierTamponToolStripMenuItem.Text = "Recuperer les pointages";
+            this.chargerFichierTamponToolStripMenuItem.Click += new System.EventHandler(this.chargerFichierTamponToolStripMenuItem_Click);
+            // 
+            // importerDepuisUnFichierToolStripMenuItem
+            // 
+            this.importerDepuisUnFichierToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.db;
+            this.importerDepuisUnFichierToolStripMenuItem.Name = "importerDepuisUnFichierToolStripMenuItem";
+            this.importerDepuisUnFichierToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.importerDepuisUnFichierToolStripMenuItem.Text = "Importer depuis un fichier";
+            this.importerDepuisUnFichierToolStripMenuItem.Click += new System.EventHandler(this.importerDepuisUnFichierToolStripMenuItem_Click);
+            // 
             // grp_pointeuse
             // 
-            this.grp_pointeuse.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grp_pointeuse.Controls.Add(this.dgv_pointeuse);
-            this.grp_pointeuse.Location = new System.Drawing.Point(2, 52);
+            this.grp_pointeuse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grp_pointeuse.Location = new System.Drawing.Point(0, 49);
             this.grp_pointeuse.Name = "grp_pointeuse";
-            this.grp_pointeuse.Size = new System.Drawing.Size(630, 272);
-            this.grp_pointeuse.TabIndex = 12;
+            this.grp_pointeuse.Size = new System.Drawing.Size(632, 282);
+            this.grp_pointeuse.TabIndex = 15;
             this.grp_pointeuse.TabStop = false;
             this.grp_pointeuse.Text = "Liste Appareil";
             // 
@@ -693,7 +833,7 @@
             this.adresse,
             this.port,
             this.emplacement,
-            this.imachine,
+            this.type,
             this.connect,
             this.actif,
             this.icon});
@@ -703,7 +843,7 @@
             this.dgv_pointeuse.Name = "dgv_pointeuse";
             this.dgv_pointeuse.ReadOnly = true;
             this.dgv_pointeuse.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_pointeuse.Size = new System.Drawing.Size(624, 253);
+            this.dgv_pointeuse.Size = new System.Drawing.Size(626, 263);
             this.dgv_pointeuse.TabIndex = 0;
             this.dgv_pointeuse.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_pointeuse_CellFormatting);
             this.dgv_pointeuse.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_pointeuse_MouseDown);
@@ -736,12 +876,12 @@
             this.emplacement.Name = "emplacement";
             this.emplacement.ReadOnly = true;
             // 
-            // imachine
+            // type
             // 
-            this.imachine.FillWeight = 74.00866F;
-            this.imachine.HeaderText = "IMachine";
-            this.imachine.Name = "imachine";
-            this.imachine.ReadOnly = true;
+            this.type.FillWeight = 74.00866F;
+            this.type.HeaderText = "Type";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
             // 
             // connect
             // 
@@ -764,82 +904,14 @@
             this.icon.Name = "icon";
             this.icon.ReadOnly = true;
             // 
-            // context_dgv_pointeuse
-            // 
-            this.context_dgv_pointeuse.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi_active,
-            this.chargerFichierTamponToolStripMenuItem});
-            this.context_dgv_pointeuse.Name = "context_dgv_pointeuse";
-            this.context_dgv_pointeuse.Size = new System.Drawing.Size(203, 48);
-            // 
-            // tsmi_active
-            // 
-            this.tsmi_active.Image = global::ZK_Lymytz.Properties.Resources.vue;
-            this.tsmi_active.Name = "tsmi_active";
-            this.tsmi_active.Size = new System.Drawing.Size(202, 22);
-            this.tsmi_active.Text = "Activer";
-            this.tsmi_active.Click += new System.EventHandler(this.tsmi_active_Click);
-            // 
-            // chargerFichierTamponToolStripMenuItem
-            // 
-            this.chargerFichierTamponToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
-            this.chargerFichierTamponToolStripMenuItem.Name = "chargerFichierTamponToolStripMenuItem";
-            this.chargerFichierTamponToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.chargerFichierTamponToolStripMenuItem.Text = "Charger Fichier Tampon";
-            this.chargerFichierTamponToolStripMenuItem.Click += new System.EventHandler(this.chargerFichierTamponToolStripMenuItem_Click);
-            // 
-            // panel_report
-            // 
-            this.panel_report.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_report.Controls.Add(this.lv_report);
-            this.panel_report.Location = new System.Drawing.Point(3, 327);
-            this.panel_report.Name = "panel_report";
-            this.panel_report.Size = new System.Drawing.Size(624, 100);
-            this.panel_report.TabIndex = 13;
-            // 
-            // lv_report
-            // 
-            this.lv_report.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lv_report.ContextMenuStrip = this.context_log;
-            this.lv_report.FormattingEnabled = true;
-            this.lv_report.Location = new System.Drawing.Point(3, 3);
-            this.lv_report.Name = "lv_report";
-            this.lv_report.Size = new System.Drawing.Size(618, 95);
-            this.lv_report.TabIndex = 0;
-            // 
-            // context_log
-            // 
-            this.context_log.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.effacerToolStripMenuItem});
-            this.context_log.Name = "context_log";
-            this.context_log.Size = new System.Drawing.Size(111, 26);
-            // 
-            // effacerToolStripMenuItem
-            // 
-            this.effacerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.clean;
-            this.effacerToolStripMenuItem.Name = "effacerToolStripMenuItem";
-            this.effacerToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.effacerToolStripMenuItem.Text = "Effacer";
-            this.effacerToolStripMenuItem.Click += new System.EventHandler(this.effacerToolStripMenuItem_Click);
-            // 
-            // connexionExterneToolStripMenuItem
-            // 
-            this.connexionExterneToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.irkickflash;
-            this.connexionExterneToolStripMenuItem.Name = "connexionExterneToolStripMenuItem";
-            this.connexionExterneToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.connexionExterneToolStripMenuItem.Text = "Connexion Externe";
-            this.connexionExterneToolStripMenuItem.Click += new System.EventHandler(this.connexionExterneToolStripMenuItem_Click);
-            // 
             // Form_Parent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 453);
-            this.Controls.Add(this.panel_report);
             this.Controls.Add(this.grp_pointeuse);
-            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.panel_report);
+            this.Controls.Add(this.panel_bottom);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -858,12 +930,14 @@
             this.toolStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.panel_bottom.ResumeLayout(false);
+            this.panel_bottom.PerformLayout();
             this.context_bubble.ResumeLayout(false);
-            this.grp_pointeuse.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).EndInit();
-            this.context_dgv_pointeuse.ResumeLayout(false);
             this.panel_report.ResumeLayout(false);
             this.context_log.ResumeLayout(false);
+            this.context_dgv_pointeuse.ResumeLayout(false);
+            this.grp_pointeuse.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -873,6 +947,7 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
@@ -912,12 +987,10 @@
         private System.Windows.Forms.ToolStripMenuItem appareilToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serveurToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enrollerToolStripMenuItem;
-        private System.Windows.Forms.GroupBox grp_pointeuse;
-        private System.Windows.Forms.DataGridView dgv_pointeuse;
         private System.Windows.Forms.Panel panel_report;
+        public System.Windows.Forms.ListBox lv_report;
         private System.Windows.Forms.ContextMenuStrip context_dgv_pointeuse;
         private System.Windows.Forms.ToolStripMenuItem tsmi_active;
-        public System.Windows.Forms.ListBox lv_report;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripButton tsb_off;
         private System.Windows.Forms.ToolStripButton tsb_deconnect;
@@ -936,19 +1009,27 @@
         private System.Windows.Forms.ToolStripMenuItem listeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem présenceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pingToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn adresse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn port;
-        private System.Windows.Forms.DataGridViewTextBoxColumn emplacement;
-        private System.Windows.Forms.DataGridViewTextBoxColumn imachine;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn connect;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn actif;
-        private System.Windows.Forms.DataGridViewImageColumn icon;
         private System.Windows.Forms.ToolStripMenuItem chargerFichierTamponToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recherchePointeuseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem voirResultatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pingToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem connexionExterneToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem miseÀJourToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem miseÀJourToolStripMenuItem1;
+        private System.Windows.Forms.GroupBox grp_pointeuse;
+        private System.Windows.Forms.DataGridView dgv_pointeuse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn adresse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn port;
+        private System.Windows.Forms.DataGridViewTextBoxColumn emplacement;
+        private System.Windows.Forms.DataGridViewTextBoxColumn type;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn connect;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn actif;
+        private System.Windows.Forms.DataGridViewImageColumn icon;
+        private System.Windows.Forms.Label lb_name_societe;
+        private System.Windows.Forms.ToolStripMenuItem societeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importerDepuisUnFichierToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exporterCréneauToolStripMenuItem;
     }
 }
 

@@ -14,37 +14,35 @@ namespace ZK_Lymytz.ENTITE
             this.iMachineNumber = iMachineNumber;
         }
 
-        public IOEMDevice(int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int iParams4, int iParams1, int iParams2, int idwManipulation, int iParams3, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
+        public IOEMDevice(int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int iParams4, int iParams1, int iParams2, int idwManipulation, int iParams3, int idwInOutMode, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
+            : this(iMachineNumber)
         {
-            this.iMachineNumber = iMachineNumber;
             this.idwTMachineNumber = idwTMachineNumber;
             this.idwSEnrollNumber = idwSEnrollNumber;
             this.iParams4 = iParams4;
             this.iParams1 = iParams1;
             this.iParams2 = iParams2;
-            this.idwManipulation = idwManipulation;
+            this.idwManipulation = idwManipulation; 
             this.iParams3 = iParams3;
+            this.idwInOutMode = idwInOutMode;
             this.idwYear = idwYear;
             this.idwMonth = idwMonth;
             this.idwDay = idwDay;
             this.idwHour = idwHour;
             this.idwMinute = idwMinute;
             this.idwSecond = idwSecond;
+            this.date_action = new DateTime(idwYear, idwMonth, idwDay, 0, 0, 0);
+            this.time_action = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, 0);
+            this.date_time_action = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, 0);
         }
 
-        public IOEMDevice(Pointeuse iPointeuse, int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
+        public IOEMDevice(Pointeuse iPointeuse, int iMachineNumber, int idwTMachineNumber, int idwSEnrollNumber, int idwInOutMode, int idwVerifyMode, int idwWorkCode, int idwReserved, int idwYear, int idwMonth, int idwDay, int idwHour, int idwMinute, int idwSecond)
+            : this(iMachineNumber, idwTMachineNumber, idwSEnrollNumber, 0, 0, 0, 0, 0, idwInOutMode, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond)
         {
-            this.iMachineNumber = iMachineNumber;
-            this.idwTMachineNumber = idwTMachineNumber;
-            this.idwSEnrollNumber = idwSEnrollNumber;
-            this.iParams1 = idwSEnrollNumber;
-            this.idwYear = idwYear;
-            this.idwMonth = idwMonth;
-            this.idwDay = idwDay;
-            this.idwHour = idwHour;
-            this.idwMinute = idwMinute;
-            this.idwSecond = idwSecond;
             this.pointeuse = iPointeuse;
+            this.idwVerifyMode = idwVerifyMode;
+            this.idwWorkCode = idwWorkCode;
+            this.idwReserved = idwReserved;
         }
 
         public int id = 0;
@@ -62,6 +60,13 @@ namespace ZK_Lymytz.ENTITE
         public int idwHour = 0;
         public int idwMinute = 0;
         public int idwSecond = 0;
+        public int idwInOutMode = 0;//0—Check-In (default value) 1—Check-Out 2—Break-Out 3—Break-In 4—OT-In 5—OT-Out
+        public int idwVerifyMode;
+        public int idwWorkCode;
+        public int idwReserved;
+        public DateTime date_action = new DateTime();
+        public DateTime time_action = new DateTime();
+        public DateTime date_time_action = new DateTime();
         public bool exclure = false;
         public bool iCorrect = false;
         public Pointeuse pointeuse = new Pointeuse();
@@ -73,6 +78,25 @@ namespace ZK_Lymytz.ENTITE
                 return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.vu, 16, 16);
             }
             return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.vu_non, 16, 16);
+        }
+
+        public System.Drawing.Bitmap Action()
+        {
+            switch (idwInOutMode)
+            {
+                case 1:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.check_out, 16, 16);
+                case 2:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.break_out, 16, 16);
+                case 3:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.break_in, 16, 16);
+                case 4:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.override_in, 16, 16);
+                case 5:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.override_out, 16, 16);
+                default:
+                    return new System.Drawing.Bitmap(global::ZK_Lymytz.Properties.Resources.check_in, 16, 16);
+            }
         }
 
         public DateTime CurrentDateTime

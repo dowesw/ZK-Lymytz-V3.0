@@ -51,7 +51,7 @@ namespace ZK_Lymytz.IHM
         private void btn_save_Click(object sender, EventArgs e)
         {
             ENTITE.Serveur serveur = getServeur();
-            if (new TOOLS.Connexion().isInfosServeur(serveur))
+            if (new TOOLS.Connexion().isConnection(serveur))
             {
                 if (BLL.ServeurBLL.CreateServeur(serveur))
                 {

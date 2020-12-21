@@ -30,7 +30,17 @@ namespace ZK_Lymytz.TOOLS
 
         public static string CheminSociete()
         {
-            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Societe";
+            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Informations" + Constantes.FILE_SEPARATOR + "Societe";
+        }
+
+        public static string CheminAgence()
+        {
+            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Informations" + Constantes.FILE_SEPARATOR + "Agence";
+        }
+
+        public static string CheminUsers()
+        {
+            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Informations" + Constantes.FILE_SEPARATOR + "Users";
         }
 
         public static string CheminServeur()
@@ -38,9 +48,9 @@ namespace ZK_Lymytz.TOOLS
             return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Serveur";
         }
 
-        public static string CheminUsers()
+        public static string CheminLiaisons()
         {
-            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Users";
+            return "Software" + Constantes.FILE_SEPARATOR + Constantes.APP_NAME + Constantes.FILE_SEPARATOR + "Liaisons";
         }
 
         private static string CheminStart()
@@ -79,18 +89,9 @@ namespace ZK_Lymytz.TOOLS
             return chemin + Constantes.FILE_SEPARATOR;
         }
 
-        public static string CheminTemp()
-        {
-            string chemin = CheminDatabase() + "Temp";
-            DirectoryInfo dossier = new DirectoryInfo(chemin);
-            if (!dossier.Exists)
-                dossier.Create();
-            return chemin + Constantes.FILE_SEPARATOR;
-        }
-
         public static string CheminSDK()
         {
-            string chemin = CheminStart() + "SDK";
+            string chemin = CheminDatabase() + "SDK";
             DirectoryInfo dossier = new DirectoryInfo(chemin);
             if (!dossier.Exists)
                 dossier.Create();
@@ -99,7 +100,7 @@ namespace ZK_Lymytz.TOOLS
 
         public static string CheminBackup()
         {
-            string chemin = CheminStart() + "Backup";
+            string chemin = CheminDatabase() + "Backup";
             DirectoryInfo dossier = new DirectoryInfo(chemin);
             if (!dossier.Exists)
                 dossier.Create();

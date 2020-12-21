@@ -15,10 +15,20 @@ namespace ZK_Lymytz.DAO
         private static TrancheHoraire Return(NpgsqlDataReader lect)
         {
             TrancheHoraire bean = new TrancheHoraire();
-            bean.Id = Convert.ToInt32(lect["id"].ToString());
-            bean.HeureDebut = (DateTime)((lect["heure_debut"] != null) ? (!lect["heure_debut"].ToString().Trim().Equals("") ? lect["heure_debut"] : DateTime.Now) : DateTime.Now);
-            bean.HeureFin = (DateTime)((lect["heure_fin"] != null) ? (!lect["heure_fin"].ToString().Trim().Equals("") ? lect["heure_fin"] : DateTime.Now) : DateTime.Now);
-            bean.DureePause = (DateTime)((lect["duree_pause"] != null) ? (!lect["duree_pause"].ToString().Trim().Equals("") ? lect["duree_pause"] : DateTime.Now) : DateTime.Now);
+            try
+            {
+                bean.Id = Convert.ToInt32(lect["id"].ToString());
+                bean.Societe = Convert.ToInt32(lect["societe"].ToString());
+                bean.HeureDebut = (DateTime)((lect["heure_debut"] != null) ? (!lect["heure_debut"].ToString().Trim().Equals("") ? lect["heure_debut"] : DateTime.Now) : DateTime.Now);
+                bean.HeureFin = (DateTime)((lect["heure_fin"] != null) ? (!lect["heure_fin"].ToString().Trim().Equals("") ? lect["heure_fin"] : DateTime.Now) : DateTime.Now);
+                bean.DureePause = (DateTime)((lect["duree_pause"] != null) ? (!lect["duree_pause"].ToString().Trim().Equals("") ? lect["duree_pause"] : DateTime.Now) : DateTime.Now);
+                bean.TypeJournee = lect["type_journee"].ToString();
+                bean.Titre = lect["titre"].ToString();
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
             return bean;
         }
 
@@ -29,13 +39,15 @@ namespace ZK_Lymytz.DAO
             try
             {
                 string query = "select * from yvs_grh_tranche_horaire where id =" + id + ";";
-                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
-                NpgsqlDataReader lect = Lcmd.ExecuteReader();
-                if (lect.HasRows)
+                using (NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect))
+                using (NpgsqlDataReader lect = Lcmd.ExecuteReader())
                 {
-                    while (lect.Read())
+                    if (lect.HasRows)
                     {
-                        bean = Return(lect);
+                        while (lect.Read())
+                        {
+                            bean = Return(lect);
+                        }
                     }
                 }
                 return bean;
@@ -51,19 +63,21 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static List<TrancheHoraire> getList(string query)
+        public static List<TrancheHoraire> getList(string query, string adresse)
         {
             List<TrancheHoraire> list = new List<TrancheHoraire>();
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
-                NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
-                NpgsqlDataReader lect = Lcmd.ExecuteReader();
-                if (lect.HasRows)
+                using (NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect))
+                using (NpgsqlDataReader lect = Lcmd.ExecuteReader())
                 {
-                    while (lect.Read())
+                    if (lect.HasRows)
                     {
-                        list.Add(Return(lect));
+                        while (lect.Read())
+                        {
+                            list.Add(Return(lect));
+                        }
                     }
                 }
                 return list;

@@ -271,7 +271,7 @@ namespace ZK_Lymytz.TOOLS
         /// <param name="path">The name of the CSV file to write to</param>
         public CsvFileWriter(string path)
         {
-            Writer = new StreamWriter(path);
+            Writer = new StreamWriter(new FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.ReadWrite));
         }
 
         public CsvFileWriter(string path, bool append, Encoding encoding)

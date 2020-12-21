@@ -11,11 +11,15 @@ namespace ZK_Lymytz.BLL
     class CalendrierBLL
     {
 
-        public static Calendrier Default()
+        public static Calendrier Default(Societe societe)
         {
             try
             {
-                return CalendrierDAO.getDefault();
+                if (Constantes.CALENDRIER != null ? Constantes.CALENDRIER.Id < 1 : true)
+                {
+                    Constantes.CALENDRIER = CalendrierDAO.getDefault(societe);
+                }
+                return Constantes.CALENDRIER;
             }
             catch (Exception ex)
             {

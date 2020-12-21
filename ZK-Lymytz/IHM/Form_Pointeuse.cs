@@ -18,6 +18,7 @@ namespace ZK_Lymytz.IHM
         public bool actif;
         public Pointeuse pointeuse = new Pointeuse();
         Pointeuse bean;
+        List<Agence> agences = new List<Agence>();
 
         public Form_Pointeuse()
         {
@@ -52,6 +53,7 @@ namespace ZK_Lymytz.IHM
         private void Form_Infos_Pointeuse_Load(object sender, EventArgs e)
         {
             LoadCurrent();
+            LoadAgence();
             rbtn_non.Checked = !actif;
             rbtn_oui.Checked = actif;
         }
@@ -66,7 +68,31 @@ namespace ZK_Lymytz.IHM
                 txt_port.Text = pointeuse.Port.ToString();
                 actif = pointeuse.Actif;
                 rbtn_multi.Checked = pointeuse.MultiSociete;
+                com_type.SelectedItem = pointeuse.Type;
             }
+        }
+
+        private void LoadAgence()
+        {
+            agences = AgenceBLL.List("select * from yvs_agences where societe = " + Constantes.SOCIETE.Id);
+            agences.Insert(0, new Agence(0, "---"));
+            try
+            {
+                cbox_agence.Items.Clear();
+                for (int i = 0; i < agences.Count; i++)
+                {
+                    cbox_agence.Items.Add(agences[i].Name);
+                    cbox_agence.AutoCompleteCustomSource.Add(agences[i].Name);
+                }
+                cbox_agence.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cbox_agence.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Form_Setting (LoadAgence)", ex);
+                cbox_agence.Items.Clear();
+            }
+
         }
 
         private Pointeuse Pointeuse_()
@@ -85,7 +111,10 @@ namespace ZK_Lymytz.IHM
             bean.Port = Convert.ToInt32(txt_port.Text.Trim());
             bean.Actif = actif;
             bean.MultiSociete = rbtn_multi.Checked;
-            bean.IMachine = 1;
+            bean.Type = com_type.SelectedItem as String;
+            bean.IMachine = pointeuse != null ? pointeuse.IMachine : 1;
+            bean.Societe = pointeuse != null ? pointeuse.Societe : 0;
+            bean.Agence = pointeuse != null ? pointeuse.Agence : 0;
             return bean;
         }
 
@@ -94,6 +123,11 @@ namespace ZK_Lymytz.IHM
             if (txt_ip.Text.Trim() == "")
             {
                 Utils.WriteLog("Entrer l'adresse IP svp!");
+                return;
+            }
+            if (!rbtn_multi.Checked ? pointeuse.Agence < 1 : false)
+            {
+                Utils.WriteLog("Précisez une agence svp!");
                 return;
             }
 
@@ -211,6 +245,16 @@ namespace ZK_Lymytz.IHM
         private void rbtn_oui_CheckedChanged(object sender, EventArgs e)
         {
             actif = true;
+        }
+
+        private void rbtn_multi_CheckedChanged(object sender, EventArgs e)
+        {
+            cbox_agence.Enabled = !rbtn_multi.Checked;
+        }
+
+        private void cbox_agence_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pointeuse.Agence = agences[cbox_agence.SelectedIndex].Id;
         }
     }
 }

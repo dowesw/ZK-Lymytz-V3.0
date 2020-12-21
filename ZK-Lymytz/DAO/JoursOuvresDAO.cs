@@ -23,6 +23,7 @@ namespace ZK_Lymytz.DAO
             bean.HeureDebutPause = (DateTime)((lect["heure_debut_pause"] != null) ? (!lect["heure_debut_pause"].ToString().Trim().Equals("") ? lect["heure_debut_pause"] : DateTime.Now) : DateTime.Now);
             bean.HeureFinPause = (DateTime)((lect["heure_fin_pause"] != null) ? (!lect["heure_fin_pause"].ToString().Trim().Equals("") ? lect["heure_fin_pause"] : DateTime.Now) : DateTime.Now);
             bean.Ouvrable = (Boolean)((lect["ouvrable"] != null) ? (!lect["ouvrable"].ToString().Trim().Equals("") ? lect["ouvrable"] : false) : false);
+            bean.Calendrier = Convert.ToInt32(lect["calendrier"].ToString());
             return bean;
         }
 
@@ -55,10 +56,10 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static JoursOuvres getOneByCalendier(Calendrier calendrier, string jour)
+        public static JoursOuvres getOneByCalendier(Calendrier calendrier, string jour, string adresse)
         {
             JoursOuvres bean = new JoursOuvres();
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 string query = "select * from yvs_jours_ouvres where calendrier =" + calendrier.Id + " and upper(jour) = upper('" + jour + "') limit 1;";

@@ -56,11 +56,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static Users OneByName(string id, string password)
+        public static Users OneByName(string code)
         {
             try
             {
-                return UsersDAO.getOneByName(id, password);
+                return UsersDAO.getOneByName(code);
             }
             catch (Exception ex)
             {

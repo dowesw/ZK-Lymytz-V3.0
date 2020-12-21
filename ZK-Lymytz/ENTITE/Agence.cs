@@ -34,5 +34,13 @@ namespace ZK_Lymytz.ENTITE
             get { return name; }
             set { name = value; }
         }
+
+        private Societe societe = new Societe();
+
+        public Societe Societe
+        {
+            get { return societe != null ? societe.Id > 0 ? societe : TOOLS.Constantes.SOCIETE : TOOLS.Constantes.SOCIETE; }
+            set { societe = value; }
+        }
     }
 }

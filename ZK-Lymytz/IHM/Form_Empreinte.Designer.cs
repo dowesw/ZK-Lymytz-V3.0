@@ -46,20 +46,29 @@
             this.chech = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.chk_not_in = new System.Windows.Forms.CheckBox();
             this.com_employe = new System.Windows.Forms.ComboBox();
             this.chk_all = new System.Windows.Forms.CheckBox();
-            this.btn_load_template = new System.Windows.Forms.Button();
             this.grp_template = new System.Windows.Forms.GroupBox();
             this.dgv_empreinte = new System.Windows.Forms.DataGridView();
             this.id_em = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.check_ = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_e = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.main = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.doigt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.context_empreinte = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.supprimerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.chargerTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_infos = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_empreinte = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_faciale = new System.Windows.Forms.ToolStripMenuItem();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pbar_statut = new System.Windows.Forms.ProgressBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.tsmi_recuperer_infos = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.grp_source.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
@@ -69,6 +78,8 @@
             this.panel3.SuspendLayout();
             this.grp_template.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_empreinte)).BeginInit();
+            this.context_empreinte.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -234,14 +245,26 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.chk_not_in);
             this.panel3.Controls.Add(this.com_employe);
             this.panel3.Controls.Add(this.chk_all);
-            this.panel3.Controls.Add(this.btn_load_template);
             this.panel3.Controls.Add(this.grp_template);
+            this.panel3.Controls.Add(this.menuStrip);
             this.panel3.Location = new System.Drawing.Point(197, 0);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(517, 447);
             this.panel3.TabIndex = 1;
+            // 
+            // chk_not_in
+            // 
+            this.chk_not_in.AutoSize = true;
+            this.chk_not_in.Location = new System.Drawing.Point(412, 8);
+            this.chk_not_in.Name = "chk_not_in";
+            this.chk_not_in.Size = new System.Drawing.Size(96, 17);
+            this.chk_not_in.TabIndex = 4;
+            this.chk_not_in.Text = "Non disponible";
+            this.chk_not_in.UseVisualStyleBackColor = true;
+            this.chk_not_in.CheckedChanged += new System.EventHandler(this.chk_not_in_CheckedChanged);
             // 
             // com_employe
             // 
@@ -263,17 +286,6 @@
             this.chk_all.UseVisualStyleBackColor = true;
             this.chk_all.CheckedChanged += new System.EventHandler(this.chk_all_CheckedChanged);
             // 
-            // btn_load_template
-            // 
-            this.btn_load_template.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_load_template.Location = new System.Drawing.Point(382, 4);
-            this.btn_load_template.Name = "btn_load_template";
-            this.btn_load_template.Size = new System.Drawing.Size(126, 29);
-            this.btn_load_template.TabIndex = 1;
-            this.btn_load_template.Text = "Charger Template";
-            this.btn_load_template.UseVisualStyleBackColor = true;
-            this.btn_load_template.Click += new System.EventHandler(this.btn_load_template_Click);
-            // 
             // grp_template
             // 
             this.grp_template.Controls.Add(this.dgv_empreinte);
@@ -294,10 +306,12 @@
             this.dgv_empreinte.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id_em,
             this.check_,
+            this.num,
             this.id_e,
             this.nom,
             this.main,
             this.doigt});
+            this.dgv_empreinte.ContextMenuStrip = this.context_empreinte;
             this.dgv_empreinte.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_empreinte.Location = new System.Drawing.Point(3, 16);
             this.dgv_empreinte.MultiSelect = false;
@@ -308,6 +322,7 @@
             this.dgv_empreinte.Size = new System.Drawing.Size(496, 394);
             this.dgv_empreinte.TabIndex = 0;
             this.dgv_empreinte.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_empreinte_CellContentClick);
+            this.dgv_empreinte.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_empreinte_MouseDown);
             // 
             // id_em
             // 
@@ -323,9 +338,16 @@
             this.check_.Name = "check_";
             this.check_.ReadOnly = true;
             // 
+            // num
+            // 
+            this.num.FillWeight = 50F;
+            this.num.HeaderText = "N°";
+            this.num.Name = "num";
+            this.num.ReadOnly = true;
+            // 
             // id_e
             // 
-            this.id_e.FillWeight = 46.17242F;
+            this.id_e.FillWeight = 50F;
             this.id_e.HeaderText = "ID";
             this.id_e.Name = "id_e";
             this.id_e.ReadOnly = true;
@@ -351,6 +373,68 @@
             this.doigt.Name = "doigt";
             this.doigt.ReadOnly = true;
             // 
+            // context_empreinte
+            // 
+            this.context_empreinte.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.supprimerToolStripMenuItem,
+            this.tsmi_recuperer_infos});
+            this.context_empreinte.Name = "context_empreinte";
+            this.context_empreinte.Size = new System.Drawing.Size(194, 70);
+            // 
+            // supprimerToolStripMenuItem
+            // 
+            this.supprimerToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.delete;
+            this.supprimerToolStripMenuItem.Name = "supprimerToolStripMenuItem";
+            this.supprimerToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.supprimerToolStripMenuItem.Text = "Supprimer";
+            this.supprimerToolStripMenuItem.Click += new System.EventHandler(this.supprimerToolStripMenuItem_Click);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.chargerTemplateToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(243, 7);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(122, 24);
+            this.menuStrip.TabIndex = 3;
+            this.menuStrip.Text = "menuStrip1";
+            // 
+            // chargerTemplateToolStripMenuItem
+            // 
+            this.chargerTemplateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi_infos,
+            this.tsmi_empreinte,
+            this.tsmi_faciale});
+            this.chargerTemplateToolStripMenuItem.Name = "chargerTemplateToolStripMenuItem";
+            this.chargerTemplateToolStripMenuItem.Size = new System.Drawing.Size(114, 20);
+            this.chargerTemplateToolStripMenuItem.Text = "Charger Template";
+            // 
+            // tsmi_infos
+            // 
+            this.tsmi_infos.Image = global::ZK_Lymytz.Properties.Resources.document;
+            this.tsmi_infos.Name = "tsmi_infos";
+            this.tsmi_infos.Size = new System.Drawing.Size(152, 22);
+            this.tsmi_infos.Text = "Informations";
+            this.tsmi_infos.Visible = false;
+            this.tsmi_infos.Click += new System.EventHandler(this.tsmi_infos_Click);
+            // 
+            // tsmi_empreinte
+            // 
+            this.tsmi_empreinte.Image = global::ZK_Lymytz.Properties.Resources.empreinte_mini;
+            this.tsmi_empreinte.Name = "tsmi_empreinte";
+            this.tsmi_empreinte.Size = new System.Drawing.Size(152, 22);
+            this.tsmi_empreinte.Text = "Digitale";
+            this.tsmi_empreinte.Click += new System.EventHandler(this.tsmi_empreinte_Click);
+            // 
+            // tsmi_faciale
+            // 
+            this.tsmi_faciale.Image = global::ZK_Lymytz.Properties.Resources.edit_user;
+            this.tsmi_faciale.Name = "tsmi_faciale";
+            this.tsmi_faciale.Size = new System.Drawing.Size(152, 22);
+            this.tsmi_faciale.Text = "Faciale";
+            this.tsmi_faciale.Click += new System.EventHandler(this.tsmi_faciale_Click);
+            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.pbar_statut);
@@ -367,6 +451,14 @@
             this.pbar_statut.Size = new System.Drawing.Size(928, 10);
             this.pbar_statut.TabIndex = 0;
             // 
+            // tsmi_recuperer_infos
+            // 
+            this.tsmi_recuperer_infos.Image = global::ZK_Lymytz.Properties.Resources.document;
+            this.tsmi_recuperer_infos.Name = "tsmi_recuperer_infos";
+            this.tsmi_recuperer_infos.Size = new System.Drawing.Size(193, 22);
+            this.tsmi_recuperer_infos.Text = "Recuperer Information";
+            this.tsmi_recuperer_infos.Click += new System.EventHandler(this.tsmi_recuperer_infos_Click);
+            // 
             // Form_Empreinte
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,6 +469,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(949, 516);
             this.MinimumSize = new System.Drawing.Size(949, 516);
@@ -396,6 +489,9 @@
             this.panel3.PerformLayout();
             this.grp_template.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_empreinte)).EndInit();
+            this.context_empreinte.ResumeLayout(false);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -418,13 +514,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn chech;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridView dgv_empreinte;
-        private System.Windows.Forms.Button btn_load_template;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id_em;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn check_;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id_e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn main;
-        private System.Windows.Forms.DataGridViewTextBoxColumn doigt;
         private System.Windows.Forms.CheckBox chk_all;
         private System.Windows.Forms.ComboBox com_employe;
         private System.Windows.Forms.Button btn_synchro;
@@ -433,5 +522,21 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.ProgressBar pbar_statut;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem chargerTemplateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_empreinte;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_faciale;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_em;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn check_;
+        private System.Windows.Forms.DataGridViewTextBoxColumn num;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_e;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn main;
+        private System.Windows.Forms.DataGridViewTextBoxColumn doigt;
+        private System.Windows.Forms.CheckBox chk_not_in;
+        private System.Windows.Forms.ContextMenuStrip context_empreinte;
+        private System.Windows.Forms.ToolStripMenuItem supprimerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_infos;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_recuperer_infos;
     }
 }

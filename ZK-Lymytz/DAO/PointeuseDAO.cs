@@ -21,6 +21,7 @@ namespace ZK_Lymytz.DAO
             bean.Societe = (Int64)((lect["societe"] != null) ? (!lect["societe"].ToString().Trim().Equals("") ? lect["societe"] : 0) : 0);
             bean.Description = lect["description"].ToString();
             bean.Emplacement = lect["emplacement"].ToString();
+            bean.Type = lect["type"].ToString();
             bean.Societe = Convert.ToInt32(lect["societe"].ToString());
             bean.Connecter = (Boolean)((lect["connecter"] != null) ? (!lect["connecter"].ToString().Trim().Equals("") ? lect["connecter"] : false) : false);
             bean.Actif = (Boolean)((lect["actif"] != null) ? (!lect["actif"].ToString().Trim().Equals("") ? lect["actif"] : false) : false);
@@ -151,8 +152,8 @@ namespace ZK_Lymytz.DAO
                 Pointeuse p = getOneByIp(bean.Ip);
                 if (p != null ? p.Id < 1 : true)
                 {
-                    string query = "insert into yvs_pointeuse(adresse_ip, port, description, emplacement, connecter, actif, i_machine, multi_societe, societe) values " +
-                        "('" + bean.Ip + "'," + bean.Port + ",'" + bean.Description + "','" + bean.Emplacement + "','" + bean.Connecter + "','" + bean.Actif + "'," + bean.IMachine + ",'" + bean.MultiSociete + "'," + Constantes.SOCIETE.Id + ")";
+                    string query = "insert into yvs_pointeuse(adresse_ip, port, description, emplacement, connecter, actif, i_machine, multi_societe, societe, agence, type, author) values " +
+                        "('" + bean.Ip + "'," + bean.Port + ",'" + bean.Description + "','" + bean.Emplacement + "','" + bean.Connecter + "','" + bean.Actif + "'," + bean.IMachine + ",'" + bean.MultiSociete + "'," + Constantes.SOCIETE.Id + "," + bean.Agence + ", '" + bean.Type + "', " + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                     NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                     cmd.ExecuteNonQuery();
                     return true;
@@ -179,7 +180,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "update yvs_pointeuse set adresse_ip = '" + bean.Ip + "', port = " + bean.Port + ", description = '" + bean.Description + "', emplacement = '" + bean.Emplacement + "', connecter = " + bean.Connecter + ", i_machine =" + bean.IMachine + ", multi_societe ='" + bean.MultiSociete + "' where id = " + id + "";
+                string query = "update yvs_pointeuse set adresse_ip = '" + bean.Ip + "', port = " + bean.Port + ", description = '" + bean.Description + "', emplacement = '" + bean.Emplacement + "', connecter = " + bean.Connecter + ", i_machine =" + bean.IMachine + ", multi_societe ='" + bean.MultiSociete + "', type = '" + bean.Type + "' where id = " + id + "";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;

@@ -12,7 +12,7 @@ namespace ZK_Lymytz.DAO
 {
     class PointageDAO
     {
-        private static Pointage Return(NpgsqlDataReader lect)
+        private static Pointage Return(NpgsqlDataReader lect, bool full)
         {
             Pointage bean = new Pointage();
             bean.Id = Convert.ToInt32(lect["id"].ToString());
@@ -26,24 +26,33 @@ namespace ZK_Lymytz.DAO
             }
             bean.Valider = Convert.ToBoolean((lect["valider"].ToString() != "") ? lect["valider"].ToString() : "false");
             bean.Supplementaire = Convert.ToBoolean((lect["heure_supplementaire"].ToString() != "") ? lect["heure_supplementaire"].ToString() : "false");
-            if ((lect["presence"] != null) ? lect["presence"].ToString() != "" : false)
+            bean.Presence = new Presence(Convert.ToInt32(lect["presence"].ToString()));
+            bean.SystemIn = (Boolean)((lect["system_in"] != null) ? (!lect["system_in"].ToString().Trim().Equals("") ? lect["system_in"] : false) : false);
+            bean.SystemOut = (Boolean)((lect["system_out"] != null) ? (!lect["system_out"].ToString().Trim().Equals("") ? lect["system_out"] : false) : false);
+            if (full)
             {
-                bean.Presence = PresenceDAO.getOneById(Convert.ToInt32(lect["presence"].ToString()));
+                bean.Presence = PresenceDAO.getOneById(Convert.ToInt32(lect["presence"].ToString()), false);
             }
             if ((lect["pointeuse_in"] != null) ? lect["pointeuse_in"].ToString() != "" : false)
             {
-                bean.PointeuseIn = PointeuseDAO.getOneById(Convert.ToInt32(lect["pointeuse_in"].ToString()));
+                bean.PointeuseIn = new Pointeuse(Convert.ToInt32(lect["pointeuse_in"].ToString()));
+                if (full)
+                {
+                    bean.PointeuseIn = PointeuseDAO.getOneById(Convert.ToInt32(lect["pointeuse_in"].ToString()));
+                }
             }
             if ((lect["pointeuse_out"] != null) ? lect["pointeuse_out"].ToString() != "" : false)
             {
-                bean.PointeuseOut = PointeuseDAO.getOneById(Convert.ToInt32(lect["pointeuse_out"].ToString()));
+                bean.PointeuseOut = new Pointeuse(Convert.ToInt32(lect["pointeuse_out"].ToString()));
+                if (full)
+                {
+                    bean.PointeuseOut = PointeuseDAO.getOneById(Convert.ToInt32(lect["pointeuse_out"].ToString()));
+                }
             }
-            bean.SystemIn = (Boolean)((lect["system_in"] != null) ? (!lect["system_in"].ToString().Trim().Equals("") ? lect["system_in"] : false) : false);
-            bean.SystemOut = (Boolean)((lect["system_out"] != null) ? (!lect["system_out"].ToString().Trim().Equals("") ? lect["system_out"] : false) : false);
             return bean;
         }
 
-        public static Pointage getOneById(int id)
+        public static Pointage getOneById(int id, bool full)
         {
             Pointage bean = new Pointage();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -56,7 +65,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -72,15 +81,15 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static List<Pointage> List(string query)
+        public static List<Pointage> List(string query, bool full, string adresse)
         {
-            return List(query, null);
+            return List(query, full, null, adresse);
         }
 
-        public static List<Pointage> List(string query, string countQuery)
+        public static List<Pointage> List(string query, bool full, string countQuery, string adresse)
         {
             List<Pointage> list = new List<Pointage>();
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
@@ -89,13 +98,13 @@ namespace ZK_Lymytz.DAO
                 {
                     if (Constantes.PBAR_WAIT != null && (countQuery != null ? countQuery.Trim().Length > 0 : false))
                     {
-                        int count = Convert.ToInt32(Connexion.LoadOneObject(countQuery));
+                        int count = Convert.ToInt32(Dao.LoadOneObject(countQuery, adresse));
                         ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
                         o.UpdateMaxBar(count);
                     }
                     while (lect.Read())
                     {
-                        list.Add(Return(lect));
+                        list.Add(Return(lect, full));
                         Constantes.LoadPatience(false);
                     }
                 }
@@ -119,7 +128,7 @@ namespace ZK_Lymytz.DAO
             {
                 if (bean.Presence != null ? bean.Presence.Id > 0 : false)
                 {
-                    string query = "insert into yvs_grh_pointage(heure_entree, heure_sortie, valider, presence, date_save_entree, date_save_sortie) values (null, null, false," + bean.Presence.Id + ",null,null)";
+                    string query = "insert into yvs_grh_pointage(heure_entree, heure_sortie, valider, presence, date_save_entree, date_save_sortie, author) values (null, null, false," + bean.Presence.Id + ",null,null," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                     NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                     cmd.ExecuteNonQuery();
                     return true;
@@ -137,27 +146,27 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getInsert(Pointage bean)
+        public static bool getInsert(Pointage bean, string adresse)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 if (bean.Presence != null ? bean.Presence.Id > 0 : false)
                 {
-                    string query = "insert into yvs_grh_pointage(heure_entree, valider, presence, date_save_entree, pointeuse_in, date_save_sortie, system_in, heure_supplementaire) values ";
+                    string query = "insert into yvs_grh_pointage(heure_entree, valider, presence, date_save_entree, pointeuse_in, date_save_sortie, system_in, heure_supplementaire, author) values ";
                     if (bean.PointeuseIn != null ? bean.PointeuseIn.Id > 0 : false)
                     {
                         if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "',false ," + bean.Presence.Id + ",'" + bean.HeureEntree + "'," + bean.PointeuseIn.Id + ", null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "',false ," + bean.Presence.Id + ",'" + bean.HeureEntree + "'," + bean.PointeuseIn.Id + ", null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                         else
-                            query += "(null, false ," + bean.Presence.Id + ", null," + bean.PointeuseIn.Id + ", null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "')";
+                            query += "(null, false ," + bean.Presence.Id + ", null," + bean.PointeuseIn.Id + ", null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                     }
                     else
                     {
                         if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "', false," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "', false," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                         else
-                            query += "(null, false ," + bean.Presence.Id + ", null, null, null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "')";
+                            query += "(null, false ," + bean.Presence.Id + ", null, null, null, '" + bean.SystemIn + "', '" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                     }
                     NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                     cmd.ExecuteNonQuery();
@@ -176,57 +185,57 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getInsert_U(Pointage bean)
+        public static bool getInsert_U(Pointage bean, string adresse)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 if (bean.Presence != null ? bean.Presence.Id > 0 : false)
                 {
-                    string query = "insert into yvs_grh_pointage(heure_entree, heure_sortie, valider, presence, date_save_entree, date_save_sortie, pointeuse_out, pointeuse_in, horaire_normale, system_in, system_out, heure_supplementaire) values ";
+                    string query = "insert into yvs_grh_pointage(heure_entree, heure_sortie, valider, presence, date_save_entree, date_save_sortie, pointeuse_out, pointeuse_in, horaire_normale, system_in, system_out, heure_supplementaire, author) values ";
                     if ((bean.PointeuseIn != null ? bean.PointeuseIn.Id > 0 : false) && (bean.PointeuseOut != null ? bean.PointeuseOut.Id > 0 : false))
                     {
                         if (bean._HeureEntree() != null && bean._HeureSortie() != null)
-                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "',null," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "',null," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureSortie() != null)
-                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else
-                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null," + bean.PointeuseOut.Id + "," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                     }
                     else if (bean.PointeuseIn != null ? bean.PointeuseIn.Id > 0 : false)
                     {
                         if (bean._HeureEntree() != null && bean._HeureSortie() != null)
-                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "', null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "', null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureSortie() != null)
-                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "', null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "', null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else
                             query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null, null," + bean.PointeuseIn.Id + ", " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
                     }
                     else if (bean.PointeuseOut != null ? bean.PointeuseOut.Id > 0 : false)
                     {
                         if (bean._HeureEntree() != null && bean._HeureSortie() != null)
-                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureSortie() != null)
-                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "'," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else
-                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null," + bean.PointeuseOut.Id + ", null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                     }
                     else
                     {
                         if (bean._HeureEntree() != null && bean._HeureSortie() != null)
-                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "', null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "','" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "','" + bean.HeureSortie + "', null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureEntree() != null)
-                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "('" + bean.HeureEntree + "', null, " + bean.Valider + "," + bean.Presence.Id + ",'" + bean.HeureEntree + "', null, null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else if (bean._HeureSortie() != null)
-                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "', null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null,'" + bean.HeureSortie + "', " + bean.Valider + "," + bean.Presence.Id + ", null,'" + bean.HeureSortie + "', null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                         else
-                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null, null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "')";
+                            query += "(null, null, " + bean.Valider + "," + bean.Presence.Id + ", null, null, null, null, " + bean.Valider + ", '" + bean.SystemIn + "','" + bean.SystemOut + "','" + bean.Supplementaire + "'," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + " )";
                     }
                     NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                     cmd.ExecuteNonQuery();
@@ -245,9 +254,9 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getUpdate(Pointage bean, long id)
+        public static bool getUpdate(Pointage bean, long id, string adresse)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 string query = "update yvs_grh_pointage set ";

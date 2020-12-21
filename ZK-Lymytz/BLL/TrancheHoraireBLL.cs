@@ -24,9 +24,14 @@ namespace ZK_Lymytz.BLL
 
         public static List<TrancheHoraire> List(string query)
         {
+            return List(query, null);
+        }
+
+        public static List<TrancheHoraire> List(string query, string adresse)
+        {
             try
             {
-                return TrancheHoraireDAO.getList(query);
+                return TrancheHoraireDAO.getList(query, adresse);
             }
             catch (Exception ex)
             {

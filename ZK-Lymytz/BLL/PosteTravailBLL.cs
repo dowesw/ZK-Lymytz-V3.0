@@ -11,9 +11,14 @@ namespace ZK_Lymytz.BLL
 
         public static PosteTravail OneById(int id)
         {
+            return OneById(id, true);
+        }
+
+        public static PosteTravail OneById(int id, bool full)
+        {
             try
             {
-                return PosteTravailDAO.getOneById(id);
+                return PosteTravailDAO.getOneById(id, full);
             }
             catch (Exception ex)
             {
@@ -23,9 +28,14 @@ namespace ZK_Lymytz.BLL
 
         public static List<PosteTravail> List(string query)
         {
+            return List(query, true);
+        }
+
+        public static List<PosteTravail> List(string query, bool full)
+        {
             try
             {
-                return PosteTravailDAO.getList(query);
+                return PosteTravailDAO.getList(query, full);
             }
             catch (Exception ex)
             {

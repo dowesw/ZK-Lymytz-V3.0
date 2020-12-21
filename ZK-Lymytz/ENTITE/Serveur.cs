@@ -12,6 +12,7 @@ namespace ZK_Lymytz.ENTITE
         private string user;
         private string password;
         private string database;
+        private DateTime dateDebut = DateTime.Now.AddDays(-20);
 
         public string Adresse
         {
@@ -43,6 +44,12 @@ namespace ZK_Lymytz.ENTITE
             set { port = value; }
         }
 
+        public DateTime DateDebut
+        {
+            get { return dateDebut; }
+            set { dateDebut = value; }
+        }
+
         //public ZK_LymytzService.Serveur Recopie()
         //{
         //    ZK_LymytzService.Serveur s = new ZK_LymytzService.Serveur();
@@ -62,6 +69,7 @@ namespace ZK_Lymytz.ENTITE
             s.database = "lymytz_demo_0";
             s.password = "yves1910/";
             s.user = "postgres";
+            s.dateDebut = DateTime.Now.AddDays(-20);
             return s;
         }
 

@@ -11,6 +11,7 @@ using ZK_Lymytz.BLL;
 using ZK_Lymytz.IHM;
 using ZK_Lymytz.ENTITE;
 using ZK_Lymytz.TOOLS;
+using System.IO;
 
 namespace ZK_Lymytz.IHM
 {
@@ -23,9 +24,11 @@ namespace ZK_Lymytz.IHM
         List<Pointeuse> pointeuses_select = new List<Pointeuse>();
         Pointeuse currentPointeuse;
         public List<IOEMDevice> logs = new List<IOEMDevice>();
-        DateTime dateDebut = new DateTime(), dateFin = new DateTime(), heureDebut = new DateTime(), heureFin = new DateTime();
+        DateTime dateDebut = DateTime.Now, dateFin = DateTime.Now, heureDebut = DateTime.Now, heureFin = DateTime.Now;
         bool _first = true;
         bool _clean = false;
+
+        public static List<Serveur> liaisons = new List<Serveur>();
 
         public IOEMDevice currentPointage = new IOEMDevice();
 
@@ -52,6 +55,7 @@ namespace ZK_Lymytz.IHM
             LoadEmploye();
             LoadPointeuse();
             AddCheckBoxHeader();
+            liaisons = LiaisonBLL.ReturnServeur();
         }
 
         public void ResetDataPointeuse(bool clean, int pos)
@@ -103,34 +107,40 @@ namespace ZK_Lymytz.IHM
 
         public void LoadEmploye()
         {
-            try
+            employes.Clear();
+            dgv_employe.Rows.Clear();
+            ResetFiche();
+            ObjectThread object_employe = new ObjectThread(com_employe);
+            ObjectThread object_dgv_employe = new ObjectThread(dgv_employe);
+            new Thread(delegate()
             {
-                employes.Clear();
-                dgv_employe.Rows.Clear();
-
-                employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
-                com_employe.DisplayMember = "NomPrenom";
-                com_employe.ValueMember = "Id";
-                com_employe.DataSource = new BindingSource(employes, null);
-
-                for (int i = 0; i < employes.Count; i++)
+                try
                 {
-                    Employe e = employes[i];
-                    String nom = e.NomPrenom;
-                    if (com_employe.AutoCompleteCustomSource.Contains(nom))
-                        nom += "°";
-                    com_employe.AutoCompleteCustomSource.Add(nom);
-                    dgv_employe.Rows.Add(new object[] { e.Id, false, nom });
-                }
-                com_employe.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                com_employe.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE), false);
+                    object_employe.DisplayMember("NomPrenom");
+                    object_employe.ValueMember("Id");
+                    object_employe.DataSource(new BindingSource(employes, null));
 
-                ResetFiche();
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Form_Add_Empreinte (LoadEmploye)", ex);
-            }
+                    for (int i = 0; i < employes.Count; i++)
+                    {
+                        Employe e = employes[i];
+                        String nom = e.NomPrenom;
+                        if (com_employe.AutoCompleteCustomSource.Contains(nom))
+                            nom += "°";
+                        object_employe.AutoCompleteCustomSource_Add(nom);
+                        object_dgv_employe.WriteDataGridView(new object[] { e.Id, false, nom });
+                    }
+                    object_employe.AutoCompleteMode(AutoCompleteMode.SuggestAppend);
+                    object_employe.AutoCompleteSource(AutoCompleteSource.CustomSource);
+                }
+                catch (Exception ex)
+                {
+                    Messages.Exception("Form_Add_Empreinte (LoadEmploye)", ex);
+                }
+                Constantes.EMPLOYES = new List<Employe>(employes);
+
+            }).Start();
+
         }
 
         public void LoadPointeuse()
@@ -140,11 +150,10 @@ namespace ZK_Lymytz.IHM
             foreach (Pointeuse p in pointeuses)
             {
                 //o.WriteDataGridView(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif, true });
-                object_pointeuse.WriteDataGridView(new object[] { p.Id, p.Ip, false });
+                object_pointeuse.WriteDataGridView(new object[] { p.Id, p.Ip, p.Emplacement, false });
             }
             ResetDataPointeuse(true, -1);
         }
-
 
         private void AddCheckBoxHeader()
         {
@@ -209,9 +218,8 @@ namespace ZK_Lymytz.IHM
             {
                 e = new Employe(o.idwSEnrollNumber, o.idwSEnrollNumber.ToString(), "");
             }
-            DateTime date = new DateTime(o.idwYear, o.idwMonth, o.idwDay, o.idwHour, o.idwMinute, o.idwSecond);
             o.id = pos + 1;
-            object_log.WriteDataGridView(pos, new object[] { pos + 1, o.Icon(), e.Id, e.Nom + " " + e.Prenom, date.ToShortDateString(), date.ToShortTimeString(), !o.exclure });
+            object_log.WriteDataGridView(pos, new object[] { pos + 1, o.Icon(), e.Id, e.Nom + " " + e.Prenom, o.CurrentDate.ToShortDateString(), o.CurrentDateTime.ToShortTimeString(), o.Action(), !o.exclure });
         }
 
         public void LoadData_()
@@ -311,7 +319,7 @@ namespace ZK_Lymytz.IHM
             return z;
         }
 
-        public void LoadData()
+        public void LoadData_OLD()
         {
             logs.Clear();
             DateTime d = dateDebut.AddMinutes(-Convert.ToDouble(txt_marge_heure_debut.Value));
@@ -321,21 +329,40 @@ namespace ZK_Lymytz.IHM
             {
                 if (p.Tampon)
                 {
-                    Utils.WriteLog("Début du chargement de la sauvegarde des logs de l'appareil " + p.Ip + "");
                     if (p.Logs.Count < 1)
                     {
-                        p.Logs = Logs.ReadCsv(Chemins.CheminTemp() + p.Ip + ".csv");
-                        if (p.Logs.Count < 1)
-                            Fonctions.LoadFileTamponPointeuse(p, 1, false);
+                        string folder = TOOLS.Chemins.CheminBackup(p.Ip);
+                        DirectoryInfo directory = new DirectoryInfo(folder);
+                        FileInfo[] files = directory.GetFiles();
+                        DateTime lastWrite = DateTime.MinValue;
+                        FileInfo lastWritenFile = null;
+                        foreach (FileInfo file in files)
+                        {
+                            if (file.LastWriteTime > lastWrite)
+                            {
+                                lastWrite = file.LastWriteTime;
+                                lastWritenFile = file;
+                            }
+                        }
+                        if (lastWritenFile != null)
+                        {
+                            p.Logs = Logs.ReadCsv(lastWritenFile.FullName);
+                        }
                     }
+                    if (p.Logs.Count < 1)
+                    {
+                        Utils.WriteLog("Veuillez charger le fichier temporaire de la pointeuse " + p.Ip + "");
+                        return;
+                    }
+                    Utils.WriteLog("Début du chargement de la sauvegarde des logs de l'appareil " + p.Ip + "");
                     if (chk_filter.Checked)
-                        logs.AddRange(Utils.FindLogsInFileTamponLogs(p.Logs, employe, chk_date.Checked, d, f));
+                        logs.AddRange(Utils.FindLogsInFileTamponLogs(p.Logs, chk_employe.Checked, employe, chk_date.Checked, d, f));
                     else
                     {
                         if (chk_exclus.Checked)
                             logs.AddRange(Utils.FindLogsInFileTamponLogsEx(p.Logs, employes_select, mc_date_exclus.BoldedDates));
                         else
-                            logs.AddRange(Utils.FindLogsInFileTamponLogs(p.Logs, null, false, d, f));
+                            logs.AddRange(Utils.FindLogsInFileTamponLogs(p.Logs, false, null, false, d, f));
                     }
                 }
                 else
@@ -363,6 +390,104 @@ namespace ZK_Lymytz.IHM
             LoadLogs(logs);
         }
 
+        public void LoadData()
+        {
+            logs.Clear();
+            DateTime d = dateDebut.AddMinutes(-Convert.ToDouble(txt_marge_heure_debut.Value));
+            DateTime f = dateFin.AddMinutes(Convert.ToDouble(txt_marge_heure_fin.Value));
+
+            if (f < d)
+                f = f.AddDays(1);
+
+            foreach (Pointeuse p in pointeuses_select)
+            {
+                if (p.Tampon)
+                {
+                    Utils.WriteLog("Début du chargement de la sauvegarde des logs de l'appareil " + p.Ip + "");
+                    List<IOEMDevice> result = new List<IOEMDevice>();
+                    if (chk_filter.Checked)
+                    {
+                        if (chk_date.Checked)
+                        {
+                            if (chk_employe.Checked)
+                                result = IOEMDeviceBLL.List(p, employe, d, f, Constantes.SOCIETE.AdresseIp);
+                            else
+                                result = IOEMDeviceBLL.List(p, null, d, f, Constantes.SOCIETE.AdresseIp);
+                        }
+                        else
+                        {
+                            if (chk_employe.Checked)
+                                result = IOEMDeviceBLL.List(p, employe, Constantes.SOCIETE.AdresseIp);
+                            else
+                                result = IOEMDeviceBLL.List(p, null, Constantes.SOCIETE.AdresseIp);
+                        }
+                    }
+                    else
+                    {
+                        if (chk_exclus.Checked)
+                            result = IOEMDeviceBLL.ListEx(p, employes_select, mc_date_exclus.BoldedDates, Constantes.SOCIETE.AdresseIp);
+                        else
+                            result = IOEMDeviceBLL.List(p, null, Constantes.SOCIETE.AdresseIp);
+                    }
+                    logs.AddRange(result);
+                }
+                else
+                {
+                    Appareil z = VerifyConnexion(p);
+                    if (z != null)
+                    {
+                        z._POINTEUSE = p;
+                        Utils.WriteLog("Début du chargement de la liste des logs de l'appareil " + p.Ip + "");
+                        List<IOEMDevice> l = new List<IOEMDevice>();
+                        if (chk_filter.Checked)
+                        {
+                            switch (p.Type)
+                            {
+                                case Constantes.TYPE_IFACE:
+                                    l = z.SSR_GetAllAttentdData(p.IMachine, p.Connecter, employe, chk_date.Checked, d, f);
+                                    break;
+                                default:
+                                    l = z.GetAllAttentdData(p.IMachine, p.Connecter, employe, chk_date.Checked, d, f);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (chk_exclus.Checked)
+                            {
+                                switch (p.Type)
+                                {
+                                    case Constantes.TYPE_IFACE:
+                                        l = z.SSR_GetAllAttentdData(p.IMachine, p.Connecter, employes_select, mc_date_exclus.BoldedDates);
+                                        break;
+                                    default:
+                                        l = z.GetAllAttentdDataEx(p.IMachine, p.Connecter, employes_select, mc_date_exclus.BoldedDates);
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                switch (p.Type)
+                                {
+                                    case Constantes.TYPE_IFACE:
+                                        l = z.SSR_GetAllAttentdData(p.IMachine, p.Connecter);
+                                        break;
+                                    default:
+                                        l = z.GetAllAttentdData(p.IMachine, p.Connecter);
+                                        break;
+                                }
+                            }
+                        }
+                        logs.AddRange(l);
+                    }
+                }
+            }
+            logs.Sort();
+            ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
+            o.UpdateMaxBar(logs.Count);
+            LoadLogs(logs);
+        }
+
         private void dgv_pointeuse_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -372,15 +497,6 @@ namespace ZK_Lymytz.IHM
                     int id = Convert.ToInt32(dgv_pointeuse.CurrentRow.Cells["ID"].Value);
                     if (id > 0)
                     {
-                        currentPointeuse = pointeuses.Find(x => x.Id == id);
-                        if (currentPointeuse != null ? currentPointeuse.Id < 1 : true)
-                            currentPointeuse = PointeuseBLL.OneById(id);
-                        if (pointeuses_select.Contains(currentPointeuse))
-                            pointeuses_select.Remove(currentPointeuse);
-                        else
-                            pointeuses_select.Add(currentPointeuse);
-                        dgv_log.Rows.Clear();
-
                         if (e.ColumnIndex == dgv_pointeuse.CurrentRow.Cells["temp"].ColumnIndex)
                         {
                             int pos = Utils.GetRowData(dgv_pointeuse, id);
@@ -391,7 +507,7 @@ namespace ZK_Lymytz.IHM
 
                             ObjectThread o = new ObjectThread(dgv_pointeuse);
                             o.RemoveDataGridView(pos);
-                            o.WriteDataGridView(pos, new object[] { currentPointeuse.Id, currentPointeuse.Ip, tampon });
+                            o.WriteDataGridView(pos, new object[] { currentPointeuse.Id, currentPointeuse.Ip, currentPointeuse.Emplacement, tampon });
 
                             currentPointeuse.Tampon = tampon;
                             ResetDataPointeuse(false, pos);
@@ -407,6 +523,53 @@ namespace ZK_Lymytz.IHM
             catch (Exception ex)
             {
                 Messages.Exception("Form_Evenement (dgv_pointeuse_CellContentClick) ", ex);
+            }
+        }
+
+        private void dgv_pointeuse_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                DataGridView.HitTestInfo info = dgv_pointeuse.HitTest(e.X, e.Y); //get info
+                int pos = dgv_pointeuse.HitTest(e.X, e.Y).RowIndex;
+                if (pos > -1)
+                {
+                    if (dgv_pointeuse.Rows[pos].Cells["ID"].Value != null)
+                    {
+                        Int32 id = (Int32)dgv_pointeuse.Rows[pos].Cells["ID"].Value;
+                        if (id > 0)
+                        {
+                            currentPointeuse = pointeuses.Find(x => x.Id == id);
+                            switch (e.Button)
+                            {
+                                case MouseButtons.Right:
+                                    {
+
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        if (currentPointeuse != null ? currentPointeuse.Id < 1 : true)
+                                            currentPointeuse = PointeuseBLL.OneById(id);
+                                        if (pointeuses_select.Contains(currentPointeuse))
+                                            pointeuses_select.Remove(currentPointeuse);
+                                        else
+                                            pointeuses_select.Add(currentPointeuse);
+                                        dgv_log.Rows.Clear();
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            ResetDataPointeuse(true, -1);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Form_Evenement (dgv_pointeuse_MouseDown) ", ex);
             }
         }
 
@@ -429,45 +592,59 @@ namespace ZK_Lymytz.IHM
 
         private void btn_synchro_Click(object sender, EventArgs e)
         {
-            Utils.WriteLog("Demande de synchronisation des logs de l'appareil " + currentPointeuse.Ip + "");
-            if (Messages.Confirmation_Infos("synchroniser") == System.Windows.Forms.DialogResult.Yes)
+            try
             {
-                if (!_clean)
+                Utils.WriteLog("Demande de synchronisation des logs de l'appareil " + currentPointeuse.Ip + "");
+                if (Messages.Confirmation_Infos("synchroniser") == System.Windows.Forms.DialogResult.Yes)
                 {
-                    if (logs.Count > 0)
+                    if (!_clean)
                     {
-                        pbar_statut.Value = 0;
-                        Constantes.PBAR_WAIT = pbar_statut;
-                        Thread t = new Thread(new ThreadStart(Synchro));
-                        t.Start();
+                        if (logs.Count > 0)
+                        {
+                            pbar_statut.Value = 0;
+                            Constantes.PBAR_WAIT = pbar_statut;
+                            Thread t = new Thread(new ThreadStart(Synchro));
+                            t.Start();
+                        }
+                        else
+                        {
+                            Utils.WriteLog("-- Synchronisation impossible car le log est vide");
+                        }
                     }
                     else
                     {
-                        Utils.WriteLog("-- Synchronisation impossible car le log est vide");
+                        Utils.WriteLog("-- Synchronisation impossible.. Vous devez recharger la liste des logs");
                     }
                 }
                 else
                 {
-                    Utils.WriteLog("-- Synchronisation impossible.. Vous devez recharger la liste des logs");
+                    Utils.WriteLog("-- Synchronisation des logs de l'appareil " + currentPointeuse.Ip + " annulée");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Utils.WriteLog("-- Synchronisation des logs de l'appareil " + currentPointeuse.Ip + " annulée");
+                Utils.Exception(ex);
             }
         }
 
         public void Synchro()
         {
-            ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
-            o.UpdateMaxBar(0);
-            if (chk_filter.Checked)
+            try
             {
-                Fonctions.SynchroniseServer(logs, currentPointeuse.Ip, false, employe, chk_date.Checked, dateDebut, dateFin, chk_invalid_only.Checked);
+                ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
+                o.UpdateMaxBar(0);
+                if (chk_filter.Checked)
+                {
+                    Fonctions.SynchroniseServer(logs, currentPointeuse.Ip, false, chk_employe.Checked, employe, chk_date.Checked, dateDebut, dateFin, chk_invalid_only.Checked);
+                }
+                else
+                {
+                    Fonctions.SynchroniseServer(logs, currentPointeuse.Ip, false, false);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Fonctions.SynchroniseServer(logs, currentPointeuse.Ip, false, false);
+                Utils.Exception(ex);
             }
         }
 
@@ -553,13 +730,14 @@ namespace ZK_Lymytz.IHM
         {
             if (!_first)
             {
+                string adresse = Constantes.SOCIETE.AdresseIp;
                 if (employe != null ? employe.Id > 0 : false)
                 {
-                    Planning pd = Fonctions.GetPlanning(employe, dateDebut);
+                    Planning pd = Fonctions.GetPlanning(employe, dateDebut, adresse);
                     txt_debut_plan.Text = pd.DateDebut.ToShortDateString() + " " + pd.HeureDebut.ToShortTimeString();
                     dateDebut = new DateTime(dateDebut.Year, dateDebut.Month, dateDebut.Day, pd.HeureDebut.Hour, pd.HeureDebut.Minute, pd.HeureDebut.Second);
 
-                    Planning pf = Fonctions.GetPlanning(employe, dateFin);
+                    Planning pf = Fonctions.GetPlanning(employe, dateFin, adresse);
                     txt_fin_plan.Text = pf.DateFin.ToShortDateString() + " " + pf.HeureFin.ToShortTimeString();
                     dateFin = new DateTime(dateFin.Year, dateFin.Month, dateFin.Day, pf.HeureFin.Hour, pf.HeureFin.Minute, pf.HeureFin.Second);
                 }
@@ -574,25 +752,44 @@ namespace ZK_Lymytz.IHM
 
         public void SearchPlanning()
         {
-            chk_heure_debut.Checked = true;
-            chk_heure_fin.Checked = true;
+            MyCheckBox obj_chk_heure_debut = new MyCheckBox(chk_heure_debut);
+            MyCheckBox obj_chk_heure_fin = new MyCheckBox(chk_heure_fin);
 
-            SearchPlanning(true, true, true);
+            MyTextBox obj_txt_debut_plan = new MyTextBox(txt_debut_plan);
+            MyTextBox obj_txt_fin_plan = new MyTextBox(txt_fin_plan);
+            MyTextBox obj_txt_debut = new MyTextBox(txt_debut);
+            MyTextBox obj_txt_fin = new MyTextBox(txt_fin);
+            new Thread(delegate()
+            {
+                try
+                {
+                    obj_chk_heure_debut.Checked(true);
+                    obj_chk_heure_fin.Checked(true);
 
-            txt_debut_plan.Text = dateDebut.ToShortDateString() + " " + dateDebut.ToShortTimeString();
-            txt_fin_plan.Text = dateFin.ToShortDateString() + " " + dateFin.ToShortTimeString();
-            txt_debut.Text = dateDebut.ToShortDateString() + " " + dateDebut.ToShortTimeString();
-            txt_fin.Text = dateFin.ToShortDateString() + " " + dateFin.ToShortTimeString();
+                    SearchPlanning(true, true, true);
+
+                    obj_txt_debut_plan.Text(dateDebut.ToShortDateString() + " " + dateDebut.ToShortTimeString());
+                    obj_txt_fin_plan.Text(dateFin.ToShortDateString() + " " + dateFin.ToShortTimeString());
+                    obj_txt_debut.Text(dateDebut.ToShortDateString() + " " + dateDebut.ToShortTimeString());
+                    obj_txt_fin.Text(dateFin.ToShortDateString() + " " + dateFin.ToShortTimeString());
+                }
+                catch (Exception ex)
+                {
+                    Messages.Exception("Form_Add_Empreinte (SearchPlanning)", ex);
+                }
+
+            }).Start();
         }
 
         public void SearchPlanning(bool with_time, bool debut, bool fin)
         {
             if (employe != null ? employe.Id > 0 : false)
             {
+                string adresse = Constantes.SOCIETE.AdresseIp;
                 if (debut)
                 {
-                    Planning pd = Fonctions.GetPlanning(employe, new DateTime(dateDebut.Year, dateDebut.Month, dateDebut.Day, 0, 0, 0));
-                    if (with_time)
+                    Planning pd = Fonctions.GetPlanning(employe, new DateTime(dateDebut.Year, dateDebut.Month, dateDebut.Day, 0, 0, 0), adresse);
+                    if (with_time ? pd != null : false)
                         dateDebut = new DateTime(dateDebut.Year, dateDebut.Month, dateDebut.Day, pd.HeureDebut.Hour, pd.HeureDebut.Minute, 0);
                     else
                         dateDebut = new DateTime(dateDebut.Year, dateDebut.Month, dateDebut.Day, 0, 0, 0);
@@ -600,8 +797,8 @@ namespace ZK_Lymytz.IHM
 
                 if (fin)
                 {
-                    Planning pf = Fonctions.GetPlanning(employe, new DateTime(dateFin.Year, dateFin.Month, dateFin.Day, 0, 0, 0));
-                    if (with_time)
+                    Planning pf = Fonctions.GetPlanning(employe, new DateTime(dateFin.Year, dateFin.Month, dateFin.Day, 0, 0, 0), adresse);
+                    if (with_time ? pf != null : false)
                         dateFin = new DateTime(dateFin.Year, dateFin.Month, dateFin.Day, pf.HeureFin.Hour, pf.HeureFin.Minute, 0);
                     else
                         dateFin = new DateTime(dateFin.Year, dateFin.Month, dateFin.Day, 0, 0, 0);
@@ -873,20 +1070,27 @@ namespace ZK_Lymytz.IHM
                 {
                     case MouseButtons.Right:
                         {
-                            currentPointage = null;
-                            for (int i = 0; i < dgv_log.Rows.Count; i++)
+                            try
                             {
-                                dgv_log.Rows[i].Selected = false;
-                            }
-
-                            dgv_log.Rows[pos].Selected = true; //Select the row
-                            if (dgv_log.Rows[pos].Cells["pos"] != null ? dgv_log.Rows[pos].Cells["pos"].Value != null : false)
-                            {
-                                Int32 position = (Int32)dgv_log.Rows[pos].Cells["pos"].Value;
-                                if (position > 0)
+                                currentPointage = null;
+                                for (int i = 0; i < dgv_log.Rows.Count; i++)
                                 {
-                                    currentPointage = logs[position - 1];
+                                    dgv_log.Rows[i].Selected = false;
                                 }
+                                dgv_log.Rows[pos].Selected = true; //Select the row
+                                if (dgv_log.Rows[pos].Cells["pos"] != null ? dgv_log.Rows[pos].Cells["pos"].Value != null : false)
+                                {
+                                    Int32 position = (Int32)dgv_log.Rows[pos].Cells["pos"].Value;
+                                    if (position > 0)
+                                    {
+                                        currentPointage = logs[position - 1];
+                                        analyserLétatToolStripMenuItem.Visible = !currentPointage.iCorrect;
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Messages.Exception("Form_Evenement (dgv_log_MouseDown)", ex);
                             }
                         }
                         break;
@@ -901,7 +1105,7 @@ namespace ZK_Lymytz.IHM
             new Dial_Insert_Pointage(this).ShowDialog();
         }
 
-        public void InsertPointageInFiche(Employe e, DateTime current, DateTime dateDebut, DateTime dateFin, bool decal, DateTime heureDecalage, string mouv, Pointeuse pp)
+        public void InsertPointageInFiche(Employe e, DateTime current, DateTime dateDebut, DateTime dateFin, bool decal, DateTime heureDecalage, string mouv, Pointeuse pp, string adresse)
         {
             try
             {
@@ -914,32 +1118,32 @@ namespace ZK_Lymytz.IHM
                         {
                             DateTime h = new DateTime(current.Year, current.Month, current.Day, current.Hour, current.Minute, 0);
                             string req = "select p.* from yvs_grh_pointage p inner join yvs_grh_presence r on p.presence = r.id where r.employe = " + e.Id + " and ((heure_entree is not null and heure_entree = '" + h + "') or (heure_sortie is not null and heure_sortie = '" + h + "'))";
-                            List<Pointage> lp = PointageBLL.List(req);
+                            List<Pointage> lp = PointageBLL.List(req, true, adresse);
                             if (lp != null ? lp.Count < 1 : true)
                             {
                                 p.HeureDebut = Utils.TimeStamp(p.DateDebut, p.HeureDebut);
                                 p.HeureFin = Utils.TimeStamp(p.DateFin, p.HeureFin);
                                 if (!decal)
                                 {
-                                    AddPointage(p, lp, current, mouv, pp);
+                                    AddPointage(p, lp, current, mouv, pp, adresse);
                                 }
                                 else
                                 {
                                     string query = "select heure_entree from yvs_grh_pointage where presence = " + p.Id + " and (heure_entree is not null and heure_entree >= '" + heureDecalage + "') and system_in is false order by heure_entree";
-                                    List<string> list = Connexion.LoadListObject(query);
+                                    List<string> list = Bll.LoadListObject(query, adresse);
                                     query = "select heure_sortie from yvs_grh_pointage where presence = " + p.Id + " and (heure_sortie is not null and heure_sortie >= '" + heureDecalage + "') and system_out is false order by heure_sortie";
-                                    list.InsertRange(list.Count, Connexion.LoadListObject(query));
+                                    list.InsertRange(list.Count, Bll.LoadListObject(query, adresse));
 
                                     List<DateTime> dates = list.ConvertAll(Utils.StringToDate);
                                     dates.Sort();
 
-                                    Connexion.RequeteLibre("delete from yvs_grh_pointage where presence = " + p.Id + " and '" + heureDecalage + "' <= heure_entree and heure_entree is not null");
-                                    Connexion.RequeteLibre("update yvs_grh_pointage set heure_sortie = null where presence = " + p.Id + " and '" + heureDecalage + "' <= heure_sortie and heure_sortie is not null");
+                                    Bll.RequeteLibre("delete from yvs_grh_pointage where presence = " + p.Id + " and '" + heureDecalage + "' <= heure_entree and heure_entree is not null", adresse);
+                                    Bll.RequeteLibre("update yvs_grh_pointage set heure_sortie = null where presence = " + p.Id + " and '" + heureDecalage + "' <= heure_sortie and heure_sortie is not null", adresse);
 
-                                    AddPointage(p, lp, current, mouv, pp);
+                                    AddPointage(p, lp, current, mouv, pp, adresse);
                                     foreach (DateTime heure in dates)
                                     {
-                                        Fonctions.OnSavePointage((Presence)p, heure, currentPointeuse);
+                                        Fonctions.OnSavePointage((Presence)p, heure, currentPointeuse, 0, adresse);
                                     }
                                 }
                             }
@@ -959,18 +1163,18 @@ namespace ZK_Lymytz.IHM
             }
         }
 
-        private void AddPointage(Presence p, List<Pointage> lp, DateTime current, string mouv, Pointeuse pointeuse)
+        private void AddPointage(Presence p, List<Pointage> lp, DateTime current, string mouv, Pointeuse pointeuse, string adresse)
         {
             bool correct = false;
             switch (mouv)
             {
                 case "S":
                     //Recherche le dernier pointage
-                    lp = PointageBLL.List("select * from yvs_grh_pointage where presence = " + p.Id + " and heure_entree is not null order by heure_entree desc");
+                    lp = PointageBLL.List("select * from yvs_grh_pointage where presence = " + p.Id + " and heure_entree is not null order by heure_entree desc", false, adresse);
                     if (lp != null ? lp.Count < 1 : true)//S'il n'y'a pas de pointage
                     {
                         //On insere une sortie sans entree
-                        correct = Fonctions.OnSavePointage("S", null, (Presence)p, current, pointeuse);
+                        correct = Fonctions.OnSavePointage("S", null, (Presence)p, current, pointeuse, adresse);
                     }
                     else
                     {
@@ -980,20 +1184,20 @@ namespace ZK_Lymytz.IHM
                         if ((po.HeureSortie != null) ? po.HeureSortie.ToString() == "01/01/0001 00:00:00" : true)//Si le dernier pointage etait une entrée
                         {
                             //On insere une sortie avec entree
-                            correct = Fonctions.OnSavePointage("S", po, (Presence)p, current, pointeuse);
+                            correct = Fonctions.OnSavePointage("S", po, (Presence)p, current, pointeuse, adresse);
                         }
                         else//Si le dernier pointage etait une sortie
                         {
                             //On insere une sortie sans entree
-                            correct = Fonctions.OnSavePointage("S", null, (Presence)p, current, pointeuse);
+                            correct = Fonctions.OnSavePointage("S", null, (Presence)p, current, pointeuse, adresse);
                         }
                     }
                     break;
                 case "E":
-                    correct = Fonctions.OnSavePointage("E", null, (Presence)p, current, pointeuse);
+                    correct = Fonctions.OnSavePointage("E", null, (Presence)p, current, pointeuse, adresse);
                     break;
                 default:
-                    correct = Fonctions.OnSavePointage((Presence)p, current, pointeuse);
+                    correct = Fonctions.OnSavePointage((Presence)p, current, pointeuse, 0, adresse);
                     break;
             }
             if (correct)
@@ -1006,6 +1210,79 @@ namespace ZK_Lymytz.IHM
                     AddRow(pos, currentPointage);
                 }
             }
+        }
+
+        private void analyserLétatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Dial_View_No_Insert(employe, currentPointage).ShowDialog();
+        }
+
+        private void dgv_log_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewCell cell = this.dgv_log.Rows[e.RowIndex].Cells[0];
+            if (logs != null ? logs.Count > 0 : false)
+            {
+                int index = Convert.ToInt32(cell.Value);
+                if (index > 0)
+                {
+                    IOEMDevice po = logs[index - 1];
+                    if (po != null ? po.idwSEnrollNumber > 0 : false)
+                    {
+                        if ((e.ColumnIndex == this.dgv_log.Columns["action"].Index) && e.Value != null)
+                        {
+                            cell = this.dgv_log.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                            cell.ToolTipText = Dial_Update_Action.Action(po.idwInOutMode);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
+
+        private void modifierActionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Dial_Update_Action(currentPointage).ShowDialog();
+        }
+
+        private void tsmi_update_action_Click(object sender, EventArgs e)
+        {
+            new Dial_Update_Action(logs.FindAll(x => !x.exclure)).ShowDialog();
+        }
+
+        private void tsmi_selected_all_Click(object sender, EventArgs e)
+        {
+            new Thread(delegate()
+            {
+                ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
+                o.UpdateMaxBar(logs.Count);
+                List<IOEMDevice> selected = logs.FindAll(x => !x.exclure);
+                if (selected.Count > (logs.Count - selected.Count))
+                {
+                    for (int i = 0; i < logs.Count; i++)
+                    {
+                        logs[i].exclure = true;
+                        object_log.RemoveDataGridView(i);
+                        AddRow(i, logs[i]);
+                        Constantes.LoadPatience(false);
+                    }
+                    new ObjectThread(tsmi_selected_all).TextToolStrip(context_options, "Tout Selectionner");
+                }
+                else
+                {
+                    for (int i = 0; i < logs.Count; i++)
+                    {
+                        logs[i].exclure = false;
+                        object_log.RemoveDataGridView(i);
+                        AddRow(i, logs[i]);
+                        Constantes.LoadPatience(false);
+                    }
+                    new ObjectThread(tsmi_selected_all).TextToolStrip(context_options, "Tout Déselectionner");
+                }
+                Constantes.LoadPatience(true);
+            }).Start();
         }
     }
 }

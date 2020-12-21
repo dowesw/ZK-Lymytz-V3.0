@@ -16,7 +16,9 @@ namespace ZK_Lymytz.ENTITE
         private string emplacement;
         private bool connecter;
         private bool actif;
+        private string type = "TFT";
         private Int64 societe;
+        private Int64 agence;
         private bool multiSociete;
         private Appareil zkemkeeper = null;
         private List<IOEMDevice> logs = new List<IOEMDevice>();
@@ -40,6 +42,15 @@ namespace ZK_Lymytz.ENTITE
             set { logs = value; }
         }
 
+        public string Type
+        {
+            get
+            {
+                return type != null ? type.Trim().Length > 0 ? type : "TFT" : "TFT";
+            }
+            set { type = value; }
+        }
+
         public bool FileLoad
         {
             get { return fileLoad; }
@@ -56,6 +67,12 @@ namespace ZK_Lymytz.ENTITE
         {
             get { return societe; }
             set { societe = value; }
+        }
+
+        public Int64 Agence
+        {
+            get { return agence; }
+            set { agence = value; }
         }
 
         public int Id
@@ -90,7 +107,7 @@ namespace ZK_Lymytz.ENTITE
 
         public int IMachine
         {
-            get { return i_machine; }
+            get { return i_machine > 0 ? i_machine : 1; }
             set { i_machine = value; }
         }
 

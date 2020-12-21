@@ -27,10 +27,28 @@ namespace ZK_Lymytz.TOOLS
                 ENTITE.Serveur bean = ServeurBLL.ReturnServeur();
                 if ((bean != null) ? bean.Port != 0 : false)
                 {
-                    INSTANCE = returnConnexion(bean);
+                    INSTANCE = returnConnexion(bean, true);
                 }
             }
             return INSTANCE;
+        }
+
+        public NpgsqlConnection Connection(string adresse)
+        {
+            if (Utils.asString(adresse))
+            {
+                ENTITE.Serveur bean = ServeurBLL.ReturnServeur();
+                if ((bean != null) ? bean.Port != 0 : false)
+                {
+                    NpgsqlConnection connexion = returnConnexion(bean, adresse, true);
+                    return connexion;
+                }
+                return null;
+            }
+            else
+            {
+                return Connection();
+            }
         }
 
         public static void Close(NpgsqlConnection con)
@@ -43,187 +61,118 @@ namespace ZK_Lymytz.TOOLS
             con = null;
         }
 
-        public NpgsqlConnection onConnection()
+        public NpgsqlConnection returnConnexion(ENTITE.Serveur bean, bool retry)
         {
-            try
-            {
-                NpgsqlConnection con = new NpgsqlConnection();
-                string constr = "PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;COMPATIBLE= 2.0.14.3;DATABASE=lymytz;HOST=192.168.1.251;PASSWORD=yves1910/;USER ID=postgres";
-                con = new NpgsqlConnection(constr);
-                con.Open();
-                return con;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Connexion (onConnection) ", ex);
-                return null;
-            }
+            return returnConnexion(bean, null, retry);
         }
 
-        public NpgsqlConnection returnConnexion(ENTITE.Serveur bean)
+        public NpgsqlConnection returnConnexion(ENTITE.Serveur bean, string adresse, bool retry)
         {
             try
             {
                 NpgsqlConnection con = new NpgsqlConnection();
-                if (isConnection(out con, bean))
+                if (isConnection(out con, bean, adresse))
                 {
                     return con;
                 }
                 else
                 {
-                    if (DialogResult.Retry == Messages.Erreur_Retry("Connexion impossible !Entrer de nouveaux parametres"))
+                    if (!Utils.asString(adresse) && retry)
                     {
-                        new IHM.Form_Serveur().ShowDialog();
-                    }
-                    else
-                    {
-                        Environment.Exit(1);
+                        if (DialogResult.Retry == Messages.Erreur_Retry("Connexion impossible !Entrer de nouveaux parametres"))
+                        {
+                            new IHM.Form_Serveur().ShowDialog();
+                        }
+                        else
+                        {
+                            Environment.Exit(1);
+                        }
                     }
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                Messages.Exception("Connexion (returnConnexion) ", ex);
+                if (retry)
+                {
+                    Messages.Exception("Connexion (returnConnexion) ", ex);
+                }
                 return null;
+            }
+        }
+
+        public bool isConnection(ENTITE.Serveur bean)
+        {
+            return isConnection(bean, null);
+        }
+
+        public bool isConnection(ENTITE.Serveur bean, string adresse)
+        {
+            try
+            {
+                NpgsqlConnection con;
+                return isConnection(out con, bean, adresse);
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 
         public bool isConnection(out NpgsqlConnection con, ENTITE.Serveur bean)
         {
+            return isConnection(out con, bean, null);
+        }
+
+        public bool isConnection(out NpgsqlConnection con, ENTITE.Serveur bean, string adresse)
+        {
+            con = null;
+            if (bean == null)
+            {
+                return false;
+            }
+            try
+            {
+                string current = bean.Adresse;
+                if (Utils.asString(adresse))
+                {
+                    current = adresse;
+                }
+                return isConnection(out con, current, bean.Port, bean.Database, bean.User, bean.Password);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool isConnection(string adresse, int port, string database, string users, string password)
+        {
+            try
+            {
+                NpgsqlConnection con;
+                return isConnection(out con, adresse, port, database, users, password);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool isConnection(out NpgsqlConnection con, string adresse, int port, string database, string users, string password)
+        {
             con = null;
             try
             {
-                if (bean != null)
-                {
-                    string constr = "PORT=" + bean.Port + ";TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;COMPATIBLE= 2.0.14.3;DATABASE=" + bean.Database + ";HOST=" + bean.Adresse + ";PASSWORD=" + bean.Password + ";USER ID=" + bean.User + "";
-                    con = new NpgsqlConnection(constr);
-                    try
-                    {
-                        con.Open();
-                        return true;
-                    }
-                    catch (System.StackOverflowException ex)
-                    {
-                        return isConnection(out con, bean);
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                string constr = "PORT=" + port + ";TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;COMPATIBLE= 2.0.14.3;DATABASE=" + database + ";HOST=" + adresse + ";PASSWORD=" + password + ";USER ID=" + users + "";
+                con = new NpgsqlConnection(constr);
+                con.Open();
+                return true;
             }
             catch (Exception ex)
             {
+                Messages.Exception("Connexion (isConnection) ", ex);
                 return false;
-            }
-        }
-
-        public bool isInfosServeur(ENTITE.Serveur bean)
-        {
-            try
-            {
-                if (bean != null)
-                {
-                    string constr = "PORT=" + bean.Port + ";TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;COMPATIBLE= 2.0.14.3;DATABASE=" + bean.Database + ";HOST=" + bean.Adresse + ";PASSWORD=" + bean.Password + ";USER ID=" + bean.User + "";
-                    NpgsqlConnection con = new NpgsqlConnection(constr);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Connexion (isInfosServeur) ", ex);
-                return false;
-            }
-        }
-
-        public static bool RequeteLibre(string query)
-        {
-            NpgsqlConnection connect = new Connexion().Connection();
-            try
-            {
-                if (query != null ? query.Trim().Length > 0 : false)
-                {
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                    cmd.ExecuteNonQuery();
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Connexion (RequeteLibre) ", ex);
-                return false;
-            }
-            finally
-            {
-                Close(connect);
-            }
-        }
-
-        public static object LoadOneObject(string query)
-        {
-            NpgsqlConnection connect = new Connexion().Connection();
-            try
-            {
-                if (query != null ? query.Trim().Length > 0 : false)
-                {
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                    NpgsqlDataReader lect = cmd.ExecuteReader();
-                    if (lect.HasRows)
-                    {
-                        while (lect.Read())
-                        {
-                            return lect[0];
-                        }
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Connexion (LoadOneObject) ", ex);
-                return null;
-            }
-            finally
-            {
-                Close(connect);
-            }
-        }
-
-        public static List<string> LoadListObject(string query)
-        {
-            NpgsqlConnection connect = new Connexion().Connection();
-            try
-            {
-                List<string> list = new List<string>();
-                if (query != null ? query.Trim().Length > 0 : false)
-                {
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
-                    NpgsqlDataReader lect = cmd.ExecuteReader();
-                    if (lect.HasRows)
-                    {
-                        while (lect.Read())
-                        {
-                            list.Add(lect[0].ToString());
-                        }
-                    }
-
-                }
-                return list;
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Connexion (LoadListObject) ", ex);
-                return null;
-            }
-            finally
-            {
-                Close(connect);
             }
         }
     }

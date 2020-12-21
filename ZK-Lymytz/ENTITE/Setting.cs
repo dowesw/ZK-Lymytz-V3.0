@@ -104,5 +104,26 @@ namespace ZK_Lymytz.ENTITE
             get { return cheminPhoto != null ? cheminPhoto : ""; }
             set { cheminPhoto = value; }
         }
+
+        private string cheminSetup;// Chemin du dossier des mise a jours
+        public string CheminSetup
+        {
+            get { return cheminSetup != null ? cheminSetup : ""; }
+            set { cheminSetup = value; }
+        }
+
+        private DateTime dateInstall;// Date de l'installation
+        public DateTime DateInstall
+        {
+            get { return  dateInstall; }
+            set { dateInstall = value; }
+        }
+
+        private bool createService;
+        public bool CreateService
+        {
+            get { return createService; }
+            set { createService = value; }
+        }
     }
 }

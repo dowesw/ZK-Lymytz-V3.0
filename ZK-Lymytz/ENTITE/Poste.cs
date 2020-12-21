@@ -6,6 +6,17 @@ namespace ZK_Lymytz.ENTITE
 {
     public class Poste
     {
+
+        public Poste()
+        {
+
+        }
+
+        public Poste(Int32 id)
+        {
+            this.id = id;
+        }
+
         private Int32 id;
         public Int32 Id
         {

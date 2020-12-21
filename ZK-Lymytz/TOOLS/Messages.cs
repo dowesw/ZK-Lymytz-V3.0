@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Npgsql;
 
@@ -57,7 +58,7 @@ namespace ZK_Lymytz.TOOLS
 
         static public DialogResult Exception(Exception ex)
         {
-            DialogResult reponse = MessageBox.Show(Mots.Msg_Exception + " : " + ex.Message, Constantes.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            DialogResult reponse = MessageBox.Show(Utils.getMessageException(ex), Constantes.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             return reponse;
         }
 
@@ -129,8 +130,7 @@ namespace ZK_Lymytz.TOOLS
 
         static public DialogResult Exception(string place, Exception ex)
         {
-            DialogResult reponse = MessageBox.Show("L'erreur suivante a été detectée : " + ex.Message + "----- Place : " + place,Constantes.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            return reponse;
+            return Exception(ex);
         }
     }
 }

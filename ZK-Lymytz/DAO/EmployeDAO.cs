@@ -12,7 +12,7 @@ namespace ZK_Lymytz.DAO
 {
     class EmployeDAO
     {
-        private static Employe Return(NpgsqlDataReader lect)
+        private static Employe Return(NpgsqlDataReader lect, bool full)
         {
             Employe bean = new Employe();
             bean.Id = Convert.ToInt32(lect["id"].ToString());
@@ -21,29 +21,30 @@ namespace ZK_Lymytz.DAO
             bean.Matricule = lect["matricule"].ToString();
             bean.Photo = lect["photos"].ToString();
             bean.HoraireDynamique = (Boolean)((lect["horaire_dynamique"] != null) ? (!lect["horaire_dynamique"].ToString().Trim().Equals("") ? lect["horaire_dynamique"] : false) : false);
+            bean.Agence = new Agence(Convert.ToInt32(lect["agence"].ToString()));
             string q = "select * from yvs_grh_contrat_emps where employe = " + bean.Id + " and actif = true and contrat_principal = true limit 1";
-            List<Contrat> lc = ContratDAO.getList(q);
+            List<Contrat> lc = ContratDAO.getList(q, full);
             if (lc.Count > 0)
             {
                 bean.Contrat = lc[0];
             }
-            q = "select * from yvs_grh_poste_employes where employe = " + bean.Id + " and actif = true and valider = true limit 1";
-            List<PosteTravail> lp = PosteTravailDAO.getList(q);
-            if (lp.Count > 0)
+            if (full)
             {
-                bean.Poste = lp[0];
-            }
-            if ((lect["agence"] != null) ? lect["agence"].ToString() != "" : false)
-            {
+                q = "select * from yvs_grh_poste_employes where employe = " + bean.Id + " and actif = true and valider = true limit 1";
+                List<PosteTravail> lp = PosteTravailDAO.getList(q, full);
+                if (lp.Count > 0)
+                {
+                    bean.Poste = lp[0];
+                }
                 bean.Agence = AgenceDAO.getOneById(Convert.ToInt32(lect["agence"].ToString()));
             }
             return bean;
         }
 
-        public static Employe getOneById(int id)
+        public static Employe getOneById(int id, bool full, string adresse)
         {
             Employe bean = new Employe();
-            NpgsqlConnection connect = new Connexion().Connection();
+            NpgsqlConnection connect = new Connexion().Connection(adresse);
             try
             {
                 string query = "select * from yvs_grh_employes where id =" + id + ";";
@@ -53,7 +54,8 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
+                        bean.Adresse = adresse;
                     }
                 }
                 return bean;
@@ -68,7 +70,8 @@ namespace ZK_Lymytz.DAO
                 Connexion.Close(connect);
             }
         }
-        public static Employe getOneById(int id, int societe)
+        
+        public static Employe getOneById(int id, bool full, int societe)
         {
             Employe bean = new Employe();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -81,7 +84,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -97,7 +100,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Employe getOneByNom(string nom, string prenom, int societe)
+        public static Employe getOneByNom(string nom, string prenom, bool full, int societe)
         {
             Employe bean = new Employe();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -110,7 +113,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -126,7 +129,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Employe getOneByNom(string nom_prenom, int societe)
+        public static Employe getOneByNom(string nom_prenom, bool full, int societe)
         {
             Employe bean = new Employe();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -139,7 +142,7 @@ namespace ZK_Lymytz.DAO
                 {
                     while (lect.Read())
                     {
-                        bean = Return(lect);
+                        bean = Return(lect, full);
                     }
                 }
                 return bean;
@@ -155,7 +158,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static List<Employe> getList(string query)
+        public static List<Employe> getList(string query, bool full)
         {
             List<Employe> list = new List<Employe>();
             NpgsqlConnection connect = new Connexion().Connection();
@@ -168,7 +171,7 @@ namespace ZK_Lymytz.DAO
                     List<string> noms = new List<string>();
                     while (lect.Read())
                     {
-                        Employe e = Return(lect);
+                        Employe e = Return(lect, full);
                         string nom = e.NomPrenom;
                         if (noms.Contains(nom))
                             e.Prenom += "°";

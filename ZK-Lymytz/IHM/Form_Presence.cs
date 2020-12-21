@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using ZK_Lymytz.BLL;
+using ZK_Lymytz.DAO;
 using ZK_Lymytz.IHM;
 using ZK_Lymytz.TOOLS;
 using ZK_Lymytz.ENTITE;
@@ -17,11 +18,13 @@ namespace ZK_Lymytz.IHM
 {
     public partial class Form_Presence : Form
     {
-        List<Presence> presences = new List<Presence>();
+        public List<Presence> presences = new List<Presence>();
         List<Pointage> pointages = new List<Pointage>();
         List<Employe> employes = new List<Employe>();
         Employe employe = new Employe();
         ObjectThread object_statut;
+
+        Presence presence;
 
         int position = 0;
 
@@ -32,11 +35,33 @@ namespace ZK_Lymytz.IHM
             object_statut = new ObjectThread(pbar_statut);
         }
 
+        public Presence Presence
+        {
+            get { return presence; }
+            set { presence = value; }
+        }
+
+        public Form_Presence(Presence presence)
+        {
+            InitializeComponent();
+            Configuration.Load(this);
+            object_statut = new ObjectThread(pbar_statut);
+            this.presence = presence;
+        }
+
         private void Form_Presence_Load(object sender, EventArgs e)
         {
             lnk_today.Text += " : " + DateTime.Now.ToString("dd MMM yyyy");
             LoadEmploye();
-            LoadPresence(DateTime.Now, null);
+            InitForm();
+        }
+
+        public void InitForm()
+        {
+            if (presence != null ? presence.Id > 0 : false)
+                LoadPresence(presence.DateDebut, presence.Employe);
+            else
+                LoadPresence(DateTime.Now, null);
         }
 
         private void Form_Presence_FormClosed(object sender, FormClosedEventArgs e)
@@ -84,7 +109,7 @@ namespace ZK_Lymytz.IHM
                     query = "select p.* from yvs_grh_presence p where p.employe = " + e.Id + " and p.date_debut = '" + d.ToShortDateString() + "' order by heure_debut";
                     queryCount = "select count(p.id) from yvs_grh_presence p where p.employe = " + e.Id + " and p.date_debut = '" + d.ToShortDateString() + "'";
                 }
-                presences = PresenceBLL.List(query, queryCount);
+                presences = PresenceBLL.List(query, true, queryCount, Constantes.SOCIETE.AdresseIp);
                 if (presences != null ? presences.Count > 0 : false)
                 {
                     LoadOnView(presences[0]);
@@ -106,6 +131,7 @@ namespace ZK_Lymytz.IHM
         {
             try
             {
+                string adresse = Constantes.SOCIETE.AdresseIp;
                 object_statut.SetValueBar(0);
                 Constantes.PBAR_WAIT = pbar_statut;
 
@@ -114,7 +140,7 @@ namespace ZK_Lymytz.IHM
 
                 string query = "select * from yvs_grh_pointage where presence = " + p.Id + " order by heure_entree, heure_sortie";
                 string queryCount = "select count(id) from yvs_grh_pointage where presence = " + p.Id + "";
-                pointages = PointageBLL.List(query, queryCount);
+                pointages = PointageBLL.List(query, true, queryCount, adresse);
                 for (int i = 0; i < pointages.Count; i++)
                 {
                     o.WriteDataGridView(new object[] { pointages[i].Id, i + 1, pointages[i].HeureEntree.ToShortTimeString(), pointages[i].HeureSortie.ToShortTimeString(), Utils.GetTime(pointages[i].Duree), pointages[i].Valider, pointages[i].Supplementaire });
@@ -290,7 +316,8 @@ namespace ZK_Lymytz.IHM
         {
             if (presence != null ? presence.Id > 0 : false)
             {
-                if (Connexion.RequeteLibre("delete from yvs_grh_pointage where presence = " + presence.Id))
+                string adresse = Constantes.SOCIETE.AdresseIp;
+                if (Dao.RequeteLibre("delete from yvs_grh_pointage where presence = " + presence.Id, adresse))
                 {
                     List<DateTime> times = new List<DateTime>();
                     foreach (Pointage po in presence.Pointages)
@@ -306,7 +333,7 @@ namespace ZK_Lymytz.IHM
                     presence.HeureFin = Utils.TimeStamp(presence.DateFin, presence.HeureFin);
                     foreach (DateTime current_time in times)
                     {
-                        Fonctions.OnSavePointage(presence, current_time, null);
+                        Fonctions.OnSavePointage(presence, current_time, null, 0, adresse);
                     }
                     LoadOnView(presence);
                     Messages.Succes();
@@ -322,15 +349,16 @@ namespace ZK_Lymytz.IHM
                 presence.Pointages = pointages;
                 if (presence != null ? presence.Id > 0 : false)
                 {
-                    List<Presence> list = PresenceBLL.List("select p.* from yvs_grh_presence p where p.employe = " + presence.Employe.Id + " and p.date_debut = '" + dtp_date.Value + "' order by heure_debut");
+                    string adresse = Constantes.SOCIETE.AdresseIp;
+                    List<Presence> list = PresenceBLL.List("select p.* from yvs_grh_presence p where p.employe = " + presence.Employe.Id + " and p.date_debut = '" + dtp_date.Value + "' order by heure_debut", true, adresse);
                     if (list != null ? list.Count > 1 : false)
                     {
                         foreach (Presence p in list)
                         {
                             if (p.Id != presence.Id)
                             {
-                                presence.Pointages.AddRange(PointageBLL.List("select * from yvs_grh_pointage where presence = " + p.Id));
-                                Connexion.RequeteLibre("delete from yvs_grh_presence where id = " + p.Id);
+                                presence.Pointages.AddRange(PointageBLL.List("select * from yvs_grh_pointage where presence = " + p.Id, true, adresse));
+                                Bll.RequeteLibre("delete from yvs_grh_presence where id = " + p.Id, adresse);
                                 presences.Remove(p);
                                 lb_pagination.Text = (position + 1) + "/" + presences.Count;
                                 txt_index_of.Text = (position + 1).ToString();
@@ -349,7 +377,8 @@ namespace ZK_Lymytz.IHM
                 Presence presence = presences[position];
                 if (presence != null ? presence.Id > 0 : false)
                 {
-                    if (Connexion.RequeteLibre("select reevaluer_total_presence(" + presence.Id + "::bigint)"))
+                    string adresse = Constantes.SOCIETE.AdresseIp;
+                    if (Bll.RequeteLibre("select reevaluer_total_presence(" + presence.Id + "::bigint)", adresse))
                     {
                         presence = PresenceBLL.OneById((int)presence.Id);
                         presences.RemoveAt(position);
@@ -411,7 +440,7 @@ namespace ZK_Lymytz.IHM
                             {
                                 Pointeuse y = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(id));
                                 if (y != null ? y.Id > 0 : false)
-                                    logs.InsertRange(logs.Count, Utils.FindLogsInFileTamponLogs(y.Logs, emp, true, p.DateDebut, p.DateFin));
+                                    logs.InsertRange(logs.Count, Utils.FindLogsInFileTamponLogs(y.Logs, true, emp, true, p.DateDebut, p.DateFin));
                             }
 
                             if (logs.Count > 0)
@@ -446,6 +475,14 @@ namespace ZK_Lymytz.IHM
             }
             LoadPresence(dtp_date.Value, emp);
             Utils.WriteLog("-- Synchronisation des logs de l'employe " + emp.NomPrenom + " terminée");
+        }
+
+        private void voirLesHeuresPrévuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (position > -1)
+            {
+                new Dial_View_Heure_Prevu(this, presences[position]).ShowDialog();
+            }
         }
     }
 }

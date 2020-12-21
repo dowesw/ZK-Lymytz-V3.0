@@ -23,13 +23,6 @@ namespace ZK_Lymytz.DAO
                 {
                     CreateServeur(serveur, Nkey);
                 }
-                if (Utils.Is64BitOperatingSystem())
-                {
-                    using (RegistryKey Nkey = Registry.CurrentUser)
-                    {
-                        CreateServeur(serveur, Nkey);
-                    }
-                }
             }
             catch (Exception e)
             {
@@ -72,13 +65,7 @@ namespace ZK_Lymytz.DAO
             RegistryKey Nkey = Registry.LocalMachine;
             try
             {
-                Serveur serveur = ReturnServeur(Nkey);
-                if (serveur != null ? (serveur.Adresse != null ? serveur.Adresse.Trim().Length < 1 : true) : true)
-                {
-                    Nkey = Registry.CurrentUser;
-                    serveur = ReturnServeur(Nkey);
-                }
-                return serveur;
+                return ReturnServeur(Nkey);
             }
             catch (Exception e)
             {

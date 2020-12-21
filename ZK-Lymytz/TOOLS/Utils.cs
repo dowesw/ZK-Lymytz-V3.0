@@ -17,6 +17,7 @@ using System.Security.Permissions;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Net;
+using System.Reflection;
 
 using Microsoft.Win32;
 
@@ -26,6 +27,7 @@ using ZK_Lymytz.ENTITE;
 
 using NpgsqlTypes;
 using Npgsql;
+using System.Net.Sockets;
 
 namespace ZK_Lymytz.TOOLS
 {
@@ -35,6 +37,11 @@ namespace ZK_Lymytz.TOOLS
 
         static IDictionary mySavedState = new Hashtable();
         static string[] commandLineOptions = new string[1] { "/LogFile=example.log" };
+
+        //The MachineName property gets the name of your computer.
+
+        public const int LOGON32_PROVIDER_DEFAULT = 0;
+        public const int LOGON32_LOGON_INTERACTIVE = 2;
 
         [DllImport("advapi32.dll", SetLastError = true)]
         public static extern bool LogonUser(string lpszUsername,
@@ -84,10 +91,87 @@ namespace ZK_Lymytz.TOOLS
         public static void Load()
         {
             Constantes.SOCIETE = SocieteBLL.ReturnSociete();
+            Constantes.AGENCE = AgenceBLL.ReturnAgence();
             Constantes.SETTING = SettingBLL.ReturnSetting();
             Constantes.USERS = UsersBLL.ReturnUsers();
             Constantes.PARAMETRE = ParametreBLL.OneBySociete(Constantes.SOCIETE.Id);
-            Constantes.POINTEUSES = PointeuseBLL.List("select * from yvs_pointeuse where societe = " + Constantes.SOCIETE.Id + " or multi_societe is true order by adresse_ip");
+            Constantes.POINTEUSES = PointeuseBLL.List("select * from yvs_pointeuse where (societe = " + Constantes.SOCIETE.Id + " and multi_societe IS TRUE) OR agence = " + Constantes.AGENCE.Id + " order by adresse_ip");
+            Run();
+        }
+
+        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+        public static void Run()
+        {
+            try
+            {
+                // Create a new FileSystemWatcher and set its properties.
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                string path = Constantes.SETTING.CheminSetup;
+                if (path != null ? path.Trim().Length > 0 : false)
+                {
+                    watcher.Path = path;
+                    /* Watch for changes in LastAccess and LastWrite times, and
+                       the renaming of files or directories. */
+                    watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+                       | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                    // Only watch text files.
+                    watcher.Filter = "*.exe";
+                    // Add event handlers.
+                    watcher.Changed += new FileSystemEventHandler(OnChanged);
+                    watcher.Created += new FileSystemEventHandler(OnChanged);
+                    watcher.Deleted += new FileSystemEventHandler(OnChanged);
+                    // Begin watching.
+                    watcher.EnableRaisingEvents = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Utils (Run) ", ex);
+            }
+        }
+
+        // Define the event handlers.
+        private static void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // Specify what is done when a file is changed, created, or deleted.
+            if (Constantes.FORM_PARENT != null)
+            {
+                Constantes.FORM_PARENT.miseÀJourToolStripMenuItem.Visible = Utils.NewVersion();
+                Constantes.FORM_PARENT.miseÀJourToolStripMenuItem1.Visible = Utils.NewVersion();
+            }
+        }
+
+        public static bool NewVersion()
+        {
+            //String path = Application.StartupPath + Constantes.FILE_SEPARATOR + Application.ProductName + ".EXE";
+            String path = Application.StartupPath + Constantes.FILE_SEPARATOR + "Uninstall.lnk";
+            FileInfo file = new FileInfo(path);
+            if (file.Exists)
+            {
+                path = Constantes.SETTING.CheminSetup + Constantes.FILE_SEPARATOR + Application.ProductName + ".EXE";
+                FileInfo setup = new FileInfo(path);
+                if (setup.Exists)
+                {
+                    if (file.LastWriteTime < setup.LastWriteTime)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool IsNumeric(object valeur)
+        {
+            try
+            {
+                int convert = Convert.ToInt32(valeur);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         // Cacher tous les formulaires actifs
@@ -237,23 +321,44 @@ namespace ZK_Lymytz.TOOLS
 
         public static void WriteLog(string logMessage)
         {
-            if (Constantes.FORM_PARENT != null)
+            string text = DateTime.Now.ToString() + " : " + logMessage;
+            if (Constantes.FORM_PARENT != null ? Constantes.FORM_PARENT.lv_report != null : false)
             {
-                if (Constantes.FORM_PARENT.lv_report != null)
+                ListBox lv = Constantes.FORM_PARENT.lv_report;
+                if (lv == null)
                 {
-                    ListBox lv = Constantes.FORM_PARENT.lv_report;
-                    string text = DateTime.Now.ToString() + " : ";
-                    if (lv == null)
-                    {
-                        text += "Formulaire principal fermé";
-                        Logs.WriteTxt("");
-                        return;
-                    }
-                    ObjectThread o = new ObjectThread(lv);
-                    text += logMessage;
-                    o.WriteListBox(text);
-                    Logs.WriteTxt(text);
+                    text += "Formulaire principal fermé";
+                    Logs.WriteTxt("");
+                    return;
                 }
+                ObjectThread o = new ObjectThread(lv);
+                o.WriteListBox(text);
+                Logs.WriteTxt(text);
+            }
+            else
+            {
+                Console.WriteLine(text);
+            }
+        }
+
+        public static void UpdateLog(int index, string logMessage)
+        {
+            string text = DateTime.Now.ToString() + " : " + logMessage;
+            if (Constantes.FORM_PARENT != null ? Constantes.FORM_PARENT.lv_report != null : false)
+            {
+                ListBox lv = Constantes.FORM_PARENT.lv_report;
+                if (lv == null)
+                {
+                    text += "Formulaire principal fermé";
+                    return;
+                }
+                ObjectThread o = new ObjectThread(lv);
+                o.RemoveListBox(index);
+                o.UpdateListBox(index, logMessage);
+            }
+            else
+            {
+                Console.WriteLine(text);
             }
         }
 
@@ -380,11 +485,6 @@ namespace ZK_Lymytz.TOOLS
             try
             {
                 IntPtr tokenHandle = new IntPtr(0);
-
-                //The MachineName property gets the name of your computer.
-
-                const int LOGON32_PROVIDER_DEFAULT = 0;
-                const int LOGON32_LOGON_INTERACTIVE = 2;
                 tokenHandle = IntPtr.Zero;
 
                 //Call the LogonUser function to obtain a handle to an access token.
@@ -569,7 +669,6 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-
         public static bool CheckRunningService(string name)
         {
             if (VerifyService(name))
@@ -726,6 +825,11 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
+        public static bool asString(string value)
+        {
+            return value != null ? value.Trim().Length > 0 : false;
+        }
+
         public static void addFrom(string name)
         {
             removeFrom(name);
@@ -749,7 +853,10 @@ namespace ZK_Lymytz.TOOLS
         {
             if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count > 0 : false)
             {
-                p = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p.Id);
+                if (p != null)
+                {
+                    p = (Pointeuse)Constantes.POINTEUSES.Find(x => x.Id == p.Id);
+                }
                 if (p != null ? p.Id > 0 : false)
                 {
                     if (p.Zkemkeeper != null)
@@ -994,9 +1101,16 @@ namespace ZK_Lymytz.TOOLS
         public static DateTime AddTimeInDate(DateTime date, DateTime heure)
         {
             DateTime d = date;
-            d = d.AddHours(heure.Hour);
-            d = d.AddMinutes(heure.Minute);
-            d = d.AddSeconds(heure.Second);
+            try
+            {
+                d = d.AddHours(heure.Hour);
+                d = d.AddMinutes(heure.Minute);
+                d = d.AddSeconds(heure.Second);
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
             return d;
         }
 
@@ -1040,19 +1154,26 @@ namespace ZK_Lymytz.TOOLS
 
         public static bool VerifyDateHeure(Planning p, DateTime h)
         {
-            DateTime dateD = new DateTime(p.DateDebut.Year, p.DateDebut.Month, p.DateDebut.Day, 0, 0, 0);
-            DateTime dateF = new DateTime(p.DateFin.Year, p.DateFin.Month, p.DateFin.Day, 0, 0, 0);
-            DateTime heureD = p.HeureDebut;
-            DateTime heureF = p.HeureFin;
-
-            DateTime heure_debut = new DateTime(dateD.Year, dateD.Month, dateD.Day, heureD.Hour, heureD.Minute, 0);
-            DateTime heure_fin = new DateTime(dateF.Year, dateF.Month, dateF.Day, heureF.Hour, heureF.Minute, 0);
-
-            heure_debut = Utils.RemoveTimeInDate(heure_debut, Constantes.PARAMETRE.TimeMargeAvance);
-            heure_fin = Utils.AddTimeInDate(heure_fin, Constantes.PARAMETRE.TimeMargeAvance);
-            if (heure_debut <= h && h <= heure_fin)
+            try
             {
-                return true;
+                DateTime dateD = new DateTime(p.DateDebut.Year, p.DateDebut.Month, p.DateDebut.Day, 0, 0, 0);
+                DateTime dateF = new DateTime(p.DateFin.Year, p.DateFin.Month, p.DateFin.Day, 0, 0, 0);
+                DateTime heureD = p.HeureDebut;
+                DateTime heureF = p.HeureFin;
+
+                DateTime heure_debut = new DateTime(dateD.Year, dateD.Month, dateD.Day, heureD.Hour, heureD.Minute, 0);
+                DateTime heure_fin = new DateTime(dateF.Year, dateF.Month, dateF.Day, heureF.Hour, heureF.Minute, 0);
+
+                heure_debut = Utils.RemoveTimeInDate(heure_debut, Constantes.PARAMETRE.TimeMargeAvance);
+                heure_fin = Utils.AddTimeInDate(heure_fin, Constantes.PARAMETRE.TimeMargeAvance);
+                if (heure_debut <= h && h <= heure_fin)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
             }
             return false;
         }
@@ -1087,9 +1208,152 @@ namespace ZK_Lymytz.TOOLS
 
         }
 
+        public static bool VerifyTable(string table, NpgsqlConnection connect)
+        {
+            NpgsqlCommand cmd = null;
+            NpgsqlDataReader lect = null;
+            try
+            {
+                if (connect == null)
+                {
+                    return false;
+                }
+                if (connect.State == System.Data.ConnectionState.Closed)
+                {
+                    connect.Open();
+                }
+                string query = "SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg_%' AND schemaname = 'public' AND tablename = '" + table + "'";
+                cmd = new NpgsqlCommand(query, connect);
+                lect = cmd.ExecuteReader();
+                if (lect.HasRows)
+                {
+                    while (lect.Read())
+                    {
+                        string result = lect[0] != null ? lect[0].ToString() : "";
+                        return Utils.asString(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (lect != null)
+                    lect.Dispose();
+            }
+            return false;
+        }
+
+        public static bool VerifyColumn(string table, string column, NpgsqlConnection connect)
+        {
+            NpgsqlCommand cmd = null;
+            NpgsqlDataReader lect = null;
+            try
+            {
+                if (connect == null)
+                {
+                    return false;
+                }
+                if (connect.State == System.Data.ConnectionState.Closed)
+                {
+                    connect.Open();
+                }
+                string query = "SELECT column_name FROM information_schema.columns WHERE table_name = '" + table + "' AND column_name = '" + column + "'";
+                cmd = new NpgsqlCommand(query, connect);
+                lect = cmd.ExecuteReader();
+                if (lect.HasRows)
+                {
+                    while (lect.Read())
+                    {
+                        string result = lect[0] != null ? lect[0].ToString() : "";
+                        return Utils.asString(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (lect != null)
+                    lect.Dispose();
+            }
+            return false;
+        }
+
+        public static bool VerifyTable(string table, Serveur serveur)
+        {
+            try
+            {
+                NpgsqlConnection connect = new Connexion().returnConnexion(serveur, false);
+                try
+                {
+                    return VerifyTable(table, connect);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Exception(ex);
+                }
+                finally
+                {
+                    Connexion.Close(connect);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            return false;
+        }
+
+        public static bool VerifyColumn(string table, string column, Serveur serveur)
+        {
+            try
+            {
+                NpgsqlConnection connect = new Connexion().returnConnexion(serveur, false);
+                try
+                {
+                    return VerifyColumn(table, column, connect);
+                }
+                catch (Exception ex)
+                {
+                    Utils.Exception(ex);
+                }
+                finally
+                {
+                    Connexion.Close(connect);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            return false;
+        }
+
         public static bool RequeteLibre(string query)
         {
-            return Connexion.RequeteLibre(query);
+            return RequeteLibre(query, null);
+        }
+
+        public static bool RequeteLibre(string query, string adresse)
+        {
+            try
+            {
+                return Bll.RequeteLibre(query, adresse);
+            }
+            catch (Exception ex)
+            {
+                Utils.Exception(ex);
+            }
+            return false;
         }
 
         public static List<DateTime> TimeEmployeNotSystem(long employe_, DateTime dateDebut_, DateTime dateFin_)
@@ -1220,20 +1484,37 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public static List<IOEMDevice> FindLogsInFileTamponLogs(List<IOEMDevice> temporaires, Employe e, bool date, DateTime d, DateTime f)
+        public static void CreateExecuteService()
+        {
+            String file = Chemins.cheminStartup + Constantes.FILE_SEPARATOR + "run_synchro.bat";
+            if (!File.Exists(file))
+            {
+                using (StreamWriter w = new StreamWriter(@file))
+                {
+                    w.WriteLine(Chemins.cheminStartup + Constantes.FILE_SEPARATOR + "ZK-Externe.exe");
+                    w.WriteLine("pause");
+                    w.Close();
+                }
+            }
+        }
+
+        public static List<IOEMDevice> FindLogsInFileTamponLogs(List<IOEMDevice> temporaires, bool addEmploye, Employe e, bool addDate, DateTime d, DateTime f)
         {
             bool with_time = !(d.ToShortTimeString().Equals("00:00:00:000") || d.ToShortTimeString().Equals("00:00:00") || d.ToShortTimeString().Equals("00:00") || d.ToShortTimeString().Equals("00"));
             List<IOEMDevice> logs = new List<IOEMDevice>();
-            if (e != null ? e.Id > 0 : false)
+            if (addEmploye ? (e != null ? e.Id > 0 : false) : false)
             {
-                if (date)
-                    logs = temporaires.FindAll(x => (x.idwSEnrollNumber == e.Id && (d <= (with_time ? x.CurrentDateTime : x.CurrentDate) && (with_time ? x.CurrentDateTime : x.CurrentDate) <= f)));
+                if (addDate)
+                    if (with_time)
+                        logs = temporaires.FindAll(x => (x.idwSEnrollNumber == e.Id && (d <= x.CurrentDateTime && x.CurrentDateTime <= f)));
+                    else
+                        logs = temporaires.FindAll(x => (x.idwSEnrollNumber == e.Id && (d <= x.CurrentDate && x.CurrentDate <= f)));
                 else
                     logs = temporaires.FindAll(x => x.idwSEnrollNumber == e.Id);
             }
             else
             {
-                if (date)
+                if (addDate)
                     logs = temporaires.FindAll(x => (d <= (with_time ? x.CurrentDateTime : x.CurrentDate) && (with_time ? x.CurrentDateTime : x.CurrentDate) <= f));
                 else
                     logs = temporaires;
@@ -1265,13 +1546,13 @@ namespace ZK_Lymytz.TOOLS
                     }
                     else
                     {
-                        logs = FindLogsInFileTamponLogs(temporaires, null, false, new DateTime(), new DateTime());
+                        logs = FindLogsInFileTamponLogs(temporaires, false, null, false, DateTime.Now, DateTime.Now);
                     }
                 }
             }
             else
             {
-                logs = FindLogsInFileTamponLogs(temporaires, null, false, new DateTime(), new DateTime());
+                logs = FindLogsInFileTamponLogs(temporaires, false, null, false, DateTime.Now, DateTime.Now);
             }
             return logs;
         }
@@ -1293,7 +1574,7 @@ namespace ZK_Lymytz.TOOLS
                 {
                     h = new DateTime(temp.idwYear, temp.idwMonth, temp.idwDay, temp.idwHour, temp.idwMinute, 0);
                 }
-                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(temp.pointeuse, temp.iMachineNumber, temp.idwTMachineNumber, temp.idwSEnrollNumber, temp.idwYear, temp.idwMonth, temp.idwDay, temp.idwHour, temp.idwMinute, temp.idwSecond);
+                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(temp.pointeuse, temp.iMachineNumber, temp.idwTMachineNumber, temp.idwSEnrollNumber, temp.idwInOutMode, temp.idwVerifyMode, temp.idwWorkCode, temp.idwReserved, temp.idwYear, temp.idwMonth, temp.idwDay, temp.idwHour, temp.idwMinute, temp.idwSecond);
                 if (e != null ? e.Id > 0 : false)
                 {
                     if (date)
@@ -1347,7 +1628,7 @@ namespace ZK_Lymytz.TOOLS
             }
             catch (Exception ex)
             {
-                return new DateTime();
+                return DateTime.Now;
             }
         }
 
@@ -1381,6 +1662,66 @@ namespace ZK_Lymytz.TOOLS
             {
                 return false;
             }
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            string localIP = "";
+            try
+            {
+                IPHostEntry host;
+                host = Dns.GetHostEntry(Dns.GetHostName());
+
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    localIP = ip.ToString();
+
+                    string[] temp = localIP.Split('.');
+
+                    if (ip.AddressFamily == AddressFamily.InterNetwork && temp[0] == "192")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        localIP = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
+            return localIP;
+        }
+
+        public static bool IsLocalAdress(string adresse)
+        {
+            try
+            {
+                if (!Utils.asString(adresse))
+                {
+                    return true;
+                }
+                if (adresse.Equals("127.0.0.1"))
+                {
+                    return true;
+                }
+                if (adresse.Equals("localhost"))
+                {
+                    return true;
+                }
+                string localhost = Utils.GetLocalIPAddress();
+                if (adresse.Equals(localhost))
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
+            return false;
         }
 
         public static List<string> Adresses(string[] debut, string[] fin)
@@ -1431,6 +1772,34 @@ namespace ZK_Lymytz.TOOLS
             catch (Exception ex) { return false; }
         }
 
+        public static void Copy(string outputFilePath, string inputFilePath)
+        {
+            int bufferSize = 1024 * 1024;
+            using (FileStream fileStream = new FileStream(outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+            using (FileStream fs = new FileStream(inputFilePath, FileMode.Open, FileAccess.ReadWrite))
+            {
+                fileStream.SetLength(fs.Length);
+                int bytesRead = -1;
+                byte[] bytes = new byte[bufferSize];
+
+                while ((bytesRead = fs.Read(bytes, 0, bufferSize)) > 0)
+                {
+                    fileStream.Write(bytes, 0, bytesRead);
+                }
+            }
+        }
+
+        public static long MilliSeconds(int day, int hour, int min, int sec)
+        {
+            int mDay = day * 24 * 60 * 60 * 1000;
+            int mHour = hour * 60 * 60 * 1000;
+            int mMin = min * 60 * 1000;
+            int mSec = sec * 1000;
+            long _milli = mDay + mHour + mMin + mSec;
+
+            return _milli;
+        }
+
         public static string SearchforCom()//modify by Dowes on Fev.14 2017
         {
             string sComValue;
@@ -1465,6 +1834,70 @@ namespace ZK_Lymytz.TOOLS
                 }
             }
             return null;//modify by Dowes on Fev.14 2017
+        }
+
+        public static Form GetForm(string fullname)
+        {
+            //Ex Fullname : Scolaris.IHM.Form_Dictionnaire
+            if (fullname != null ? fullname.Trim().Length > 0 : false)
+            {
+                Form form = (Form)Assembly.GetExecutingAssembly().CreateInstance(fullname);
+                return form;
+            }
+            return null;
+        }
+
+        public static void WriteStatut(int position)
+        {
+            WriteStatut(position, false);
+        }
+
+        public static void WriteStatut(int position, bool wait)
+        {
+            if (Constantes.FORM_START == null)
+            {
+                Constantes.FORM_START = new Form_Start();
+                Constantes.OBJECT_START = new ObjectThread(Constantes.FORM_START);
+                Constantes.OBJECT_START.Show();
+            }
+            Constantes.FORM_START.Write(position, wait);
+        }
+
+        public static int hashCode(Object o)
+        {
+            return (o == null) ? 0 : o.GetHashCode();
+        }
+
+        public static string getMessageException(Exception ex)
+        {
+            StackTrace st = new StackTrace(ex, true);
+            //Get the first stack frame
+            StackFrame frame = st.GetFrame(0);
+            //Get the file name
+            string fileName = frame.GetFileName();
+            //Get the method name
+            string methodName = frame.GetMethod().Name;
+            //Get the line number from the stack frame
+            int line = frame.GetFileLineNumber();
+            //Get the column number
+            int col = frame.GetFileColumnNumber();
+
+            string message = ex.Message + ". Class = " + fileName + ", Methode = " + methodName + " (ligne : " + line + ", colonne : " + col + ")";
+
+            return message;
+        }
+
+        public static void Exception(Exception ex)
+        {
+            if (Constantes.DEBUG)
+            {
+                Utils.Exception(ex);
+            }
+            else
+            {
+                string message = Utils.getMessageException(ex);
+                Utils.WriteLog(message);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ZK_Lymytz.ENTITE
 {
+    [Serializable]
     public class Users
     {
         private int id;
@@ -20,10 +21,24 @@ namespace ZK_Lymytz.ENTITE
             set { code = value; }
         }
 
+        private string nom_users;
+        public string NomUsers
+        {
+            get { return nom_users; }
+            set { nom_users = value; }
+        }
+
+        private string password;
+        public string Password
+        {
+            get { return password != null ? password : ""; }
+            set { password = value; }
+        }
+
         private string name;
         public string Name
         {
-            get { return name; }
+            get { return name != null ? name : ""; }
             set { name = value; }
         }
 
@@ -76,11 +91,25 @@ namespace ZK_Lymytz.ENTITE
             set { actif = value; }
         }
 
-        private bool acces_pointeuse;
-        public bool AccesPointeuse
+        private bool acces_multi_agence;
+        public bool AccesMultiAgence
         {
-            get { return acces_pointeuse; }
-            set { acces_pointeuse = value; }
+            get { return acces_multi_agence; }
+            set { acces_multi_agence = value; }
+        }
+
+        private bool acces_multi_societe;
+        public bool AccesMultiSociete
+        {
+            get { return acces_multi_societe; }
+            set { acces_multi_societe = value; }
+        }
+
+        private bool super_admin;
+        public bool SuperAdmin
+        {
+            get { return super_admin; }
+            set { super_admin = value; }
         }
 
         private string alea_mdp;
@@ -88,6 +117,20 @@ namespace ZK_Lymytz.ENTITE
         {
             get { return alea_mdp; }
             set { alea_mdp = value; }
+        }
+
+        private int author;
+        public int Author
+        {
+            get { return author; }
+            set { author = value; }
+        }
+
+        private Agence agence = new Agence();
+        public Agence Agence
+        {
+            get { return agence; }
+            set { agence = value; }
         }
 
         public string Username
@@ -108,9 +151,14 @@ namespace ZK_Lymytz.ENTITE
                 TOOLS.Messages.ShowErreur("Users Incorrect!");
                 return false;
             }
-            if (bean.name == null || bean.name.Trim().Equals(""))
+            if (bean.code == null || bean.code.Trim().Equals(""))
             {
-                TOOLS.Messages.ShowErreur("Le nom de l'utilisateur ne peut pas être null!");
+                TOOLS.Messages.ShowErreur("L'identifiant de l'utilisateur ne peut pas être null!");
+                return false;
+            }
+            if (bean.password == null || bean.password.Trim().Equals(""))
+            {
+                TOOLS.Messages.ShowErreur("Le mot de passe de l'utilisateur ne peut pas être null!");
                 return false;
             }
             return true;

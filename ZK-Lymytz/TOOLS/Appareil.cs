@@ -24,8 +24,8 @@ namespace ZK_Lymytz.TOOLS
         public Finger _FINGER = new Finger();
         public Presence _PRESENCE = new Presence();
         public Planning _PLANNING = new Planning();
-        public DateTime _CURRENT_DATE = new DateTime();
-        public DateTime _CURRENT_TIME = new DateTime();
+        public DateTime _CURRENT_DATE = DateTime.Now;
+        public DateTime _CURRENT_TIME = DateTime.Now;
 
         public int _FINGER_IN = 3;
         public int _FINGER_ID = -1;
@@ -172,6 +172,7 @@ namespace ZK_Lymytz.TOOLS
         {
             return axCZKEM.ReadAllUserID(iMachineNumber);
         }
+
         public bool ConnectNet()
         {
             if (_POINTEUSE != null ? _POINTEUSE.Ip != null : false)
@@ -321,6 +322,21 @@ namespace ZK_Lymytz.TOOLS
             return axCZKEM.GetUserTmpExStr(ImachineNumbre, id, iDfinger, out flag, out sTmpData, out longTmp);
         }
 
+        public bool SSR_GetAllUserInfo(int dwMachineNumber, out string dwEnrollNumber, out string iName, out string iPassword, out int iPrivilege, out bool iEnabled)
+        {
+            return axCZKEM.SSR_GetAllUserInfo(dwMachineNumber, out dwEnrollNumber, out iName, out iPassword, out iPrivilege, out iEnabled);
+        }
+
+        public bool SSR_SetUserInfo(int ImachineNumbre, int id, string names, string password, int privilege, bool bEnable)
+        {
+            return axCZKEM.SSR_SetUserInfo(ImachineNumbre, id.ToString(), names, password, privilege, bEnable);
+        }
+
+        public bool SSR_DelUserTmp(int iMachineNumber, string id, int fingerID)
+        {
+            return axCZKEM.SSR_DelUserTmp(iMachineNumber, id, fingerID);
+        }
+
         public bool SSR_DelUserTmpExt(int iMachineNumber, string id, int fingerID)
         {
             return axCZKEM.SSR_DelUserTmpExt(iMachineNumber, id, fingerID);
@@ -331,9 +347,19 @@ namespace ZK_Lymytz.TOOLS
             return axCZKEM.DelUserTmp(ImachineNumbre, id, fingerID);
         }
 
+        public bool DelUserFace(int ImachineNumbre, string id, int dwFaceIndex)
+        {
+            return axCZKEM.DelUserFace(ImachineNumbre, id, dwFaceIndex);
+        }
+
         public bool DeleteUserInfoEx(int ImachineNumbre, int id)
         {
             return axCZKEM.DeleteUserInfoEx(ImachineNumbre, id);
+        }
+
+        public bool DeleteEnrollData(int ImachineNumbre, int id, int iBackupNumber)
+        {
+            return axCZKEM.SSR_DeleteEnrollData(ImachineNumbre, id.ToString(), iBackupNumber);
         }
 
         public bool Restart(int iMachineNumber)
@@ -443,7 +469,12 @@ namespace ZK_Lymytz.TOOLS
 
         public List<IOEMDevice> GetAllAttentdData(int iMachineNumber, bool bIsConnected)
         {
-            return GetAllAttentdData(iMachineNumber, bIsConnected, null, false, new DateTime(), new DateTime());
+            return GetAllAttentdData(iMachineNumber, bIsConnected, null, false, DateTime.Now, DateTime.Now);
+        }
+
+        public List<IOEMDevice> SSR_GetAllAttentdData(int iMachineNumber, bool bIsConnected)
+        {
+            return SSR_GetAllAttentdData(iMachineNumber, bIsConnected, null, false, DateTime.Now, DateTime.Now);
         }
 
         public List<IOEMDevice> GetAllAttentdData(int iMachineNumber, bool bIsConnected, Employe e, bool date, DateTime d, DateTime f)
@@ -471,7 +502,7 @@ namespace ZK_Lymytz.TOOLS
                         int idwVerifyMode = 0;
                         int idwInOutMode = 0;
                         int idwWorkCode = 0;
-                        int idwReserved = 0;
+                        int idwReserved = 0; 
                         int idwYear = 0;
                         int idwMonth = 0;
                         int idwDay = 0;
@@ -488,7 +519,7 @@ namespace ZK_Lymytz.TOOLS
                             }
                             if (h > Convert.ToDateTime("31/05/2016 17:59:59"))
                             {
-                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwInOutMode, idwVerifyMode, idwWorkCode, idwReserved, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
                                 if (e != null ? e.Id > 0 : false)
                                 {
                                     if (date)
@@ -501,6 +532,98 @@ namespace ZK_Lymytz.TOOLS
                                     else
                                     {
                                         if (idwEnrollNumber == e.Id)
+                                        {
+                                            trans.Add(iO);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (date)
+                                    {
+                                        if (d <= h && h <= f)
+                                        {
+                                            trans.Add(iO);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        trans.Add(iO);
+                                    } 
+                                }
+                                Constantes.LoadPatience(false);
+                            }
+                        }
+                    }
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    c = Cursors.Default;
+                    axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
+                }
+                return trans;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllAttentdData) ", ex);
+                return null;
+            }
+        }
+
+        public List<IOEMDevice> SSR_GetAllAttentdData(int iMachineNumber, bool bIsConnected, Employe e, bool date, DateTime d, DateTime f)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<IOEMDevice>();
+                }
+                string hd = d.ToShortTimeString();
+                string hf = f.ToShortTimeString();
+                bool heure_ = !(hd.Equals("00:00:00:000") || hd.Equals("00:00:00") || hd.Equals("00:00") || hd.Equals("00") || hf.Equals("00:00:00:000") || hf.Equals("00:00:00") || hf.Equals("00:00") || hf.Equals("00"));
+
+                List<IOEMDevice> trans = new List<IOEMDevice>();
+                if (axCZKEM.RegEvent(iMachineNumber, 65535))
+                {
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
+                    if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
+                    {
+                        int idwTMachineNumber = 0;
+                        string idwEnrollNumber = "";
+                        int idwVerifyMode = 0;
+                        int idwInOutMode = 0;
+                        int idwWorkCode = 0;
+                        int idwReserved = 0;
+                        int idwYear = 0;
+                        int idwMonth = 0;
+                        int idwDay = 0;
+                        int idwHour = 0;
+                        int idwMinute = 0; 
+                        int idwSecond = 0;
+
+                        while (axCZKEM.SSR_GetGeneralLogData(iMachineNumber, out idwEnrollNumber, out idwVerifyMode, out idwInOutMode,
+                                 out idwYear, out idwMonth, out idwDay, out idwHour, out idwMinute, out idwSecond, ref idwWorkCode))//get records from the memory
+                        {
+                            DateTime h = new DateTime(idwYear, idwMonth, idwDay, 0, 0, 0);
+                            if (heure_)
+                            {
+                                h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, 0);
+                            }
+                            if (h > Convert.ToDateTime("31/05/2016 17:59:59"))
+                            {
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, Convert.ToInt16(idwEnrollNumber), idwInOutMode, idwVerifyMode, idwWorkCode, idwReserved, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                if (e != null ? e.Id > 0 : false)
+                                {
+                                    if (date)
+                                    {
+                                        if (idwEnrollNumber == e.Id.ToString() && (d <= h && h <= f))
+                                        {
+                                            trans.Add(iO);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (idwEnrollNumber == e.Id.ToString())
                                         {
                                             trans.Add(iO);
                                         }
@@ -575,7 +698,7 @@ namespace ZK_Lymytz.TOOLS
                             if (h > _d_)
                             {
                                 bool deja = false;
-                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, idwEnrollNumber, idwInOutMode, idwVerifyMode, idwWorkCode, idwReserved, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
                                 DateTime _h = new DateTime(h.Year, h.Month, h.Day, 0, 0, 0);
                                 foreach (Employe e in le)
                                 {
@@ -626,7 +749,96 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public List<Empreinte> GetAllTemplate(int iMachineNumber, bool bIsConnected)
+        public List<IOEMDevice> SSR_GetAllAttentdData(int iMachineNumber, bool bIsConnected, List<Employe> le, DateTime[] dates)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<IOEMDevice>();
+                }
+
+                List<IOEMDevice> trans = new List<IOEMDevice>();
+                if (axCZKEM.RegEvent(iMachineNumber, 65535))
+                {
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);//disable the device
+                    if (axCZKEM.ReadGeneralLogData(iMachineNumber)) //read the logs from the memory.(the same as axCZKEM.ReadAllGLogData(iMachineNumber))
+                    {
+                        int idwTMachineNumber = 0;
+                        string idwEnrollNumber = "";
+                        int idwVerifyMode = 0;
+                        int idwInOutMode = 0;
+                        int idwWorkCode = 0;
+                        int idwReserved = 0;
+                        int idwYear = 0;
+                        int idwMonth = 0;
+                        int idwDay = 0;
+                        int idwHour = 0;
+                        int idwMinute = 0;
+                        int idwSecond = 0;
+                        while (axCZKEM.SSR_GetGeneralLogData(iMachineNumber, out idwEnrollNumber, out idwVerifyMode, out idwInOutMode,
+                                 out idwYear, out idwMonth, out idwDay, out idwHour, out idwMinute, out idwSecond, ref idwWorkCode))//get records from the memory
+                        {
+
+                            DateTime h = new DateTime(idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                            DateTime _d_ = Convert.ToDateTime("31/05/2016 17:59:59");
+                            if (h > _d_)
+                            {
+                                bool deja = false;
+                                ENTITE.IOEMDevice iO = new ENTITE.IOEMDevice(_POINTEUSE, iMachineNumber, idwTMachineNumber, Convert.ToInt16(idwEnrollNumber), idwInOutMode, idwVerifyMode, idwWorkCode,idwReserved, idwYear, idwMonth, idwDay, idwHour, idwMinute, idwSecond);
+                                DateTime _h = new DateTime(h.Year, h.Month, h.Day, 0, 0, 0);
+                                foreach (Employe e in le)
+                                {
+                                    if (e != null ? e.Id > 0 : false)
+                                    {
+                                        if (idwEnrollNumber == e.Id.ToString())
+                                        {
+                                            deja = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (!deja)
+                                {
+                                    foreach (DateTime d in dates)
+                                    {
+                                        DateTime _d = new DateTime(d.Year, d.Month, d.Day, 0, 0, 0);
+                                        if (_d == _h)
+                                        {
+                                            deja = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!deja)
+                                {
+                                    Employe e = EmployeBLL.OneById(iO.idwSEnrollNumber, Constantes.SOCIETE.Id);
+                                    if (e != null ? e.Id > 0 : false)
+                                    {
+                                        trans.Add(iO);
+                                    }
+                                }
+                                Constantes.LoadPatience(false);
+                            }
+                        }
+                    }
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    c = Cursors.Default;
+                    axCZKEM.EnableDevice(iMachineNumber, true);//disable the device
+                }
+                return trans;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (GetAllAttentdDataEx) ", ex);
+                return null;
+            }
+        }
+
+        public List<Empreinte> GetAllTemplate(int iMachineNumber, bool bIsConnected, bool isExist)
         {
             try
             {
@@ -661,16 +873,28 @@ namespace ZK_Lymytz.TOOLS
                         int iFlag = 0;
                         if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
                         {
-                            ++i;
-                            Empreinte e = new Empreinte();
-                            e.Id = i;
-                            e.Employe = new Employe(idwEnrollNumber, sName);
-                            e.Digital = idwFigerIndex;
-                            e.STemplate = sTmpData;
-                            e.Privilege = iPrivilege;
-                            e.Longueur = iTmpLength;
-                            e.Flag = iFlag;
-                            l.Add(e);
+                            bool add = !isExist;
+                            if (isExist)
+                            {
+                                Empreinte y = EmpreinteBLL.OneByEmployeFinger(Convert.ToInt16(idwEnrollNumber), idwFigerIndex);
+                                if (y != null ? y.Id < 1 : true)
+                                {
+                                    add = true;
+                                }
+                            }
+                            if (add)
+                            {
+                                ++i;
+                                Empreinte e = new Empreinte();
+                                e.Id = i;
+                                e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                                e.Digital = idwFigerIndex;
+                                e.STemplate = sTmpData;
+                                e.Privilege = iPrivilege;
+                                e.Longueur = iTmpLength;
+                                e.Flag = iFlag;
+                                l.Add(e);
+                            }
                         }
                         Constantes.LoadPatience(false);
                     }
@@ -687,7 +911,7 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
-        public List<Empreinte> GetAllTemplate(int iMachineNumber, int idEmploye, bool bIsConnected)
+        public List<Empreinte> GetAllTemplate(int iMachineNumber, int idEmploye, bool bIsConnected, bool isExist)
         {
             try
             {
@@ -724,16 +948,28 @@ namespace ZK_Lymytz.TOOLS
                             int iFlag = 0;
                             if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
                             {
-                                ++i;
-                                Empreinte e = new Empreinte();
-                                e.Id = i;
-                                e.Employe = new Employe(idwEnrollNumber, sName);
-                                e.Digital = idwFigerIndex;
-                                e.STemplate = sTmpData;
-                                e.Privilege = iPrivilege;
-                                e.Longueur = iTmpLength;
-                                e.Flag = iFlag;
-                                l.Add(e);
+                                bool add = !isExist;
+                                if (isExist)
+                                {
+                                    Empreinte y = EmpreinteBLL.OneByEmployeFinger(Convert.ToInt16(idwEnrollNumber), idwFigerIndex);
+                                    if (y != null ? y.Id < 1 : true)
+                                    {
+                                        add = true;
+                                    }
+                                }
+                                if (add)
+                                {
+                                    ++i;
+                                    Empreinte e = new Empreinte();
+                                    e.Id = i;
+                                    e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                                    e.Digital = idwFigerIndex;
+                                    e.STemplate = sTmpData;
+                                    e.Privilege = iPrivilege;
+                                    e.Longueur = iTmpLength;
+                                    e.Flag = iFlag;
+                                    l.Add(e);
+                                }
                             }
                             Constantes.LoadPatience(false);
                         }
@@ -751,7 +987,371 @@ namespace ZK_Lymytz.TOOLS
             }
         }
 
+        public List<Empreinte> SSR_GetAllTemplate(int iMachineNumber, int idEmploye, bool bIsConnected, bool isExist)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
+                }
+
+                List<Empreinte> l = new List<Empreinte>();
+                string idwEnrollNumber = "";
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int idwFigerIndex;
+                string sTmpData = "";
+                int iTmpLength = 0;
+
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
+
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
+
+                while (axCZKEM.SSR_GetAllUserInfo(iMachineNumber, out idwEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
+                {
+                    if (idwEnrollNumber == idEmploye.ToString())
+                    {
+                        for (idwFigerIndex = 0; idwFigerIndex < 10; idwFigerIndex++)
+                        {
+                            int iFlag = 0;
+                            if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
+                            {
+                                bool add = !isExist;
+                                if (isExist)
+                                {
+                                    Empreinte y = EmpreinteBLL.OneByEmployeFinger(Convert.ToInt16(idwEnrollNumber), idwFigerIndex);
+                                    if (y != null ? y.Id < 1 : true)
+                                    {
+                                        add = true;
+                                    }
+                                }
+                                if (add)
+                                {
+                                    ++i;
+                                    Empreinte e = new Empreinte();
+                                    e.Id = i;
+                                    e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                                    e.Digital = idwFigerIndex;
+                                    e.STemplate = sTmpData;
+                                    e.Privilege = iPrivilege;
+                                    e.Longueur = iTmpLength;
+                                    e.Flag = iFlag;
+                                    l.Add(e);
+                                }
+                            }
+                            Constantes.LoadPatience(false);
+                        }
+                    }
+                }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (SSR_GetAllTemplate) ", ex);
+                return null;
+            }
+        }
+
+        public List<Empreinte> SSR_GetAllTemplate(int iMachineNumber, bool bIsConnected, bool isExist)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
+                }
+
+                List<Empreinte> l = new List<Empreinte>();
+                string idwEnrollNumber = "";
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int idwFigerIndex;
+                string sTmpData = "";
+                int iTmpLength = 0;
+
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
+
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
+
+                while (axCZKEM.SSR_GetAllUserInfo(iMachineNumber, out idwEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
+                {
+                    for (idwFigerIndex = 0; idwFigerIndex < 10; idwFigerIndex++)
+                    {
+                        int iFlag = 0;
+                        if (axCZKEM.GetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFigerIndex, out iFlag, out sTmpData, out iTmpLength))//get the corresponding templates string and length from the memory
+                        {
+                            bool add = !isExist;
+                            if (isExist)
+                            {
+                                Empreinte y = EmpreinteBLL.OneByEmployeFinger(Convert.ToInt16(idwEnrollNumber), idwFigerIndex);
+                                if (y != null ? y.Id < 1 : true)
+                                {
+                                    add = true;
+                                }
+                            }
+                            if (add)
+                            {
+                                ++i;
+                                Empreinte e = new Empreinte();
+                                e.Id = i;
+                                e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                                e.Digital = idwFigerIndex;
+                                e.STemplate = sTmpData;
+                                e.Privilege = iPrivilege;
+                                e.Longueur = iTmpLength;
+                                e.Flag = iFlag;
+                                l.Add(e);
+                            }
+                        }
+                        Constantes.LoadPatience(false);
+                    }
+                }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (SSR_GetAllTemplate) ", ex);
+                return null;
+            }
+        }
+
+        public List<Empreinte> SSR_GetAllFaceTemplate(int iMachineNumber, bool bIsConnected, bool isExist)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
+                }
+
+                List<Empreinte> l = new List<Empreinte>();
+                string idwEnrollNumber = "";
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int iFaceIndex = 50;
+                string sTmpData = "";
+                int iTmpLength = 0;
+
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
+
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
+
+                while (axCZKEM.SSR_GetAllUserInfo(iMachineNumber, out idwEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
+                {
+                    if (axCZKEM.GetUserFaceStr(iMachineNumber, idwEnrollNumber.ToString(), iFaceIndex, ref sTmpData, ref iTmpLength))//get the corresponding templates string and length from the memory
+                    {
+                        bool add = !isExist;
+                        if (isExist)
+                        {
+                            Empreinte y = EmpreinteBLL.OneByEmployeFacial(Convert.ToInt16(idwEnrollNumber), iFaceIndex);
+                            if (y != null ? y.Id < 1 : true)
+                            {
+                                add = true;
+                            }
+                        }
+                        if (add)
+                        {
+                            ++i;
+                            Empreinte e = new Empreinte();
+                            e.Id = i;
+                            e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                            e.Facial = iFaceIndex;
+                            e.STemplate = sTmpData;
+                            e.Privilege = iPrivilege;
+                            e.Longueur = iTmpLength;
+                            l.Add(e);
+                        }
+                    }
+                    Constantes.LoadPatience(false);
+                }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (SSR_GetAllFaceTemplate) ", ex);
+                return null;
+            }
+        }
+
+        public List<Empreinte> SSR_GetAllFaceTemplate(int iMachineNumber, int idEmploye, bool bIsConnected, bool isExist)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return new List<Empreinte>();
+                }
+
+                List<Empreinte> l = new List<Empreinte>();
+                string idwEnrollNumber = "";
+                string sName = "";
+                string sPassword = "";
+                int iPrivilege = 0;
+                bool bEnabled = false;
+                int iFaceIndex = 50;
+                string sTmpData = "";
+                int iTmpLength = 0;
+
+                axCZKEM.EnableDevice(iMachineNumber, false);
+                Cursor c = Cursors.WaitCursor;
+
+                axCZKEM.BeginBatchUpdate(iMachineNumber, 1);//create memory space for batching data
+                axCZKEM.ReadAllUserID(iMachineNumber);//read all the user information to the memory
+                axCZKEM.ReadAllTemplate(iMachineNumber);//read all the users' fingerprint templates to the memory
+                int i = 0;
+
+                while (axCZKEM.SSR_GetAllUserInfo(iMachineNumber, out idwEnrollNumber, out sName, out sPassword, out iPrivilege, out bEnabled))//get all the users' information from the memory
+                {
+                    if (idwEnrollNumber == idEmploye.ToString())
+                    {
+                        if (axCZKEM.GetUserFaceStr(iMachineNumber, idwEnrollNumber.ToString(), iFaceIndex, ref sTmpData, ref iTmpLength))//get the corresponding templates string and length from the memory
+                        {
+                            bool add = !isExist;
+                            if (isExist)
+                            {
+                                Empreinte y = EmpreinteBLL.OneByEmployeFacial(Convert.ToInt16(idwEnrollNumber), iFaceIndex);
+                                if (y != null ? y.Id < 1 : true)
+                                {
+                                    add = true;
+                                }
+                            }
+                            if (add)
+                            {
+                                ++i;
+                                Empreinte e = new Empreinte();
+                                e.Id = i;
+                                e.Employe = new Employe(Convert.ToInt16(idwEnrollNumber), sName);
+                                e.Facial = iFaceIndex;
+                                e.STemplate = sTmpData;
+                                e.Privilege = iPrivilege;
+                                e.Longueur = iTmpLength;
+                                l.Add(e);
+                            }
+                        }
+                        Constantes.LoadPatience(false);
+                    }
+                }
+                axCZKEM.BatchUpdate(iMachineNumber);//download all the information in the memory
+                axCZKEM.EnableDevice(iMachineNumber, true);
+                c = Cursors.Default;
+                return l;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Appareil (SSR_GetAllFaceTemplate) ", ex);
+                return null;
+            }
+        }
+
         public int SetAllTemplate(List<Empreinte> l, int iMachineNumber, bool bIsConnected)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return 0;
+                }
+                int i = 0;
+                if (l.Count > 0)
+                {
+                    ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
+                    o.UpdateMaxBar(Constantes.PBAR_WAIT.Maximum + l.Count);
+
+                    int idwEnrollNumber = 0;
+                    string sName = "";
+                    int idwFingerIndex = 0;
+                    string sTmpData = "";
+                    int iPrivilege = 0;
+                    string sPassword = null;
+                    int longueur = 0;
+                    bool bEnabled = true;
+                    int iFlag = 0;
+
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    axCZKEM.ReadAllTemplate(iMachineNumber);//read template in devise
+                    foreach (Empreinte e in l)
+                    {
+                        idwEnrollNumber = (int)(e.Employe != null ? e.Employe.Id : 0);
+                        sName = (e.Employe != null ? e.Employe.NomPrenom : "");
+                        idwFingerIndex = e.Digital;
+                        sTmpData = e.STemplate;
+                        iPrivilege = e.Privilege;
+                        longueur = e.Longueur;
+                        iFlag = e.Flag;
+                        if (sTmpData != null ? sTmpData.Trim() != "" : false)
+                        {
+                            if (axCZKEM.SetUserInfo(iMachineNumber, idwEnrollNumber, sName, sPassword, iPrivilege, bEnabled))//upload user information to the memory
+                            {
+                                if (axCZKEM.SetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFingerIndex, iFlag, sTmpData))//upload tempates information to the memory
+                                {
+                                    Finger d = (Finger)Finger.Get(idwFingerIndex);
+                                    Utils.WriteLog("---- Ajout de l'empreinte de l'employé " + sName + " du doigt (" + d.Doigt + ") de la main (" + d.Main + ") effectue!");
+                                    ++i;
+                                }
+                                else
+                                {
+                                    Utils.WriteLog("---- Ajout de l'empreinte de l'employé " + sName + " echoué!");
+                                }
+                            }
+                            else
+                            {
+                                Utils.WriteLog("---- Ajout de l'employé " + sName + " echoue!");
+                            }
+                        }
+                        Constantes.LoadPatience(false);
+                    }
+                    c = Cursors.Default;
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (SetAllTemplate) ", ex);
+                return 0;
+            }
+            finally
+            {
+                axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                axCZKEM.EnableDevice(iMachineNumber, true);
+            }
+        }
+
+        public int SSR_SetAllTemplate(List<Empreinte> l, int iMachineNumber, bool bIsConnected)
         {
             try
             {
@@ -791,12 +1391,91 @@ namespace ZK_Lymytz.TOOLS
                         iFlag = e.Flag;
                         if (sTmpData != null ? sTmpData.Trim() != "" : false)
                         {
-                            if (axCZKEM.SetUserInfo(iMachineNumber, idwEnrollNumber, sName, sPassword, iPrivilege, bEnabled))//upload user information to the memory
+                            if (axCZKEM.SSR_SetUserInfo(iMachineNumber, idwEnrollNumber.ToString(), sName, sPassword, iPrivilege, bEnabled))//upload user information to the memory
                             {
                                 if (axCZKEM.SetUserTmpExStr(iMachineNumber, idwEnrollNumber.ToString(), idwFingerIndex, iFlag, sTmpData))//upload tempates information to the memory
                                 {
                                     Finger d = (Finger)Finger.Get(idwFingerIndex);
                                     Utils.WriteLog("---- Ajout de l'empreinte de l'employé " + sName + " du doigt (" + d.Doigt + ") de la main (" + d.Main + ") effectue!");
+                                    ++i;
+                                }
+                                else
+                                {
+                                    Utils.WriteLog("---- Ajout de l'empreinte de l'employé " + sName + " echoué!");
+                                }
+                            }
+                            else
+                            {
+                                Utils.WriteLog("---- Ajout de l'employé " + sName + " echoue!");
+                            }
+                        }
+                        Constantes.LoadPatience(false);
+                    }
+                    c = Cursors.Default;
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Zkemkeeper (SetAllTemplate) ", ex);
+                return 0;
+            }
+            finally
+            {
+                axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                axCZKEM.EnableDevice(iMachineNumber, true);
+            }
+        }
+
+        public int SSR_SetAllFaceTemplate(List<Empreinte> l, int iMachineNumber, bool bIsConnected)
+        {
+            try
+            {
+                if (bIsConnected == false)
+                {
+                    Messages.ShowErreur("Please connect the device first!");
+                    return 0;
+                }
+                int i = 0;
+                if (l.Count > 0)
+                {
+                    ObjectThread o = new ObjectThread(Constantes.PBAR_WAIT);
+                    o.UpdateMaxBar(Constantes.PBAR_WAIT.Maximum + l.Count);
+
+                    int idwEnrollNumber = 0;
+                    string sName = "";
+                    int iFaceIndex = 0;
+                    string sTmpData = "";
+                    int iPrivilege = 0;
+                    string sPassword = null;
+                    int iLength = 0;
+                    bool bEnabled = true;
+
+                    Cursor c = Cursors.WaitCursor;
+                    axCZKEM.EnableDevice(iMachineNumber, false);
+                    axCZKEM.RefreshData(iMachineNumber);//the data in the device should be refreshed
+                    axCZKEM.ReadAllTemplate(iMachineNumber);//read template in devise
+                    foreach (Empreinte e in l)
+                    {
+                        idwEnrollNumber = (int)(e.Employe != null ? e.Employe.Id : 0);
+                        iFaceIndex = e.Facial;
+                        sTmpData = e.STemplate;
+                        iLength = e.Longueur;
+                        if (sTmpData != null ? sTmpData.Trim() != "" : false)
+                        {
+                            bool continu = axCZKEM.SSR_GetUserInfo(iMachineNumber, idwEnrollNumber.ToString(), out sName, out sPassword, out iPrivilege, out bEnabled);
+                            if (!continu || (sName != null ? sName.Trim().Length < 1 : true))
+                            {
+                                sName = (e.Employe != null ? e.Employe.Nom : "");
+                                iPrivilege = e.Privilege;
+                                bEnabled = true;
+                                continu = axCZKEM.SSR_SetUserInfo(iMachineNumber, idwEnrollNumber.ToString(), sName, sPassword, iPrivilege, bEnabled);//upload user information to the memory
+                            }
+                            if (continu)
+                            {
+                                if (axCZKEM.SetUserFaceStr(iMachineNumber, idwEnrollNumber.ToString(), iFaceIndex, sTmpData, iLength))//upload tempates information to the memory
+                                {
+                                    Utils.WriteLog("---- Ajout de l'empreinte faciale de l'employé " + sName + " effectue!");
                                     ++i;
                                 }
                                 else
@@ -1095,6 +1774,11 @@ namespace ZK_Lymytz.TOOLS
         //If your fingerprint(or your card) passes the verification,this event will be triggered
         private void axCZKEM1_OnAttTransactionEx(string sEnrollNumber, int iIsInValid, int iAttState, int iVerifyMethod, int iYear, int iMonth, int iDay, int iHour, int iMinute, int iSecond, int iWorkCode)
         {
+            if (_EMPLOYE != null ? _EMPLOYE.Id < 1 : true)
+            {
+                _EMPLOYE = EmployeBLL.OneById(Convert.ToInt32(sEnrollNumber));
+            }
+            // iAttState  ----  0—Check-In (default value) 1—Check-Out 2—Break-Out 3—Break-In 4—OT-In 5—OT-Out
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {
                 Cursor c;
@@ -1103,7 +1787,8 @@ namespace ZK_Lymytz.TOOLS
                 Utils.WriteLog("... pour la date : " + iYear.ToString() + "-" + iMonth.ToString() + "-" + iDay.ToString() + " " + iHour.ToString() + ":" + iMinute.ToString() + ":" + iSecond.ToString());
                 DateTime current_time = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
                 DateTime current_date = new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);
-                if (Fonctions.OnSavePointage(_EMPLOYE, current_time, current_date, _POINTEUSE))
+                string adresse = Constantes.SOCIETE.AdresseIp;
+                if (Fonctions.OnSavePointage(_EMPLOYE, current_time, current_date, _POINTEUSE, iAttState, adresse))
                 {
                     c = Cursors.WaitCursor;
                     Utils.WriteLog("Pointage enregistré avec succes...");
@@ -1123,26 +1808,29 @@ namespace ZK_Lymytz.TOOLS
                     iO.idwSecond = iSecond;
                     Logs.WriteCsv((IOEMDevice)iO);
 
-                    ClearLCD(true);
-                    if (_PLANNING.Valide)
+                    if (_POINTEUSE.Type.Equals(Constantes.TYPE_TFT))
                     {
-                        WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
-                        WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                        ClearLCD(true);
+                        if (_PLANNING.Valide)
+                        {
+                            WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
+                            WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                        }
+                        else
+                        {
+                            WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
+                            WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
+                            WriteLCD(true, 2, 0, "Vous n'êtes pas programmé");
+                        }
+                        Fonctions.DefaultLCD(true);
                     }
-                    else
-                    {
-                        WriteLCD(true, 0, 4, iHour > 13 ? "Bonsoir" : "Bonjour");
-                        WriteLCD(true, 1, 0, _EMPLOYE.Nom + " " + _EMPLOYE.Prenom);
-                        WriteLCD(true, 2, 0, "Vous n'êtes pas programmé");
-                    }
-                    Fonctions.DefaultLCD(true);
                 }
                 c = Cursors.Default;
             }
         }
 
         //When you have enrolled your finger,this event will be triggered and return the quality of the fingerprint you have enrolled
-        public void axCZKEM1_OnFingerFeature(int iScore)
+        public void axCZKEM1_OnFingerFeature(int iScore) 
         {
             if (_EMPLOYE != null ? _EMPLOYE.Id > 0 : false)
             {

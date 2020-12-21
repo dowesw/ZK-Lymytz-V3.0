@@ -32,10 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Evenement));
             this.grp_pointeuse = new System.Windows.Forms.GroupBox();
             this.dgv_pointeuse = new System.Windows.Forms.DataGridView();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pointeuse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.temp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.grp_log = new System.Windows.Forms.GroupBox();
+            this.context_options = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmi_selected_all = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_update_action = new System.Windows.Forms.ToolStripMenuItem();
             this.dgv_log = new System.Windows.Forms.DataGridView();
             this.pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.icon = new System.Windows.Forms.DataGridViewImageColumn();
@@ -43,10 +43,13 @@
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.heure = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.action = new System.Windows.Forms.DataGridViewImageColumn();
             this.exclus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.context_log = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.effacerLesLignesInseréesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insererDansUneFicheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analyserLétatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.effacerLesLignesInseréesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modifierActionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_load = new System.Windows.Forms.Button();
             this.btn_synchro = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -97,9 +100,14 @@
             this.check = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.nomEmpl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tt_message = new System.Windows.Forms.ToolTip(this.components);
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pointeuse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.emplacemnt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.temp = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.grp_pointeuse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).BeginInit();
             this.grp_log.SuspendLayout();
+            this.context_options.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).BeginInit();
             this.context_log.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -141,6 +149,7 @@
             this.dgv_pointeuse.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.pointeuse,
+            this.emplacemnt,
             this.temp});
             this.dgv_pointeuse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_pointeuse.Location = new System.Drawing.Point(3, 16);
@@ -151,38 +160,42 @@
             this.dgv_pointeuse.TabIndex = 0;
             this.dgv_pointeuse.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_pointeuse_CellContentClick);
             this.dgv_pointeuse.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_pointeuse_CellFormatting);
-            // 
-            // id
-            // 
-            this.id.HeaderText = "ID";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Visible = false;
-            // 
-            // pointeuse
-            // 
-            this.pointeuse.HeaderText = "Pointeuse";
-            this.pointeuse.Name = "pointeuse";
-            this.pointeuse.ReadOnly = true;
-            // 
-            // temp
-            // 
-            this.temp.FalseValue = "false";
-            this.temp.FillWeight = 10F;
-            this.temp.HeaderText = "";
-            this.temp.Name = "temp";
-            this.temp.ReadOnly = true;
-            this.temp.TrueValue = "true";
+            this.dgv_pointeuse.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_pointeuse_MouseDown);
             // 
             // grp_log
             // 
+            this.grp_log.ContextMenuStrip = this.context_options;
             this.grp_log.Controls.Add(this.dgv_log);
             this.grp_log.Location = new System.Drawing.Point(305, -2);
             this.grp_log.Name = "grp_log";
             this.grp_log.Size = new System.Drawing.Size(650, 381);
             this.grp_log.TabIndex = 1;
             this.grp_log.TabStop = false;
-            this.grp_log.Text = "Historique";
+            this.grp_log.Text = "+ Historique";
+            // 
+            // context_options
+            // 
+            this.context_options.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi_selected_all,
+            this.tsmi_update_action});
+            this.context_options.Name = "context_options";
+            this.context_options.Size = new System.Drawing.Size(182, 48);
+            // 
+            // tsmi_selected_all
+            // 
+            this.tsmi_selected_all.Image = global::ZK_Lymytz.Properties.Resources.connected;
+            this.tsmi_selected_all.Name = "tsmi_selected_all";
+            this.tsmi_selected_all.Size = new System.Drawing.Size(181, 22);
+            this.tsmi_selected_all.Text = "Tous Déselectionner";
+            this.tsmi_selected_all.Click += new System.EventHandler(this.tsmi_selected_all_Click);
+            // 
+            // tsmi_update_action
+            // 
+            this.tsmi_update_action.Image = global::ZK_Lymytz.Properties.Resources.history;
+            this.tsmi_update_action.Name = "tsmi_update_action";
+            this.tsmi_update_action.Size = new System.Drawing.Size(181, 22);
+            this.tsmi_update_action.Text = "Modifier Action";
+            this.tsmi_update_action.Click += new System.EventHandler(this.tsmi_update_action_Click);
             // 
             // dgv_log
             // 
@@ -198,6 +211,7 @@
             this.name,
             this.date,
             this.heure,
+            this.action,
             this.exclus});
             this.dgv_log.ContextMenuStrip = this.context_log;
             this.dgv_log.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -209,6 +223,7 @@
             this.dgv_log.Size = new System.Drawing.Size(644, 362);
             this.dgv_log.TabIndex = 1;
             this.dgv_log.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_log_CellContentClick);
+            this.dgv_log.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgv_log_CellFormatting);
             this.dgv_log.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_log_MouseDown);
             // 
             // pos
@@ -234,24 +249,29 @@
             // 
             // name
             // 
-            this.name.FillWeight = 214.5677F;
+            this.name.FillWeight = 200F;
             this.name.HeaderText = "Noms & Prénoms";
             this.name.Name = "name";
             this.name.ReadOnly = true;
             // 
             // date
             // 
-            this.date.FillWeight = 93.58389F;
             this.date.HeaderText = "Date";
             this.date.Name = "date";
             this.date.ReadOnly = true;
             // 
             // heure
             // 
-            this.heure.FillWeight = 93.08425F;
             this.heure.HeaderText = "Heure";
             this.heure.Name = "heure";
             this.heure.ReadOnly = true;
+            // 
+            // action
+            // 
+            this.action.FillWeight = 20F;
+            this.action.HeaderText = "";
+            this.action.Name = "action";
+            this.action.ReadOnly = true;
             // 
             // exclus
             // 
@@ -264,9 +284,27 @@
             // 
             this.context_log.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.insererDansUneFicheToolStripMenuItem,
-            this.effacerLesLignesInseréesToolStripMenuItem});
+            this.analyserLétatToolStripMenuItem,
+            this.effacerLesLignesInseréesToolStripMenuItem,
+            this.modifierActionToolStripMenuItem});
             this.context_log.Name = "context_log";
-            this.context_log.Size = new System.Drawing.Size(207, 48);
+            this.context_log.Size = new System.Drawing.Size(207, 92);
+            // 
+            // insererDansUneFicheToolStripMenuItem
+            // 
+            this.insererDansUneFicheToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
+            this.insererDansUneFicheToolStripMenuItem.Name = "insererDansUneFicheToolStripMenuItem";
+            this.insererDansUneFicheToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.insererDansUneFicheToolStripMenuItem.Text = "Inserer dans une fiche";
+            this.insererDansUneFicheToolStripMenuItem.Click += new System.EventHandler(this.insererDansUneFicheToolStripMenuItem_Click);
+            // 
+            // analyserLétatToolStripMenuItem
+            // 
+            this.analyserLétatToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.connected;
+            this.analyserLétatToolStripMenuItem.Name = "analyserLétatToolStripMenuItem";
+            this.analyserLétatToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.analyserLétatToolStripMenuItem.Text = "Analyser l\'état";
+            this.analyserLétatToolStripMenuItem.Click += new System.EventHandler(this.analyserLétatToolStripMenuItem_Click);
             // 
             // effacerLesLignesInseréesToolStripMenuItem
             // 
@@ -276,13 +314,13 @@
             this.effacerLesLignesInseréesToolStripMenuItem.Text = "Effacer les lignes inserées";
             this.effacerLesLignesInseréesToolStripMenuItem.Click += new System.EventHandler(this.effacerLesLignesInseréesToolStripMenuItem_Click);
             // 
-            // insererDansUneFicheToolStripMenuItem
+            // modifierActionToolStripMenuItem
             // 
-            this.insererDansUneFicheToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources._in;
-            this.insererDansUneFicheToolStripMenuItem.Name = "insererDansUneFicheToolStripMenuItem";
-            this.insererDansUneFicheToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.insererDansUneFicheToolStripMenuItem.Text = "Inserer dans une fiche";
-            this.insererDansUneFicheToolStripMenuItem.Click += new System.EventHandler(this.insererDansUneFicheToolStripMenuItem_Click);
+            this.modifierActionToolStripMenuItem.Image = global::ZK_Lymytz.Properties.Resources.history;
+            this.modifierActionToolStripMenuItem.Name = "modifierActionToolStripMenuItem";
+            this.modifierActionToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.modifierActionToolStripMenuItem.Text = "Modifier action";
+            this.modifierActionToolStripMenuItem.Click += new System.EventHandler(this.modifierActionToolStripMenuItem_Click);
             // 
             // btn_load
             // 
@@ -832,6 +870,34 @@
             // 
             this.tt_message.ToolTipTitle = "Marges";
             // 
+            // id
+            // 
+            this.id.HeaderText = "ID";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Visible = false;
+            // 
+            // pointeuse
+            // 
+            this.pointeuse.HeaderText = "Pointeuse";
+            this.pointeuse.Name = "pointeuse";
+            this.pointeuse.ReadOnly = true;
+            // 
+            // emplacemnt
+            // 
+            this.emplacemnt.HeaderText = "Emplacement";
+            this.emplacemnt.Name = "emplacemnt";
+            this.emplacemnt.ReadOnly = true;
+            // 
+            // temp
+            // 
+            this.temp.FalseValue = "false";
+            this.temp.FillWeight = 20F;
+            this.temp.HeaderText = "";
+            this.temp.Name = "temp";
+            this.temp.ReadOnly = true;
+            this.temp.TrueValue = "true";
+            // 
             // Form_Evenement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,6 +920,7 @@
             this.grp_pointeuse.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_pointeuse)).EndInit();
             this.grp_log.ResumeLayout(false);
+            this.context_options.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_log)).EndInit();
             this.context_log.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -940,16 +1007,23 @@
         public System.Windows.Forms.DataGridView dgv_log;
         private System.Windows.Forms.ContextMenuStrip context_log;
         private System.Windows.Forms.ToolStripMenuItem effacerLesLignesInseréesToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pointeuse;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn temp;
         private System.Windows.Forms.ToolStripMenuItem insererDansUneFicheToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem analyserLétatToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn pos;
         private System.Windows.Forms.DataGridViewImageColumn icon;
         private System.Windows.Forms.DataGridViewTextBoxColumn num;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn date;
         private System.Windows.Forms.DataGridViewTextBoxColumn heure;
+        private System.Windows.Forms.DataGridViewImageColumn action;
         private System.Windows.Forms.DataGridViewCheckBoxColumn exclus;
+        private System.Windows.Forms.ToolStripMenuItem modifierActionToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip context_options;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_update_action;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_selected_all;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pointeuse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn emplacemnt;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn temp;
     }
 }

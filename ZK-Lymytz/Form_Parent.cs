@@ -26,18 +26,28 @@ namespace ZK_Lymytz
         {
             InitializeComponent();
             object_pointeuse = new ObjectThread(dgv_pointeuse);
+            LoadConfig();
         }
 
         private void Form_Parent_Load(object sender, EventArgs e)
         {
             bubble.Text = Constantes.APP_NAME;
-            LoadConfig();
             LoadPointeuse();
         }
 
-        private void LoadConfig()
+        public void LoadInfosSociete()
+        {
+            string nameSociete = Constantes.SOCIETE.NameComplet;
+            this.lb_name_societe.Text = nameSociete;
+            int length = nameSociete.Length;
+            int X = this.Size.Width - ((length < 20 ? (length * 6) : (length > 30 ? (length * 8) : (length * 9))));
+            this.lb_name_societe.Location = new Point(X, lb_name_societe.Location.Y);
+        }
+
+        public void LoadConfig()
         {
             this.Text = Constantes.APP_NAME;
+            LoadInfosSociete();
             fileMenu.Text = Mots.Fichier;
             viewMenu.Text = Mots.Affichage;
             toolsMenu.Text = Mots.Outil;
@@ -63,21 +73,17 @@ namespace ZK_Lymytz
 
         public void AddPointeuse(Pointeuse p)
         {
-            object_pointeuse.WriteDataGridView(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif, p.Icon() });
+            object_pointeuse.WriteDataGridView(new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.Type, p.Connecter, p.Actif, p.Icon() });
         }
 
         public void UpdatePointeuse(Pointeuse p)
         {
             int i = Utils.GetRowData(dgv_pointeuse, p.Id);
             if (i > -1)
-            {
                 object_pointeuse.RemoveDataGridView(i);
-            }
             else
-            {
                 i = 0;
-            }
-            object_pointeuse.WriteDataGridView(i, new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.IMachine, p.Connecter, p.Actif, p.Icon() });
+            object_pointeuse.WriteDataGridView(i, new object[] { p.Id, p.Ip, p.Port, p.Emplacement, p.Type, p.Connecter, p.Actif, p.Icon() });
             ResetDataPointeuse();
             dgv_pointeuse.Rows[i].Selected = true;
             currentPointeuse = p;
@@ -98,8 +104,7 @@ namespace ZK_Lymytz
             object_pointeuse.ClearDataGridView(true);
             if (Constantes.POINTEUSES != null ? Constantes.POINTEUSES.Count < 1 : true)
             {
-                Societe s = SocieteBLL.ReturnSociete();
-                Constantes.POINTEUSES = PointeuseBLL.List("select * from yvs_pointeuse where societe = " + s.Id + " order by adresse_ip");
+                Constantes.POINTEUSES = PointeuseBLL.List("select * from yvs_pointeuse where (societe = " + Constantes.SOCIETE.Id + " and multi_societe IS TRUE) OR agence = " + Constantes.AGENCE.Id + " order by adresse_ip");
             }
             foreach (Pointeuse p in Constantes.POINTEUSES)
             {
@@ -157,6 +162,7 @@ namespace ZK_Lymytz
             currentPointeuse.Ip = p.Ip;
             currentPointeuse.Port = p.Port;
             currentPointeuse.Societe = p.Societe;
+            currentPointeuse.Type = p.Type;
             currentPointeuse.Zkemkeeper = p.Zkemkeeper;
             currentPointeuse.MultiSociete = p.MultiSociete;
         }
@@ -287,6 +293,8 @@ namespace ZK_Lymytz
             {
                 //childForm.MdiParent = this;
             }
+            miseÀJourToolStripMenuItem.Visible = Utils.NewVersion();
+            miseÀJourToolStripMenuItem1.Visible = Utils.NewVersion();
         }
 
         private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1117,6 +1125,23 @@ namespace ZK_Lymytz
             }
         }
 
+        private void societeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Constantes.FORM_SOCIETE == null)
+            {
+                Form_Societe f = new Form_Societe(false);
+                f.Show();
+                Constantes.FORM_SOCIETE = f;
+                Utils.WriteLog("Ouverture page (Gestion Socièté)");
+                Utils.addFrom("Form_Societe");
+            }
+            else
+            {
+                Constantes.FORM_SOCIETE.WindowState = FormWindowState.Normal;
+                Constantes.FORM_SOCIETE.BringToFront();
+            }
+        }
+
         private void pingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Constantes.FORM_VIEW_LOG == null)
@@ -1136,14 +1161,22 @@ namespace ZK_Lymytz
         private void dgv_pointeuse_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             DataGridViewCell cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[0];
-            if ((e.ColumnIndex == this.dgv_pointeuse.Columns["icon"].Index) && e.Value != null)
+            Pointeuse po = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(cell.Value));
+            if (po != null ? po.Id > 0 : false)
             {
-                Pointeuse po = Constantes.POINTEUSES.Find(x => x.Id == Convert.ToInt32(cell.Value));
-                cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                if (po != null ? (po.Logs != null ? po.Logs.Count > 0 : false) : false)
-                    cell.ToolTipText = "Fichier tampon de cet appareil est chargé";
+                if ((e.ColumnIndex == this.dgv_pointeuse.Columns["icon"].Index) && e.Value != null)
+                {
+                    cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    if (po != null ? (po.Logs != null ? po.Logs.Count > 0 : false) : false)
+                        cell.ToolTipText = "Fichier tampon de cet appareil est chargé";
+                    else
+                        cell.ToolTipText = "Fichier tampon de cet appareil n'est pas chargé";
+                }
                 else
-                    cell.ToolTipText = "Fichier tampon de cet appareil n'est pas chargé";
+                {
+                    cell = this.dgv_pointeuse.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    cell.ToolTipText = po.Description;
+                }
             }
         }
 
@@ -1156,7 +1189,6 @@ namespace ZK_Lymytz
                 {
                     currentPointeuse.Logs.Clear();
                     UpdatePointeuse(currentPointeuse);
-                    Utils.WriteLog("-- Début du chargerment du fichier tampon de la pointeuse " + currentPointeuse.Ip + "");
                     Fonctions.LoadFileTamponPointeuse(currentPointeuse, 1, true);
                 }
                 else
@@ -1275,6 +1307,48 @@ namespace ZK_Lymytz
             {
                 Utils.WriteLog("Vous devez selectionner l'appareil");
             }
+        }
+
+        private void miseÀJourToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String path = Constantes.SETTING.CheminSetup + Constantes.FILE_SEPARATOR + Application.ProductName + ".EXE";
+            FileInfo setup = new FileInfo(path);
+            if (setup.Exists)
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
+
+        private void importerDepuisUnFichierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog fdlg = new OpenFileDialog();
+                fdlg.Title = "C# Corner Open File Dialog";
+                fdlg.InitialDirectory = Chemins.CheminBackup(currentPointeuse.Ip);
+                fdlg.Filter = "Backup (*.csv*)|*.csv*";
+                fdlg.FilterIndex = 2;
+                fdlg.RestoreDirectory = true;
+                if (fdlg.ShowDialog() == DialogResult.OK)
+                {
+                    new Thread(delegate() { Fonctions.ImporteFileInDataBase(currentPointeuse, fdlg.FileName); }).Start();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void exporterCréneauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Thread(delegate()
+            {
+                foreach (Serveur serveur in LiaisonBLL.ReturnServeur())
+                {
+                    Fonctions.SynchroniseCreneau(serveur);
+                }
+            }).Start();
         }
     }
 }

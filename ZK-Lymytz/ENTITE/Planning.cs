@@ -11,8 +11,10 @@ namespace ZK_Lymytz.ENTITE
         private DateTime date_debut;
         private DateTime date_fin;
         private TrancheHoraire tranche = new TrancheHoraire();
+        private long employe;
         private bool valide;
         private bool supplementaire = false;
+        private bool repos = false;
 
         public bool Chevauche
         {
@@ -39,10 +41,22 @@ namespace ZK_Lymytz.ENTITE
             set { valide = value; }
         }
 
+        public bool Repos
+        {
+            get { return repos; }
+            set { repos = value; }
+        }
+
         public long Id
         {
             get { return id; }
             set { id = value; }
+        }
+
+        public long Employe
+        {
+            get { return employe; }
+            set { employe = value; }
         }
 
         public DateTime DureePause

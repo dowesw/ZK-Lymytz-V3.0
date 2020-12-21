@@ -14,7 +14,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PresenceDAO.getOneById(id);
+                return PresenceDAO.getOneById(id, false);
             }
             catch (Exception ex)
             {
@@ -26,7 +26,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PresenceDAO.getOneByDate(empl, date);
+                return PresenceDAO.getOneByDate(empl, date, false);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PresenceDAO.getOneByDates(empl, dateDebut, dateFin);
+                return PresenceDAO.getOneByDates(empl, dateDebut, dateFin, false);
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PresenceDAO.getOneByDates(empl, dateDebut, dateFin, dateFinPrevu);
+                return PresenceDAO.getOneByDates(empl, dateDebut, dateFin, dateFinPrevu, false);
             }
             catch (Exception ex)
             {
@@ -58,11 +58,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static bool Insert(Presence bean)
+        public static bool Insert(Presence bean, string adresse)
         {
             try
             {
-                return PresenceDAO.getInsert(bean);
+                return PresenceDAO.getInsert(bean, adresse);
             }
             catch (Exception ex)
             {
@@ -70,11 +70,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static Presence Insert_U(Presence bean)
+        public static Presence Insert_U(Presence bean, string adresse)
         {
             try
             {
-                return PresenceDAO.setInsert(bean);
+                return PresenceDAO.setInsert(bean, adresse);
             }
             catch (Exception ex)
             {
@@ -84,9 +84,14 @@ namespace ZK_Lymytz.BLL
 
         public static bool Update(Presence bean)
         {
+            return Update(bean, null);
+        }
+
+        public static bool Update(Presence bean, string adresse)
+        {
             try
             {
-                return PresenceDAO.getUpdate(bean);
+                return PresenceDAO.getUpdate(bean, adresse);
             }
             catch (Exception ex)
             {
@@ -94,11 +99,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static List<Presence> List(string query)
+        public static List<Presence> List(string query, bool full, string adresse)
         {
             try
             {
-                return PresenceDAO.List(query);
+                return PresenceDAO.List(query, full, adresse);
             }
             catch (Exception ex)
             {
@@ -106,11 +111,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static List<Presence> List(string query, string queryCount)
+        public static List<Presence> List(string query, bool full, string queryCount, string adresse)
         {
             try
             {
-                return PresenceDAO.List(query, queryCount);
+                return PresenceDAO.List(query, full, queryCount, adresse);
             }
             catch (Exception ex)
             {

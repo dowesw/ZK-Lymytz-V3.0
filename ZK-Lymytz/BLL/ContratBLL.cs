@@ -13,9 +13,14 @@ namespace ZK_Lymytz.BLL
 
         public static Contrat OneById(int id)
         {
+            return OneById(id, true);
+        }
+
+        public static Contrat OneById(int id, bool full)
+        {
             try
             {
-                return ContratDAO.getOneById(id);
+                return ContratDAO.getOneById(id, full);
             }
             catch (Exception ex)
             {
@@ -25,9 +30,14 @@ namespace ZK_Lymytz.BLL
 
         public static List<Contrat> List(string query)
         {
+            return List(query, true);
+        }
+
+        public static List<Contrat> List(string query, bool full)
+        {
             try
             {
-                return ContratDAO.getList(query);
+                return ContratDAO.getList(query, full);
             }
             catch (Exception ex)
             {

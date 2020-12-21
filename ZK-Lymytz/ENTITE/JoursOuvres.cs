@@ -14,6 +14,7 @@ namespace ZK_Lymytz.ENTITE
         private DateTime duree_pause;
         private DateTime heure_debut_pause;
         private DateTime heure_fin_pause;
+        private int calendrier;
         private bool ouvrable;
 
         public int Id
@@ -62,6 +63,12 @@ namespace ZK_Lymytz.ENTITE
         {
             get { return ouvrable; }
             set { ouvrable = value; }
+        }
+
+        public int Calendrier
+        {
+            get { return calendrier; }
+            set { calendrier = value; }
         }
     }
 }

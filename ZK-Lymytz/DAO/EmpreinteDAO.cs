@@ -19,9 +19,9 @@ namespace ZK_Lymytz.DAO
             bean.Numerique = Convert.ToInt32(lect["empreinte_numerique"].ToString());
             bean.Flag = Convert.ToInt32(lect["flag"].ToString());
             bean.Longueur = Convert.ToInt32(lect["longueur"].ToString());
-            bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()));
+            bean.Employe = EmployeDAO.getOneById(Convert.ToInt32(lect["employe"].ToString()), false, null);
             bean.Template = Convert.FromBase64String(lect["template"].ToString());
-            bean.STemplate = lect["template"].ToString(); 
+            bean.STemplate = lect["template"].ToString();
             return bean;
         }
 
@@ -56,8 +56,25 @@ namespace ZK_Lymytz.DAO
 
         public static Empreinte getOneByEmployeFinger(long employe, int finger)
         {
-            Empreinte bean = new Empreinte();
             NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                return getOneByEmployeFinger(employe, finger, connect);
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("EmpreinteDao (getOneByEmployeFinger) ", ex);
+                return null;
+            }
+            finally
+            {
+                Connexion.Close(connect);
+            }
+        }
+
+        public static Empreinte getOneByEmployeFinger(long employe, int finger, NpgsqlConnection connect)
+        {
+            Empreinte bean = new Empreinte();
             try
             {
                 string query = "select * from yvs_grh_empreinte_employe where employe =" + employe + " and empreinte_digital = " + finger;
@@ -83,12 +100,30 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Empreinte getOneByEmployeFinger(long employe, int finger, NpgsqlConnection connect)
+        public static Empreinte getOneByEmployeFacial(long employe, int facial)
+        {
+            NpgsqlConnection connect = new Connexion().Connection();
+            try
+            {
+                return getOneByEmployeFacial(employe, facial, connect);
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("EmpreinteDao (getOneByEmployeFinger) ", ex);
+                return null;
+            }
+            finally
+            {
+                Connexion.Close(connect);
+            }
+        }
+
+        public static Empreinte getOneByEmployeFacial(long employe, int facial, NpgsqlConnection connect)
         {
             Empreinte bean = new Empreinte();
             try
             {
-                string query = "select * from yvs_grh_empreinte_employe where employe =" + employe + " and empreinte_digital = " + finger;
+                string query = "select * from yvs_grh_empreinte_employe where employe =" + employe + " and empreinte_faciale = " + facial;
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
@@ -144,7 +179,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "insert into yvs_grh_empreinte_employe(longueur, empreinte_digital, empreinte_faciale, empreinte_numerique, template, flag, employe) values (" + bean.Longueur + "," + bean.Digital + "," + bean.Facial + "," + bean.Numerique + ",'" + bean.STemplate + "'," + bean.Flag + "," + bean.Employe.Id + ")";
+                string query = "insert into yvs_grh_empreinte_employe(longueur, empreinte_digital, empreinte_faciale, empreinte_numerique, template, flag, employe, author) values (" + bean.Longueur + "," + bean.Digital + "," + bean.Facial + "," + bean.Numerique + ",'" + bean.STemplate + "'," + bean.Flag + "," + bean.Employe.Id + "," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -164,7 +199,7 @@ namespace ZK_Lymytz.DAO
         {
             try
             {
-                string query = "insert into yvs_grh_empreinte_employe(longueur, empreinte_digital, empreinte_faciale, empreinte_numerique, template, flag, employe) values (" + bean.Longueur + "," + bean.Digital + "," + bean.Facial + "," + bean.Numerique + ",'" + bean.STemplate + "'," + bean.Flag + "," + bean.Employe.Id + ")";
+                string query = "insert into yvs_grh_empreinte_employe(longueur, empreinte_digital, empreinte_faciale, empreinte_numerique, template, flag, employe, author) values (" + bean.Longueur + "," + bean.Digital + "," + bean.Facial + "," + bean.Numerique + ",'" + bean.STemplate + "'," + bean.Flag + "," + bean.Employe.Id + "," + (Constantes.USERS.Author > 0 ? Constantes.USERS.Author.ToString() : "null") + ")";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;
@@ -180,7 +215,7 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static bool getUpdate(Empreinte bean,long id)
+        public static bool getUpdate(Empreinte bean, long id)
         {
             NpgsqlConnection connect = new Connexion().Connection();
             try
@@ -206,7 +241,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "delete from into yvs_grh_empreinte_employe where id = " + id + "";
+                string query = "delete from yvs_grh_empreinte_employe where id = " + id + "";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, connect);
                 cmd.ExecuteNonQuery();
                 return true;

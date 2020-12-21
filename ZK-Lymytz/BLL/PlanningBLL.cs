@@ -34,6 +34,30 @@ namespace ZK_Lymytz.BLL
             }
         }
 
+        public static Planning OneByDateEmploye(long employe, long tranche, DateTime dateDebut, DateTime dateFin)
+        {
+            try
+            {
+                return PlanningDAO.getOneByDateEmploye(employe, tranche, dateDebut, dateFin);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static Planning OneByDateEmploye(long employe, long tranche, DateTime date)
+        {
+            try
+            {
+                return PlanningDAO.getOneByDateEmploye(employe, tranche, date);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static Planning OneByDateEmploye(long employe, DateTime date, DateTime heure)
         {
             try
@@ -57,12 +81,28 @@ namespace ZK_Lymytz.BLL
                 throw new Exception(ex.Message);
             }
         }
-
-        public static List<Planning> List(string query)
+        public static bool Insert(Planning planning)
         {
             try
             {
-                return PlanningDAO.getList(query);
+                return PlanningDAO.getInsert(planning);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static List<Planning> List(string query)
+        {
+            return List(query, null);
+        }
+
+        public static List<Planning> List(string query, string adresse)
+        {
+            try
+            {
+                return PlanningDAO.getList(query, adresse);
             }
             catch (Exception ex)
             {

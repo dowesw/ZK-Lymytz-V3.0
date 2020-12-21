@@ -14,7 +14,7 @@ namespace ZK_Lymytz.BLL
         {
             try
             {
-                return PointageDAO.getOneById(id);
+                return PointageDAO.getOneById(id, false);
             }
             catch (Exception ex)
             {
@@ -22,11 +22,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static bool Insert(Pointage bean)
+        public static bool Insert(Pointage bean, string adresse)
         {
             try
             {
-                return PointageDAO.getInsert(bean);
+                return PointageDAO.getInsert(bean, adresse);
             }
             catch (Exception ex)
             {
@@ -34,11 +34,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static bool InsertU(Pointage bean)
+        public static bool InsertU(Pointage bean, string adresse)
         {
             try
             {
-                return PointageDAO.getInsert_U(bean);
+                return PointageDAO.getInsert_U(bean, adresse);
             }
             catch (Exception ex)
             {
@@ -46,11 +46,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static bool Update(Pointage bean, long id)
+        public static bool Update(Pointage bean, long id, string adresse)
         {
             try
             {
-                return PointageDAO.getUpdate(bean, id);
+                return PointageDAO.getUpdate(bean, id, adresse);
             }
             catch (Exception ex)
             {
@@ -58,11 +58,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static List<Pointage> List(string query)
+        public static List<Pointage> List(string query, bool full, string adresse)
         {
             try
             {
-                return PointageDAO.List(query);
+                return PointageDAO.List(query, full, adresse);
             }
             catch (Exception ex)
             {
@@ -70,11 +70,11 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static List<Pointage> List(string query, string queryCount)
+        public static List<Pointage> List(string query, bool full, string queryCount, string adresse)
         {
             try
             {
-                return PointageDAO.List(query, queryCount);
+                return PointageDAO.List(query, full, queryCount, adresse);
             }
             catch (Exception ex)
             {

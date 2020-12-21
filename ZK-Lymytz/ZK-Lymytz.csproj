@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZK_Lymytz</RootNamespace>
     <AssemblyName>ZK-Lymytz</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publier\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,8 +25,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -57,6 +58,21 @@
   <PropertyGroup>
     <StartupObject>ZK_Lymytz.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>90DCD0ACD04A32F5A5E43769929CB896DBD4CE42</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ZK-Lymytz_CléTemporaire.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.zkemkeeper, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -69,6 +85,9 @@
     <Reference Include="Npgsql, Version=2.0.14.3, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\Npgsql2.0.14.3-bin-ms.net2.0\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet">
+      <HintPath>..\..\Tools\SSH.NET-2016.1.0-bin\lib\net35\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -84,8 +103,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\AgenceBLL.cs" />
+    <Compile Include="BLL\Bll.cs" />
     <Compile Include="BLL\CalendrierBLL.cs" />
     <Compile Include="BLL\ContratBLL.cs" />
+    <Compile Include="BLL\IOEMDeviceBLL.cs" />
+    <Compile Include="BLL\LiaisonBLL.cs" />
     <Compile Include="BLL\PosteTravailBLL.cs" />
     <Compile Include="BLL\PosteBLL.cs" />
     <Compile Include="BLL\UsersBLL.cs" />
@@ -101,9 +123,15 @@
     <Compile Include="BLL\ServeurBLL.cs" />
     <Compile Include="BLL\SocieteBLL.cs" />
     <Compile Include="BLL\TrancheHoraireBLL.cs" />
+    <Compile Include="COMPONENT\MyCheckBox.cs" />
+    <Compile Include="COMPONENT\MyComponent.cs" />
+    <Compile Include="COMPONENT\MyTextBox.cs" />
     <Compile Include="DAO\AgenceDAO.cs" />
     <Compile Include="DAO\CalendrierDAO.cs" />
     <Compile Include="DAO\ContratDAO.cs" />
+    <Compile Include="DAO\Dao.cs" />
+    <Compile Include="DAO\IOEMDeviceDAO.cs" />
+    <Compile Include="DAO\LiaisonDAO.cs" />
     <Compile Include="DAO\PosteTravailDAO.cs" />
     <Compile Include="DAO\PosteDAO.cs" />
     <Compile Include="DAO\UsersDAO.cs" />
@@ -145,6 +173,12 @@
     <Compile Include="Form_Parent.designer.cs">
       <DependentUpon>Form_Parent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_Start.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Start.Designer.cs">
+      <DependentUpon>Form_Start.cs</DependentUpon>
+    </Compile>
     <Compile Include="IHM\Dial_Connet_Externe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +190,24 @@
     </Compile>
     <Compile Include="IHM\Dial_Insert_Pointage.Designer.cs">
       <DependentUpon>Dial_Insert_Pointage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Dial_Update_Action.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Dial_Update_Action.Designer.cs">
+      <DependentUpon>Dial_Update_Action.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Dial_View_Heure_Prevu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Dial_View_Heure_Prevu.Designer.cs">
+      <DependentUpon>Dial_View_Heure_Prevu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Dial_View_No_Insert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Dial_View_No_Insert.Designer.cs">
+      <DependentUpon>Dial_View_No_Insert.cs</DependentUpon>
     </Compile>
     <Compile Include="IHM\Form_Archive_Pointeuse.cs">
       <SubType>Form</SubType>
@@ -198,6 +250,12 @@
     </Compile>
     <Compile Include="IHM\Form_Gestion_Pointeuse.Designer.cs">
       <DependentUpon>Form_Gestion_Pointeuse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHM\Form_Liaison_Externe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_Liaison_Externe.Designer.cs">
+      <DependentUpon>Form_Liaison_Externe.cs</DependentUpon>
     </Compile>
     <Compile Include="IHM\Form_Ping_Appareil.cs">
       <SubType>Form</SubType>
@@ -271,6 +329,12 @@
     <Compile Include="IHM\Form_ViewResult.designer.cs">
       <DependentUpon>Form_ViewResult.cs</DependentUpon>
     </Compile>
+    <Compile Include="IHM\Form_View_Pointeuse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IHM\Form_View_Pointeuse.Designer.cs">
+      <DependentUpon>Form_View_Pointeuse.cs</DependentUpon>
+    </Compile>
     <Compile Include="IHM\Form_Wait.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,6 +347,9 @@
     <Compile Include="TOOLS\Configuration.cs" />
     <Compile Include="TOOLS\Connexion.cs" />
     <Compile Include="TOOLS\Constantes.cs" />
+    <Compile Include="TOOLS\DateCompareFileInfo.cs" />
+    <Compile Include="TOOLS\Options.cs" />
+    <Compile Include="TOOLS\RemoteAcces.cs" />
     <Compile Include="TOOLS\Scheduler.cs" />
     <Compile Include="TOOLS\Appareil.cs" />
     <Compile Include="TOOLS\ReadWriteTxt.cs" />
@@ -293,14 +360,27 @@
     <Compile Include="TOOLS\ReadWriteCsv.cs" />
     <Compile Include="TOOLS\Fonctions.cs" />
     <Compile Include="TOOLS\Utils.cs" />
+    <Compile Include="TOOLS\WS.cs" />
     <EmbeddedResource Include="Form_Parent.resx">
       <DependentUpon>Form_Parent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Start.resx">
+      <DependentUpon>Form_Start.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Dial_Connet_Externe.resx">
       <DependentUpon>Dial_Connet_Externe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Dial_Insert_Pointage.resx">
       <DependentUpon>Dial_Insert_Pointage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Dial_Update_Action.resx">
+      <DependentUpon>Dial_Update_Action.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Dial_View_Heure_Prevu.resx">
+      <DependentUpon>Dial_View_Heure_Prevu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Dial_View_No_Insert.resx">
+      <DependentUpon>Dial_View_No_Insert.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_Archive_Pointeuse.resx">
       <DependentUpon>Form_Archive_Pointeuse.cs</DependentUpon>
@@ -322,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_Gestion_Pointeuse.resx">
       <DependentUpon>Form_Gestion_Pointeuse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_Liaison_Externe.resx">
+      <DependentUpon>Form_Liaison_Externe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_Ping_Appareil.resx">
       <DependentUpon>Form_Ping_Appareil.cs</DependentUpon>
@@ -358,6 +441,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_ViewResult.resx">
       <DependentUpon>Form_ViewResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IHM\Form_View_Pointeuse.resx">
+      <DependentUpon>Form_View_Pointeuse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IHM\Form_Wait.resx">
       <DependentUpon>Form_Wait.cs</DependentUpon>
@@ -415,6 +501,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <None Include="IMG\ACTIONS\personal.png" />
+    <None Include="IMG\ACTIONS\administrateur.png" />
+    <None Include="IMG\ACTIONS\override_out.png" />
+    <None Include="IMG\ACTIONS\override_in.png" />
+    <None Include="IMG\ACTIONS\check_out.png" />
+    <None Include="IMG\ACTIONS\check_in.png" />
+    <None Include="IMG\ACTIONS\break_out.png" />
+    <None Include="IMG\ACTIONS\break_in.png" />
+    <None Include="IMG\label.png" />
+    <None Include="IMG\logo.jpg" />
     <None Include="IMG\ACTIONS\search.png" />
     <None Include="IMG\ACTIONS\in_out.png" />
     <None Include="IMG\vu_non.png" />
@@ -510,6 +606,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

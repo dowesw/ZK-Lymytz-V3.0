@@ -22,11 +22,22 @@ namespace ZK_Lymytz.BLL
             }
         }
 
-        public static JoursOuvres OneByCalendrier(Calendrier calendrier, string jour)
+        public static JoursOuvres OneByCalendrier(Calendrier calendrier, string jour, string adresse)
         {
             try
             {
-                return JoursOuvresDAO.getOneByCalendier(calendrier, jour);
+                JoursOuvres y;
+                int index = Constantes.JOURSOUVRES.FindIndex(x => x.Jour == jour && x.Calendrier == (calendrier != null ? calendrier.Id : 0));
+                if (index > -1)
+                {
+                    y = Constantes.JOURSOUVRES[index];
+                }
+                else
+                {
+                    y = JoursOuvresDAO.getOneByCalendier(calendrier, jour, adresse);
+                    Constantes.JOURSOUVRES.Add(y);
+                }
+                return y;
             }
             catch (Exception ex)
             {

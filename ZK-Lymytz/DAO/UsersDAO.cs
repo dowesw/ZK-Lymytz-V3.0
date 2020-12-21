@@ -14,6 +14,30 @@ namespace ZK_Lymytz.DAO
         static string chemin = Chemins.CheminUsers();
         static List<Users> listeUsers = new List<Users>();
 
+        private static Users Return(NpgsqlDataReader lect)
+        {
+            Users bean = new Users();
+            try
+            {
+                bean.Id = Convert.ToInt32(lect["id"].ToString());
+                bean.Code = lect["code_users"].ToString();
+                bean.NomUsers = lect["nom_users"].ToString();
+                bean.Password = lect["password_user"].ToString();
+                bean.AleaMdp = lect["alea_mdp"].ToString();
+                bean.Actif = Convert.ToBoolean((lect["actif"].ToString() != "") ? lect["actif"].ToString() : "false");
+                bean.AccesMultiAgence = Convert.ToBoolean((lect["acces_multi_agence"].ToString() != "") ? lect["acces_multi_agence"].ToString() : "false");
+                bean.AccesMultiSociete = Convert.ToBoolean((lect["acces_multi_societe"].ToString() != "") ? lect["acces_multi_societe"].ToString() : "false");
+                bean.SuperAdmin = Convert.ToBoolean((lect["super_admin"].ToString() != "") ? lect["super_admin"].ToString() : "false");
+                bean.Agence = new Agence(Convert.ToInt32(lect["agence"].ToString()), lect["designation"].ToString());
+                bean.Agence.Societe = new Societe(Convert.ToInt32(lect["societe"].ToString()), lect["name"].ToString(), Convert.ToInt32(lect["groupe"].ToString()), lect["adresse_ip"].ToString());
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
+            return bean;
+        }
+
         public static bool CreateUsers(Users user)
         {
             try
@@ -21,13 +45,6 @@ namespace ZK_Lymytz.DAO
                 using (RegistryKey Nkey = Registry.LocalMachine)
                 {
                     CreateUsers(user, Nkey);
-                }
-                if (Utils.Is64BitOperatingSystem())
-                {
-                    using (RegistryKey Nkey = Registry.CurrentUser)
-                    {
-                        CreateUsers(user, Nkey);
-                    }
                 }
                 return true;
             }
@@ -37,6 +54,7 @@ namespace ZK_Lymytz.DAO
                 return false;
             }
         }
+
         public static bool CreateUsers(Users user, RegistryKey Nkey)
         {
             try
@@ -47,9 +65,13 @@ namespace ZK_Lymytz.DAO
                     Nkey.CreateSubKey(@chemin);
                     valKey = Nkey.OpenSubKey(@chemin, true);
                 }
+                valKey.SetValue("id", user.Id);
+                valKey.SetValue("code", user.Code);
+                valKey.SetValue("nom_users", user.NomUsers);
+                valKey.SetValue("author", user.Author);
+                valKey.SetValue("name", user.Name);
                 valKey.SetValue("passwordpc", user.PasswordPC);
                 valKey.SetValue("passwordlog", user.PasswordLog);
-                valKey.SetValue("name", user.Name);
                 return true;
             }
             catch (Exception e)
@@ -68,13 +90,7 @@ namespace ZK_Lymytz.DAO
             RegistryKey Nkey = Registry.LocalMachine;
             try
             {
-                Users user = ReturnUsers(Nkey);
-                if (user != null ? (user.Name != null ? user.Name.Trim().Length < 1 : true) : true)
-                {
-                    Nkey = Registry.CurrentUser;
-                    user = ReturnUsers(Nkey);
-                }
-                return user;
+                return ReturnUsers(Nkey);
             }
             catch (Exception e)
             {
@@ -95,6 +111,10 @@ namespace ZK_Lymytz.DAO
                 RegistryKey valKey = Nkey.OpenSubKey(@chemin, true);
                 if (valKey != null)
                 {
+                    user.Id = (int)(valKey.GetValue("id") != null ? valKey.GetValue("id") : 0);
+                    user.Code = (string)(valKey.GetValue("code") != null ? valKey.GetValue("code") : "");
+                    user.NomUsers = (string)(valKey.GetValue("nom_users") != null ? valKey.GetValue("nom_users") : "");
+                    user.Author = (int)(valKey.GetValue("author") != null ? valKey.GetValue("author") : 0);
                     user.PasswordPC = (string)(valKey.GetValue("passwordpc") != null ? valKey.GetValue("passwordpc") : "");
                     user.PasswordLog = (string)(valKey.GetValue("passwordlog") != null ? valKey.GetValue("passwordlog") : "");
                     user.Name = (string)(valKey.GetValue("name") != null ? valKey.GetValue("name") : "");
@@ -143,20 +163,14 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select * from yvs_users where id =" + id + ";";
+                string query = "select u.*, a.designation, a.designation, a.societe, s.name, s.groupe, s.adresse_ip from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id where id = " + id + ";";
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Code = lect["code_users"].ToString();
-                        bean.Name = lect["nom_users"].ToString();
-                        bean.PasswordLog = lect["password_user"].ToString();
-                        bean.AleaMdp = lect["alea_mdp"].ToString();
-                        bean.Actif = Convert.ToBoolean((lect["actif"].ToString() != "") ? lect["actif"].ToString() : "false");
-                        bean.AccesPointeuse = Convert.ToBoolean((lect["actif"].ToString() != "") ? lect["actif"].ToString() : "false");
+                        bean = Return(lect);
                     }
                 }
                 return bean;
@@ -172,26 +186,21 @@ namespace ZK_Lymytz.DAO
             }
         }
 
-        public static Users getOneByName(string id, string password)
+        public static Users getOneByName(string code)
         {
             Users bean = new Users();
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select * from yvs_users where code_users ='" + id + "' and password_user = '" + password + "';";
+                string query = "select u.*, a.designation, a.designation, a.societe, s.name, s.groupe, s.adresse_ip from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id where code_users = '" + code + "';";
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
                 {
                     while (lect.Read())
                     {
-                        bean.Id = Convert.ToInt32(lect["id"].ToString());
-                        bean.Code = lect["code_users"].ToString();
-                        bean.Name = lect["nom_users"].ToString();
-                        bean.PasswordLog = lect["password_user"].ToString();
-                        bean.AleaMdp = lect["alea_mdp"].ToString();
-                        bean.Actif = Convert.ToBoolean((lect["actif"].ToString() != "") ? lect["actif"].ToString() : "false");
-                        bean.AccesPointeuse = Convert.ToBoolean((lect["actif"].ToString() != "") ? lect["actif"].ToString() : "false");
+                        bean = Return(lect);
+                        break;
                     }
                 }
                 return bean;

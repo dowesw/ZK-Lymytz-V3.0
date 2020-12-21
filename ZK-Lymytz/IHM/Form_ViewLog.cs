@@ -59,7 +59,7 @@ namespace ZK_Lymytz.IHM
         {
             if (pings != null ? pings.Count > 0 : false)
             {
-                DateTime _last = new DateTime();
+                DateTime _last = DateTime.Now;
                 for (int i = 0; i < pings.Count; i++)
                 {
                     string line = pings[i];

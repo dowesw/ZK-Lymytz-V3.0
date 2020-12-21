@@ -22,6 +22,12 @@ namespace ZK_Lymytz.ENTITE
 
         }
 
+        public Empreinte(long id, Employe employe)
+        {
+            this.id = id;
+            this.employe = employe;
+        }
+
         public Empreinte(Employe employe, int digital, int flag, string sTemplate, int longueur)
         {
             this.employe = employe;

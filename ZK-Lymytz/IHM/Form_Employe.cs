@@ -17,7 +17,9 @@ namespace ZK_Lymytz.IHM
 {
     public partial class Form_Employe : Form
     {
+        List<Employe> employes = new List<Employe>();
         Employe employe = new Employe();
+        Employe select = new Employe();
         public Pointeuse pointeuse = new Pointeuse();
         public bool vue_all_employe = true;
         Appareil appareil;
@@ -59,6 +61,7 @@ namespace ZK_Lymytz.IHM
             txt_password.ResetText();
             txt_privilege.ResetText();
             txt_agence.ResetText();
+            lb_nom_prenom.Text = "---";
             chk_actif.Checked = false;
             this.box_identity.Image = global::ZK_Lymytz.Properties.Resources.contact;
         }
@@ -66,7 +69,7 @@ namespace ZK_Lymytz.IHM
         private void ChangeFonction()
         {
             _ResetText();
-            if (vue_all_employe)  
+            if (vue_all_employe)
             {
                 this.box_connect.Image = global::ZK_Lymytz.Properties.Resources.unconnecte;
                 btn_change_fct.Text = "Passer en mode testing";
@@ -136,23 +139,51 @@ namespace ZK_Lymytz.IHM
         private void LoadEmploye()
         {
             object_employe.ClearDataGridView(true);
-
-            int iEnrollNumber = 0;
-            int iEMachineNumber = 0;
-            int iBackupNumber = 0;
-            int iPrivilege = 0;
-            int iEnabled = 0;
+            employes.Clear();
 
             appareil.EnableDevice(pointeuse.IMachine, false);
             appareil.ReadAllUserID(pointeuse.IMachine);//read all the user information to the memory
-            while (appareil.GetAllUserID(pointeuse.IMachine, ref iEnrollNumber, ref iEMachineNumber, ref iBackupNumber, ref iPrivilege, ref iEnabled))
+            switch (pointeuse.Type)
             {
-                Employe e = EmployeBLL.OneById(iEnrollNumber);
-                if (e != null ? e.Id < 1 : true)
-                {
-                    e = new Employe(iEnrollNumber, iEnrollNumber.ToString(), "");
-                }
-                object_employe.WriteDataGridView(new object[] { e.Id, e.NomPrenom });
+                case Constantes.TYPE_IFACE:
+                    {
+                        string iEnrollNumber = "";
+                        string iName = "";
+                        int iPrivilege = 0;
+                        string iPassword = "";
+                        bool iEnabled = false;
+                        while (appareil.SSR_GetAllUserInfo(pointeuse.IMachine, out iEnrollNumber, out iName, out iPassword, out iPrivilege, out iEnabled))
+                        {
+                            Employe e = new Employe(Convert.ToInt32(iEnrollNumber), iEnrollNumber, "");
+                            e.Nom = iName;
+                            e.Password = iPassword;
+                            e.Privilege = iPrivilege;
+                            e.BEnabled = iEnabled;
+
+                            object_employe.WriteDataGridView(new object[] { e.Id, e.NomPrenom, e.IsPrivilege });
+                            employes.Add(e);
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        int iEnrollNumber = 0;
+                        int iPrivilege = 0;
+                        int iEMachineNumber = 0;
+                        int iBackupNumber = 0;
+                        int iEnabled = 0;
+
+                        while (appareil.GetAllUserID(pointeuse.IMachine, ref iEnrollNumber, ref iEMachineNumber, ref iBackupNumber, ref iPrivilege, ref iEnabled))
+                        {
+                            Employe e = EmployeBLL.OneById(iEnrollNumber);
+                            if (e != null ? e.Id < 1 : true)
+                            {
+                                e = new Employe(iEnrollNumber, iEnrollNumber.ToString(), "");
+                            }
+                            object_employe.WriteDataGridView(new object[] { e.Id, e.NomPrenom, e.IsPrivilege });
+                        }
+                        break;
+                    }
             }
             appareil.EnableDevice(pointeuse.IMachine, true);
             ResetEmploye();
@@ -182,29 +213,46 @@ namespace ZK_Lymytz.IHM
 
         private void LoadInfos()
         {
-            if (appareil.EnableDevice(pointeuse.IMachine, false))
+            switch (pointeuse.Type)
             {
-                Cursor c = Cursors.WaitCursor;
-                if (appareil.ReadAllTemplate(pointeuse.IMachine))
-                {
-                    string names = "";
-                    string password = "";
-                    int privilege = 0;
-                    bool bEnabled = false;
-
-                    if (appareil.GetUserInfo(pointeuse.IMachine, (int)employe.Id, ref names, ref password, ref privilege, ref bEnabled))//upload user information to the memory
+                case Constantes.TYPE_IFACE:
                     {
-                        employe.Nom = names;
-                        employe.Password = password;
-                        employe.Privilege = privilege;
-                        employe.BEnabled = bEnabled;
-
-                        LoadOnView(employe);
+                        int idx = employes.FindIndex(x => x.Id == employe.Id);
+                        if (idx > -1)
+                        {
+                            employe = employes[idx];
+                            LoadOnView(employe);
+                        }
+                        break;
                     }
-                }
-                appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
-                appareil.EnableDevice(pointeuse.IMachine, true);
-                c = Cursors.Default;
+                default:
+                    {
+                        if (appareil.EnableDevice(pointeuse.IMachine, false))
+                        {
+                            Cursor c = Cursors.WaitCursor;
+                            if (appareil.ReadAllTemplate(pointeuse.IMachine))
+                            {
+                                string names = "";
+                                string password = "";
+                                int privilege = 0;
+                                bool bEnabled = false;
+
+                                if (appareil.GetUserInfo(pointeuse.IMachine, (int)employe.Id, ref names, ref password, ref privilege, ref bEnabled))//upload user information to the memory
+                                {
+                                    employe.Nom = names;
+                                    employe.Password = password;
+                                    employe.Privilege = privilege;
+                                    employe.BEnabled = bEnabled;
+
+                                    LoadOnView(employe);
+                                }
+                            }
+                            appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
+                            appareil.EnableDevice(pointeuse.IMachine, true);
+                            c = Cursors.Default;
+                        }
+                        break;
+                    }
             }
         }
 
@@ -221,6 +269,7 @@ namespace ZK_Lymytz.IHM
             {
                 this.box_identity.Image = global::ZK_Lymytz.Properties.Resources.contact;
             }
+            lb_nom_prenom.Text = e.NomPrenom;
         }
 
         private void LoadEmpreinte()
@@ -288,6 +337,50 @@ namespace ZK_Lymytz.IHM
             }
         }
 
+        private void dgv_employe_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                DataGridView.HitTestInfo info = dgv_employe.HitTest(e.X, e.Y); //get info
+                int pos = dgv_employe.HitTest(e.X, e.Y).RowIndex;
+                if (pos > -1)
+                {
+                    if (dgv_employe.Rows[pos].Cells["id"] != null ? dgv_employe.Rows[pos].Cells["id"].Value != null : false)
+                    {
+                        int id = Convert.ToInt32(dgv_employe.Rows[pos].Cells["id"].Value);
+                        if (id > 0)
+                        {
+                            int idx = employes.FindIndex(x => x.Id == id);
+                            if (idx > -1)
+                            {
+                                switch (e.Button)
+                                {
+                                    case MouseButtons.Right:
+                                        {
+                                            for (int i = 0; i < dgv_employe.Rows.Count; i++)
+                                            {
+                                                dgv_employe.Rows[i].Selected = false;
+                                            }
+                                            select = employes[idx];
+                                            tsmi_defined_niveau.Text = select.Privilege == 2 ? "Retirer Administrateur" : "Definir Administrateur";
+                                            tsmi_defined_niveau.Image = select.Privilege == 2 ? global::ZK_Lymytz.Properties.Resources.edit_user : global::ZK_Lymytz.Properties.Resources.administrateur;
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception("Form_Employe (dgv_employe_MouseDown)", ex);
+            }
+        }
+
         private void DeleteUser()
         {
             if (employe != null ? employe.Id > 0 : false)
@@ -339,23 +432,65 @@ namespace ZK_Lymytz.IHM
 
         public void Update()
         {
+            Update(employe);
+        }
+
+        public void Update(Employe e)
+        {
             if (appareil.EnableDevice(pointeuse.IMachine, false))
             {
                 Cursor c = Cursors.WaitCursor;
                 if (appareil.ReadAllTemplate(pointeuse.IMachine))
                 {
-                    if (appareil.SetUserInfo(pointeuse.IMachine, (int)employe.Id, employe.Nom, employe.Password, employe.Privilege, employe.BEnabled))//upload user information to the memory
+                    switch (pointeuse.Type)
                     {
-                        Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] effectuée");
-                    }
-                    else
-                    {
-                        Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
+                        case Constantes.TYPE_IFACE:
+                            {
+                                if (appareil.SSR_SetUserInfo(pointeuse.IMachine, (int)e.Id, e.Nom, e.Password, e.Privilege, e.BEnabled))//upload user information to the memory
+                                {
+                                    int pos = Utils.GetRowData(dgv_employe, e.Id);
+                                    if (pos > -1)
+                                    {
+                                        object_employe.RemoveDataGridView(pos);
+                                        object_employe.WriteDataGridView(pos, new object[] { e.Id, e.NomPrenom, e.IsPrivilege });
+                                        int idx = employes.FindIndex(x => x.Id == e.Id);
+                                        if (idx > -1)
+                                            employes[idx].Privilege = e.Privilege;
+                                    }
+                                    Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] effectuée");
+                                }
+                                else
+                                {
+                                    Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] impossible");
+                                }
+                                break;
+                            }
+                        default:
+                            {
+                                if (appareil.SetUserInfo(pointeuse.IMachine, (int)e.Id, e.Nom, e.Password, e.Privilege, e.BEnabled))//upload user information to the memory
+                                {
+                                    int pos = Utils.GetRowData(dgv_employe, e.Id);
+                                    if (pos > -1)
+                                    {
+                                        object_employe.RemoveDataGridView(pos);
+                                        object_employe.WriteDataGridView(pos, new object[] { e.Id, e.NomPrenom, e.IsPrivilege });
+                                        int idx = employes.FindIndex(x => x.Id == e.Id);
+                                        if (idx > -1)
+                                            employes[idx].Privilege = e.Privilege;
+                                    }
+                                    Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] effectuée");
+                                }
+                                else
+                                {
+                                    Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] impossible");
+                                }
+                                break;
+                            }
                     }
                 }
                 else
                 {
-                    Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
+                    Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] impossible");
                 }
                 appareil.RefreshData(pointeuse.IMachine);//the data in the device should be refreshed
                 appareil.EnableDevice(pointeuse.IMachine, true);
@@ -363,7 +498,7 @@ namespace ZK_Lymytz.IHM
             }
             else
             {
-                Utils.WriteLog("-- Modification des informations de l'employe " + employe.Id + " [" + employe.Nom + "] impossible");
+                Utils.WriteLog("-- Modification des informations de l'employe " + e.Id + " [" + e.Nom + "] impossible");
             }
         }
 
@@ -450,6 +585,35 @@ namespace ZK_Lymytz.IHM
         private void btn_change_fct_Click(object sender, EventArgs e)
         {
             ChangeFonction();
+        }
+
+        private void tsmi_defined_niveau_Click(object sender, EventArgs e)
+        {
+            if (select != null ? select.Id > 0 : false)
+            {
+                select.Privilege = select.Privilege == 0 ? 2 : 0;
+                int idx = employes.FindIndex(x => x.Privilege == 2 && x.Id != select.Id);
+                if (idx > -1 && select.Privilege == 2)
+                {
+                    Messages.Information("Vous avez déjà défini un administrateur");
+                }
+                else
+                {
+                    Utils.WriteLog("Demande de la modification des informations de l'employe " + select.Id + " [" + select.Nom + "]");
+                    if (Messages.Confirmation_Infos("enregistrer") == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        new Thread(delegate() { Update(select); }).Start();
+                    }
+                    else
+                    {
+                        Utils.WriteLog("-- Modification des informations de l'employe " + select.Id + " [" + select.Nom + "] annulée");
+                    }
+                }
+            }
+            else
+            {
+                Utils.WriteLog("Vous devez selectionner l'employé");
+            }
         }
     }
 }
