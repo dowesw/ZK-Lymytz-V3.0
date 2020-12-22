@@ -92,27 +92,35 @@ namespace ZK_Lymytz.IHM
 
         public void LoadEmploye()
         {
-            try
+            employes.Clear();
+            ObjectThread object_employe = new ObjectThread(com_employe);
+            new Thread(delegate ()
             {
-                employes.Clear();
-                employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE));
-                com_employe.DisplayMember = "NomPrenom";
-                com_employe.ValueMember = "Id";
-                com_employe.DataSource = new BindingSource(employes, null);
-
-                for (int i = 0; i < employes.Count; i++)
+                try
                 {
-                    com_employe.AutoCompleteCustomSource.Add(employes[i].NomPrenom);
-                }
-                com_employe.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                com_employe.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    employes = EmployeBLL.List(Constantes.QUERY_EMPLOYE(Constantes.SOCIETE), false);
+                    object_employe.DisplayMember("NomPrenom");
+                    object_employe.ValueMember("Id");
+                    object_employe.DataSource(new BindingSource(employes, null));
 
-                ResetEmploye();
-            }
-            catch (Exception ex)
-            {
-                Messages.Exception("Form_Add_Empreinte (LoadEmploye)", ex);
-            }
+                    for (int i = 0; i < employes.Count; i++)
+                    {
+                        Employe e = employes[i];
+                        String nom = e.NomPrenom;
+                        if (com_employe.AutoCompleteCustomSource.Contains(nom))
+                            nom += "°";
+                        object_employe.AutoCompleteCustomSource_Add(nom);
+                    }
+                    object_employe.AutoCompleteMode(AutoCompleteMode.SuggestAppend);
+                    object_employe.AutoCompleteSource(AutoCompleteSource.CustomSource);
+                }
+                catch (Exception ex)
+                {
+                    Messages.Exception("Form_Add_Empreinte (LoadEmploye)", ex);
+                }
+                Constantes.EMPLOYES = new List<Employe>(employes);
+
+            }).Start();
         }
 
         public void LoadPointeuse()

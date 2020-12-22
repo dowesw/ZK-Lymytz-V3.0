@@ -135,7 +135,7 @@ namespace ZK_Lymytz.IHM
                 }
                 catch (Exception ex)
                 {
-                    Messages.Exception("Form_Add_Empreinte (LoadEmploye)", ex);
+                    Messages.Exception("Form_Evenement (LoadEmploye)", ex);
                 }
                 Constantes.EMPLOYES = new List<Employe>(employes);
 
