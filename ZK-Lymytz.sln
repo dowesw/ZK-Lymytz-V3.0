@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZK-Lymytz", "ZK-Lymytz\ZK-Lymytz.csproj", "{223B9870-927D-4F4A-9310-7DB8943B9DCF}"
-EndProject
-Project("{E729F059-12D4-455F-A2A4-FDA8DD25E08A}") = "ZK-Setup", "ZK-Setup\ZK-Setup.isproj", "{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,16 +24,6 @@ Global
 		{223B9870-927D-4F4A-9310-7DB8943B9DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{223B9870-927D-4F4A-9310-7DB8943B9DCF}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
 		{223B9870-927D-4F4A-9310-7DB8943B9DCF}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.CD_ROM|Any CPU.ActiveCfg = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.CD_ROM|Any CPU.Build.0 = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.Debug|Any CPU.ActiveCfg = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.Debug|Any CPU.Build.0 = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.DVD-5|Any CPU.ActiveCfg = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.DVD-5|Any CPU.Build.0 = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.Release|Any CPU.ActiveCfg = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.Release|Any CPU.Build.0 = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.SingleImage|Any CPU.ActiveCfg = SingleImage
-		{BFD67E25-B6F0-4B0E-987C-E92C9960C60D}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
