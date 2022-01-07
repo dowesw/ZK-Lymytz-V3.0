@@ -1,0 +1,19 @@
+6.2.4.11
+	1.Add interface to support Pull protocol
+	2.Modify TCP communication problem on win8 64 bits operation system
+	3.Add SSR_SetDeviceData interface for TFT color terminals
+	4.Add SSR_GetDeviceData interface for TFT color terminals
+	5.Delete the SleepDevice introduction part of 5.5.1.7 ,New SDK not have such function 
+	6.Change the install or uninstall sdk .bat file
+6.2.4.1
+	1. To solve the problem of get the wrong group number with function "GetUserGroup" on TFT device.
+	2. To solve the problem of uploading 50 thousands users in batch update mode.
+	3. Updating the specification of function SetUserTZStr and GetUserTZStr.
+	4. Adding group verification and personal verification to AccessControl Demo. Adding "normal open & normal close" function to B&W AccessControl Demo.
+	5. Adding the specification of Attendance Photo function in TFT_SDK_Manual.
+
+6.2.4.0
+	1. To solve the problem of supporting "Hot Plug" in USBClient communication.
+
+6.2.3.9 
+	1. 64bit SDK is available.

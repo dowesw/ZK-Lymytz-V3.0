@@ -1,0 +1,15 @@
+- Installation de la sdk
+	En fonction de la version du système (64 ou 32 bits) executer le fichier "_Auto-install_sdk_X.bat" qui se trouve dans le dossier "sdk" 
+	en mode administrateur "Executer en tant qu'administrateur"
+- Installation de ZK-Lymytz (application de gestion des pointeuses Zk-software)
+	Doubler click sur le setup et suivre les instructions d'installation
+	
+Installation finie, lancer l'application et configurer votre environnement
+- Paramètre administrateur
+	Entrer le mot de passe de l'utilisateur précisé
+- Définir la socièté
+	Si vous n'avez pas encore choisi votre socièté dans la liste des choix
+- Définir le serveur de base de donnée(si necessaire/si base de donnée est sur une autre machine)
+
+Les paramètres sont modifiables
+	Pour cela lancer l'application et au niveau de l'icone sur la bare de lancement rapide faire un clic droit et choisir "Paramètres"
