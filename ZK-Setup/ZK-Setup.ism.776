@@ -586,7 +586,6 @@
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/><td/></row>
 		<row><td>setAllUsersProfile2K</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%ALLUSERSPROFILE]</td><td/><td/></row>
-		<row><td>setPublicProfileVista</td><td>51</td><td>PUBLIC</td><td>[%PUBLIC]</td><td/><td/></row>
 		<row><td>setUserProfileNT</td><td>51</td><td>USERPROFILE</td><td>[%USERPROFILE]</td><td/><td/></row>
 	</table>
 
@@ -633,7 +632,6 @@
 		<row><td>LocalAppDataFolder</td><td>TARGETDIR</td><td>.:LocalA~1|LocalAppData</td><td/><td>0</td><td/></row>
 		<row><td>MY_PRODUCT_NAME</td><td>LYMYTZ</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
-		<row><td>PUBLIC</td><td>TARGETDIR</td><td>.:PUBLIC~1|Public</td><td/><td>0</td><td/></row>
 		<row><td>PersonalFolder</td><td>TARGETDIR</td><td>.:Personal</td><td/><td>0</td><td/></row>
 		<row><td>PrimaryVolumePath</td><td>TARGETDIR</td><td>.:Primar~1|PrimaryVolumePath</td><td/><td>0</td><td/></row>
 		<row><td>ProgramFiles64Folder</td><td>TARGETDIR</td><td>.:Prog64~1|Program Files 64</td><td/><td>0</td><td/></row>
@@ -2274,7 +2272,6 @@
 		<col def="I2">Order</col>
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
-		<row><td>_C91C1C53_DE0A_4CE9_A5AB_F53728CF90FE_</td><td>Microsoft .NET Framework 3.5.prq</td><td/><td/><td/></row>
 	</table>
 
 	<table name="ISSetupType">
@@ -2308,51 +2305,12 @@
 		<col def="I4">TimeStamp</col>
 		<row><td>COMPANY_NAME</td><td>1036</td><td>Lymytz</td><td>0</td><td/><td>-911883097</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1036</td><td>Toujours installer</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ACROBAT5FOLDER</td><td>1036</td><td>   Cette installation exige Adobe Acrobat Reader 5.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER10FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 10.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER11FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 11.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER6FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 6.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER7FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 7.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER8FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 8.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADER9FOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader 9.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_ADOBEREADERDCFOLDER</td><td>1036</td><td>Cette installation exige Adobe Acrobat Reader DC.</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1036</td><td>Les paramètres couleur de votre système ne sont pas adaptés à l'exécution de [ProductName].</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION10</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 1.0.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION11</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 1.1.</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION20</td><td>1036</td><td>Microsoft .NET Framework 2.0 needs to be installed for this installation to continue.</td><td>0</td><td/><td>1277597907</td></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION20SP1</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 2.0 avec SP1.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION30</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 3.0.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION30SP1</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 3.0 avec SP1.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION35</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 3.5.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION35SP1</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 3.5 avec SP1.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40CLIENT</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.0 Client Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.0 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION451FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.5.1 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION452FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.5.2 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.5 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION461FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.6.1 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION46FULL</td><td>1036</td><td>Cette installation exige Microsoft .NET Framework 4.6 Full Package ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE10FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 10 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE11FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 11 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE5FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 5 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE6FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 6 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE7FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 7 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE8FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 8 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_IE9FOUND</td><td>1036</td><td>Cette installation exige Internet Explorer 9 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MDAC27FOUND</td><td>1036</td><td>Cette installation exige Microsoft MDAC 2.7 .</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MDACFOUND</td><td>1036</td><td>Cette installation exige Microsoft MDAC 2.6 avec SP2.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2003</td><td>1036</td><td>Cette installation exige Microsoft Office 2003 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2007</td><td>1036</td><td>Cette installation exige Microsoft Office 2007 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2010</td><td>1036</td><td>Cette installation exige Microsoft Office 2010 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2013x64</td><td>1036</td><td>Cette installation exige Microsoft Office 2013 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2013x86</td><td>1036</td><td>Cette installation exige Microsoft Office 2013 ou version supérieure.</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_MSOFFICE2016</td><td>1036</td><td>Cette installation exige Microsoft Office 2016 Click-to-Run/Démarrer en un clic ou version supérieure.</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>1036</td><td>Le système d'exploitation n'est pas adapté à l'exécution de [ProductName].</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_POWERSHELLVERSION</td><td>1036</td><td>Cette installation exige Microsoft Windows PowerShell.</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_PROCESSOR</td><td>1036</td><td>Le processeur n'est pas adapté à l'exécution de [ProductName].</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_RAM</td><td>1036</td><td>Le taux RAM n'est pas adapté à l'exécution de [ProductName].</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_SCREEN</td><td>1036</td><td>La résolution de l'écran n'est pas adaptée à l'exécution [ProductName].</td><td>0</td><td/><td/></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_SQLEXP2008SP1FOUND</td><td>1036</td><td>Cette installation exige Microsoft SQL Server 2008 Express avec SP1.</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_COMPACT</td><td>1036</td><td>Compacte</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_COMPACT_DESC</td><td>1036</td><td>Description brève</td><td>0</td><td/><td/></row>
 		<row><td>IDPROP_SETUPTYPE_COMPLETE</td><td>1036</td><td>Installation standard</td><td>0</td><td/><td/></row>
@@ -2528,7 +2486,7 @@
 		<row><td>IDS_ERROR_119</td><td>1036</td><td>Erreur lors de l'annulation de l'inscription de l'application COM+. Contactez votre personnel de support technique pour des informations supplémentaires.</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ERROR_12</td><td>1036</td><td>Début de l'action [Time] : [1].</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ERROR_120</td><td>1036</td><td>Suppression en cours des versions antérieures de cette application...</td><td>0</td><td/><td/></row>
-		<row><td>IDS_ERROR_121</td><td>1036</td><td>Suppression des versions antérieures de l’application en préparation</td><td>0</td><td/><td/></row>
+		<row><td>IDS_ERROR_121</td><td>1036</td><td>Suppression des versions antérieures de cette application en cours de préparation...</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ERROR_122</td><td>1036</td><td>Erreur lors de l'application du programme correctif au fichier [2]. Il a sans doute été mis à jour de manière différente et ne peut plus être modifié par ce programme correctif. Pour obtenir des informations complémentaires, contactez le revendeur de votre programme correctif. {{Erreur système : [3]}}</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ERROR_123</td><td>1036</td><td>[2] ne peut pas installer l'un des produits requis. Contactez votre groupe de support technique. {{Erreur système : [3].}}</td><td>0</td><td/><td/></row>
 		<row><td>IDS_ERROR_124</td><td>1036</td><td>Impossible de supprimer la version antérieure de [2]. Contactez votre groupe de support technique.  {{Erreur système : [3].}}</td><td>0</td><td/><td/></row>
@@ -3168,7 +3126,7 @@
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME16</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Lymytz.exe</td><td>0</td><td/><td>-509251569</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME17</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Externe.exe</td><td>0</td><td/><td>-509247409</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME18</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Service.exe</td><td>0</td><td/><td>-509231025</td></row>
-		<row><td>IDS_SHORTCUT_DISPLAY_NAME19</td><td>1036</td><td>UNINST~1|Uninstall</td><td>0</td><td/><td>288014442</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME19</td><td>1036</td><td>Uninstall</td><td>0</td><td/><td>-509253521</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME2</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Externe.exe</td><td>0</td><td/><td>-1180350926</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME20</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Externe.exe</td><td>0</td><td/><td>1378222535</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME21</td><td>1036</td><td>LAUNCH~1.EXE|Launch ZK-Service.exe</td><td>0</td><td/><td>1378255303</td></row>
@@ -3317,10 +3275,6 @@
 		<row><td>IDS__IsAdminInstallPoint_NetworkLocationFormatted</td><td>1036</td><td>{&amp;MSSansBold8}Emplacement réseau</td><td>0</td><td/><td/></row>
 		<row><td>IDS__IsAdminInstallPoint_SpecifyNetworkLocation</td><td>1036</td><td>{&amp;Tahoma8}Veuillez spécifier un emplacement réseau pour l'image serveur du produit.</td><td>0</td><td/><td/></row>
 		<row><td>IDS__IsBrowseButton</td><td>1036</td><td>P&amp;arcourir...</td><td>0</td><td/><td/></row>
-		<row><td>IDS__IsBrowseCertficateDlg_CertificatePath</td><td>1036</td><td>&amp;Chemin des certificats SSL :</td><td>0</td><td/><td/></row>
-		<row><td>IDS__IsBrowseCertficateDlg_Description</td><td>1036</td><td>Paramètres des certificats SSL.</td><td>0</td><td/><td/></row>
-		<row><td>IDS__IsBrowseCertficateDlg_Password</td><td>1036</td><td>&amp;Mot de passe pour les certificats SSL :</td><td>0</td><td/><td/></row>
-		<row><td>IDS__IsBrowseCertficateDlg_Title</td><td>1036</td><td>{&amp;MSSansBold8}Configurer SSL pour Internet Information Services.</td><td>0</td><td/><td/></row>
 		<row><td>IDS__IsBrowseFolderDlg_11</td><td>1036</td><td>{&amp;Tahoma8}</td><td>0</td><td/><td/></row>
 		<row><td>IDS__IsBrowseFolderDlg_4</td><td>1036</td><td>{&amp;Tahoma8}</td><td>0</td><td/><td/></row>
 		<row><td>IDS__IsBrowseFolderDlg_8</td><td>1036</td><td>{&amp;Tahoma8}</td><td>0</td><td/><td/></row>
@@ -3570,15 +3524,6 @@
 		<col def="s255">Value</col>
 	</table>
 
-	<table name="ISVisualElement">
-		<col key="yes" def="s72">File_</col>
-		<col def="s72">BackgroundColor</col>
-		<col def="s72">ForegroundText</col>
-		<col def="s72">ShowNameOn150x150</col>
-		<col def="S255">Square150x150Logo</col>
-		<col def="S255">Square70x70Logo</col>
-	</table>
-
 	<table name="ISWSEWrap">
 		<col key="yes" def="s72">Action_</col>
 		<col key="yes" def="s72">Name</col>
@@ -3740,7 +3685,6 @@
 		<row><td>WriteIniValues</td><td/><td>5100</td><td>WriteIniValues</td><td/></row>
 		<row><td>WriteRegistryValues</td><td/><td>5000</td><td>WriteRegistryValues</td><td/></row>
 		<row><td>setAllUsersProfile2K</td><td>VersionNT &gt;= 500</td><td>980</td><td/><td/></row>
-		<row><td>setPublicProfileVista</td><td>VersionNT &gt;= 600</td><td>981</td><td/><td/></row>
 		<row><td>setUserProfileNT</td><td>VersionNT</td><td>960</td><td/><td/></row>
 	</table>
 
@@ -3778,7 +3722,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>SaveAsSchema</td><td/></row>
 		<row><td>SccEnabled</td><td>0</td></row>
 		<row><td>SccPath</td><td/></row>
-		<row><td>SchemaVersion</td><td>779</td></row>
+		<row><td>SchemaVersion</td><td>776</td></row>
 		<row><td>Script</td><td>1</td></row>
 		<row><td>Skin</td><td/></row>
 		<row><td>Type</td><td>MSI</td></row>
@@ -3808,7 +3752,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>SetAllUsersProfileNT</td><td>VersionNT = 400</td><td>970</td><td/><td/></row>
 		<row><td>ValidateProductID</td><td/><td>700</td><td>ValidateProductID</td><td/></row>
 		<row><td>setAllUsersProfile2K</td><td>VersionNT &gt;= 500</td><td>980</td><td/><td/></row>
-		<row><td>setPublicProfileVista</td><td>VersionNT &gt;= 600</td><td>981</td><td/><td/></row>
 		<row><td>setUserProfileNT</td><td>VersionNT</td><td>960</td><td/><td/></row>
 	</table>
 
@@ -4184,7 +4127,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{E7EDA498-E8A8-4F79-8521-E686DC7221A1}</td><td/></row>
 		<row><td>ProductName</td><td>ZK-Lymytz</td><td/></row>
-		<row><td>ProductVersion</td><td>4.00.012</td><td/></row>
+		<row><td>ProductVersion</td><td>4.00.011</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR;ISACTIONPROP1</td><td/></row>
@@ -4511,7 +4454,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>AppId</td><td>RunAsInteractiveUser</td><td>Y</td><td>0</td><td>1</td><td/><td/><td/><td/><td/></row>
 		<row><td>AppId</td><td>ServiceParameters</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td/></row>
 		<row><td>AppSearch</td><td>Property</td><td>N</td><td/><td/><td/><td/><td>Identifier</td><td/><td>The property associated with a Signature</td></row>
-		<row><td>AppSearch</td><td>Signature_</td><td>N</td><td/><td/><td>ISXmlLocator;Signature;RegLocator;IniLocator;DrLocator;CompLocator</td><td>1</td><td>Identifier</td><td/><td>The Signature_ represents a unique file signature and is also the foreign key in the Signature,  RegLocator, IniLocator, CompLocator and the DrLocator tables.</td></row>
+		<row><td>AppSearch</td><td>Signature_</td><td>N</td><td/><td/><td>ISXmlLocator;Signature</td><td>1</td><td>Identifier</td><td/><td>The Signature_ represents a unique file signature and is also the foreign key in the Signature,  RegLocator, IniLocator, CompLocator and the DrLocator tables.</td></row>
 		<row><td>BBControl</td><td>Attributes</td><td>Y</td><td>0</td><td>2147483647</td><td/><td/><td/><td/><td>A 32-bit word that specifies the attribute flags to be applied to this control.</td></row>
 		<row><td>BBControl</td><td>BBControl</td><td>N</td><td/><td/><td/><td/><td>Identifier</td><td/><td>Name of the control. This name must be unique within a billboard, but can repeat on different billboard.</td></row>
 		<row><td>BBControl</td><td>Billboard_</td><td>N</td><td/><td/><td>Billboard</td><td>1</td><td>Identifier</td><td/><td>External key to the Billboard table, name of the billboard.</td></row>
@@ -4928,7 +4871,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISProductConfigurationInstance</td><td>Property</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>Product Congiuration property name</td></row>
 		<row><td>ISProductConfigurationInstance</td><td>Value</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>String value for property.</td></row>
 		<row><td>ISProductConfigurationProperty</td><td>ISProductConfiguration_</td><td>N</td><td/><td/><td>ISProductConfiguration</td><td>1</td><td>Text</td><td/><td>Foreign key into the ISProductConfiguration table.</td></row>
-		<row><td>ISProductConfigurationProperty</td><td>Property</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>Product Congiuration property name</td></row>
+		<row><td>ISProductConfigurationProperty</td><td>Property</td><td>N</td><td/><td/><td>Property</td><td>1</td><td>Text</td><td/><td>Product Congiuration property name</td></row>
 		<row><td>ISProductConfigurationProperty</td><td>Value</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td>String value for property. Never null or empty.</td></row>
 		<row><td>ISRelease</td><td>Attributes</td><td>N</td><td/><td/><td/><td/><td/><td/><td>Bitfield holding boolean values for various release attributes.</td></row>
 		<row><td>ISRelease</td><td>BuildLocation</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>Build location.</td></row>
@@ -5185,12 +5128,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISVirtualShortcut</td><td>Name</td><td>N</td><td/><td/><td/><td/><td>Identifier</td><td/><td>Property name</td></row>
 		<row><td>ISVirtualShortcut</td><td>Shortcut_</td><td>N</td><td/><td/><td>Shortcut</td><td>1</td><td>Identifier</td><td/><td>Foreign key into Shortcut table.</td></row>
 		<row><td>ISVirtualShortcut</td><td>Value</td><td>N</td><td/><td/><td/><td/><td/><td/><td>Property value</td></row>
-		<row><td>ISVisualElement</td><td>BackgroundColor</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>Background Color for the tile</td></row>
-		<row><td>ISVisualElement</td><td>File_</td><td>N</td><td/><td/><td>File</td><td>1</td><td>Identifier</td><td/><td>Foreign key into File table.</td></row>
-		<row><td>ISVisualElement</td><td>ForegroundText</td><td>N</td><td/><td/><td/><td/><td>Text</td><td>light;dark</td><td>Text color for the tile</td></row>
-		<row><td>ISVisualElement</td><td>ShowNameOn150x150</td><td>N</td><td/><td/><td/><td/><td>Text</td><td>on;off</td><td>Whether to show the name on a medium-sized square title</td></row>
-		<row><td>ISVisualElement</td><td>Square150x150Logo</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td>Optional base name for image to show on a medium-sized square tile</td></row>
-		<row><td>ISVisualElement</td><td>Square70x70Logo</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td>Optional base name for image to show on a small-sized square tile</td></row>
 		<row><td>ISWSEWrap</td><td>Action_</td><td>N</td><td/><td/><td>CustomAction</td><td>1</td><td>Identifier</td><td/><td>Foreign key into CustomAction table</td></row>
 		<row><td>ISWSEWrap</td><td>Name</td><td>N</td><td/><td/><td/><td/><td>Text</td><td/><td>Property associated with this Action</td></row>
 		<row><td>ISWSEWrap</td><td>Value</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td>Value associated with this Property</td></row>
@@ -5517,7 +5454,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>UIText</td><td>Text</td><td>Y</td><td/><td/><td/><td/><td>Text</td><td/><td>The localized version of the string.</td></row>
 		<row><td>Upgrade</td><td>ActionProperty</td><td>N</td><td/><td/><td/><td/><td>UpperCase</td><td/><td>The property to set when a product in this set is found.</td></row>
 		<row><td>Upgrade</td><td>Attributes</td><td>N</td><td>0</td><td>2147483647</td><td/><td/><td/><td/><td>The attributes of this product set.</td></row>
-		<row><td>Upgrade</td><td>ISDisplayName</td><td>Y</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Upgrade</td><td>ISDisplayName</td><td>Y</td><td/><td/><td>ISUpgradeMsiItem</td><td>1</td><td/><td/><td/></row>
 		<row><td>Upgrade</td><td>Language</td><td>Y</td><td/><td/><td/><td/><td>Language</td><td/><td>A comma-separated list of languages for either products in this set or products not in this set.</td></row>
 		<row><td>Upgrade</td><td>Remove</td><td>Y</td><td/><td/><td/><td/><td>Formatted</td><td/><td>The list of features to remove when uninstalling a product from this set.  The default is "ALL".</td></row>
 		<row><td>Upgrade</td><td>UpgradeCode</td><td>N</td><td/><td/><td/><td/><td>Guid</td><td/><td>The UpgradeCode GUID belonging to the products in this set.</td></row>
