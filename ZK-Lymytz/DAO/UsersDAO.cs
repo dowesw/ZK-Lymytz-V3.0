@@ -29,7 +29,11 @@ namespace ZK_Lymytz.DAO
                 bean.AccesMultiSociete = Convert.ToBoolean((lect["acces_multi_societe"].ToString() != "") ? lect["acces_multi_societe"].ToString() : "false");
                 bean.SuperAdmin = Convert.ToBoolean((lect["super_admin"].ToString() != "") ? lect["super_admin"].ToString() : "false");
                 bean.Agence = new Agence(Convert.ToInt32(lect["agence"].ToString()), lect["designation"].ToString());
-                bean.Agence.Societe = new Societe(Convert.ToInt32(lect["societe"].ToString()), lect["name"].ToString(), Convert.ToInt32(lect["groupe"].ToString()), lect["adresse_ip"].ToString());
+                int societe = Utils.asNumeric(lect["societe"]) ? Convert.ToInt32(lect["societe"].ToString()) : 0;
+                int groupe = Utils.asNumeric(lect["groupe"]) ? Convert.ToInt32(lect["groupe"].ToString()) : 0;
+                string name = lect["name"] != null ? lect["name"].ToString() : "";
+                string adresse_ip = lect["adresse_ip"] != null ? lect["adresse_ip"].ToString() : "";
+                bean.Agence.Societe = new Societe(societe, name, groupe, adresse_ip);
             }
             catch (Exception ex)
             {
@@ -163,7 +167,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select u.*, a.designation, a.designation, a.societe, s.name, s.groupe, s.adresse_ip from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id where id = " + id + ";";
+                string query = "select u.*, a.designation, a.designation, a.societe, s.name, COALESCE(s.groupe, 0) AS groupe, s.adresse_ip, g.libelle from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id left join yvs_base_groupe_societe g on s.groupe = g.id where id = " + id + ";";
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)
@@ -192,7 +196,7 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select u.*, a.designation, a.designation, a.societe, s.name, s.groupe, s.adresse_ip from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id where code_users = '" + code + "';";
+                string query = "select u.*, a.designation, a.designation, a.societe, s.name, COALESCE(s.groupe, 0) AS groupe, s.adresse_ip, g.libelle from yvs_users u inner join yvs_agences a on u.agence = a.id inner join yvs_societes s on a.societe = s.id left join yvs_base_groupe_societe g on s.groupe = g.id where code_users = '" + code + "';";
                 NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect);
                 NpgsqlDataReader lect = Lcmd.ExecuteReader();
                 if (lect.HasRows)

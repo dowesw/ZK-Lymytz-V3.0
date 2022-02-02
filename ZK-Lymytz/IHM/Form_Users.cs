@@ -105,13 +105,13 @@ namespace ZK_Lymytz.IHM
                         {
                             if (users.SuperAdmin)
                             {
-                                societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id ");
+                                societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id left join yvs_base_groupe_societe g on y.groupe = g.id ");
                             }
-                            else if (users.Agence.Societe.Groupe > 0)
+                            else if (users.Agence.Societe.Groupe!=null? users.Agence.Societe.Groupe.Id > 0:false)
                             {
-                                societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id where y.groupe = " + users.Agence.Societe.Groupe);
+                                societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id left join yvs_base_groupe_societe g on y.groupe = g.id where y.groupe = " + users.Agence.Societe.Groupe.Id);
                             }
                             else
                             {

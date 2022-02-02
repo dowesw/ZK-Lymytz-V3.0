@@ -40,6 +40,7 @@
             this.txt_user = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txt_pwd = new System.Windows.Forms.TextBox();
+            this.btn_tester = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_save
@@ -139,6 +140,17 @@
             this.txt_pwd.TabIndex = 8;
             this.txt_pwd.Text = "yves1910/";
             // 
+            // btn_tester
+            // 
+            this.btn_tester.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_tester.Location = new System.Drawing.Point(65, 167);
+            this.btn_tester.Name = "btn_tester";
+            this.btn_tester.Size = new System.Drawing.Size(102, 32);
+            this.btn_tester.TabIndex = 102;
+            this.btn_tester.Text = "Tester";
+            this.btn_tester.UseVisualStyleBackColor = true;
+            this.btn_tester.Click += new System.EventHandler(this.btn_tester_Click);
+            // 
             // Form_Serveur
             // 
             this.AcceptButton = this.btn_save;
@@ -146,6 +158,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(286, 211);
+            this.Controls.Add(this.btn_tester);
             this.Controls.Add(this.txt_pwd);
             this.Controls.Add(this.txt_user);
             this.Controls.Add(this.txt_db);
@@ -186,5 +199,6 @@
         private System.Windows.Forms.TextBox txt_user;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txt_pwd;
+        private System.Windows.Forms.Button btn_tester;
     }
 }

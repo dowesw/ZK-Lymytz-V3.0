@@ -830,6 +830,30 @@ namespace ZK_Lymytz.TOOLS
             return value != null ? value.Trim().Length > 0 : false;
         }
 
+        public static bool asString(Object value)
+        {
+            return value != null ? asString(value.ToString()) : false;
+        }
+
+        public static bool asNumeric(string value)
+        {
+            if (asString(value))
+            {
+                try
+                {
+                    Convert.ToInt32(value);
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        public static bool asNumeric(Object value)
+        {
+            return value != null ? asNumeric(value.ToString()) : false;
+        }
+
         public static void addFrom(string name)
         {
             removeFrom(name);

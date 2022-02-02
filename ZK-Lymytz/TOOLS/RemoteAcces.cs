@@ -12,7 +12,7 @@ namespace ZK_Lymytz.TOOLS
 {
     class RemoteAcces
     {
-        string adresse = "92.222.82.26";
+        string adresse = "51.68.230.114";
         int port = 1910;
         string protocol = "FTP";
 
@@ -57,12 +57,12 @@ namespace ZK_Lymytz.TOOLS
 
     class FTP
     {
-        string adresse = "92.222.82.26";
+        string adresse = "51.68.230.114";
         int port = 1910;
-        string users = "yves";
+        string users = "lymytz";
         string password = "yves1910/";
         string host = "ftp://";
-        string path_root = "/home/yves/files/";
+        string path_root = "/home/";
 
         public FTP(string adresse, int port, string users, string password)
         {
@@ -71,6 +71,7 @@ namespace ZK_Lymytz.TOOLS
             this.users = users;
             this.password = password;
             this.host += adresse + ":" + port + "/files/";
+            this.path_root += users + "/files/";
         }
 
         public string UploadFile(string file_local)
@@ -100,11 +101,11 @@ namespace ZK_Lymytz.TOOLS
 
     class SFTP
     {
-        string adresse = "92.222.82.26";
+        string adresse = "51.68.230.114";
         int port = 1910;
-        string users = "yves";
+        string users = "lymytz";
         string password = "yves1910/";
-        string path_root = "/home/yves/files/";
+        string path_root = "/home/";
 
         public SFTP(string adresse, int port, string users, string password)
         {
@@ -112,6 +113,7 @@ namespace ZK_Lymytz.TOOLS
             this.port = port;
             this.users = users;
             this.password = password;
+            this.path_root += users+"/files/";
         }
 
         public string UploadFile(string file_local)
@@ -147,7 +149,7 @@ namespace ZK_Lymytz.TOOLS
 
     class DESKTOP
     {
-        string adresse = "92.222.82.26";
+        string adresse = "51.68.230.114";
         string users = "hp elite 8300";
         string password = "lymytz109374141/";
         string host = "\\\\";

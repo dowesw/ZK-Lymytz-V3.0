@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Text;
-
-using Npgsql;
-using Microsoft.Win32;
 using ZK_Lymytz.ENTITE;
 using ZK_Lymytz.TOOLS;
 
@@ -51,6 +50,8 @@ namespace ZK_Lymytz.DAO
                     valKey.SetValue("password", societe.Password);
                     valKey.SetValue("domain", societe.Domain);
                     valKey.SetValue("type", societe.TypeConnexion);
+                    valKey.SetValue("groupe_id", (societe.Groupe != null ? societe.Groupe.Id : 0));
+                    valKey.SetValue("groupe_libelle", (societe.Groupe != null ? societe.Groupe.Libelle : ""));
                     return true;
                 }
                 return false;
@@ -108,6 +109,9 @@ namespace ZK_Lymytz.DAO
                     serveur.Password = (string)(valKey.GetValue("password") != null ? valKey.GetValue("password") : "");
                     serveur.Domain = (string)(valKey.GetValue("domain") != null ? valKey.GetValue("domain") : "");
                     serveur.TypeConnexion = (string)(valKey.GetValue("type") != null ? valKey.GetValue("type") : "");
+                    int groupe_id = serveur.Port = Convert.ToInt32(valKey.GetValue("groupe_id") != null ? valKey.GetValue("groupe_id") : 0);
+                    string groupe_libelle = (string)(valKey.GetValue("groupe_libelle") != null ? valKey.GetValue("groupe_libelle") : "");
+                    serveur.Groupe = new Groupe(groupe_id, groupe_libelle);
                     valKey.Close();
                 }
                 return serveur;
@@ -167,7 +171,6 @@ namespace ZK_Lymytz.DAO
 
         private static Societe Get(NpgsqlDataReader lect)
         {
-            NpgsqlConnection connect = new Connexion().Connection();
             Societe bean = new Societe();
             try
             {
@@ -179,6 +182,19 @@ namespace ZK_Lymytz.DAO
                 bean.Password = lect["password"].ToString();
                 bean.Domain = lect["domain"].ToString();
                 bean.TypeConnexion = lect["type_connexion"].ToString();
+                int groupe_id = 0;
+                string groupe_libelle = "";
+                try
+                {
+                    groupe_id = Convert.ToInt32(lect["groupe"].ToString());
+                }
+                catch (Exception ex) { }
+                try
+                {
+                    groupe_libelle = lect["libelle"].ToString();
+                }
+                catch (Exception ex) { }
+                bean.Groupe = new Groupe(groupe_id, groupe_libelle);
             }
             catch (Exception ex)
             {
@@ -193,8 +209,9 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id where y.name ='" + name + "';";
+                string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id left join yvs_base_groupe_societe g on y.groupe = g.id " +
+                            "where y.name ='" + name + "';";
                 using (NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect))
                 using (NpgsqlDataReader lect = Lcmd.ExecuteReader())
                 {
@@ -225,8 +242,9 @@ namespace ZK_Lymytz.DAO
             NpgsqlConnection connect = new Connexion().Connection();
             try
             {
-                string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id where y.id = " + id + ";";
+                string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id left join yvs_base_groupe_societe g on y.groupe = g.id " +
+                            "where y.id = " + id + ";";
                 using (NpgsqlCommand Lcmd = new NpgsqlCommand(query, connect))
                 using (NpgsqlDataReader lect = Lcmd.ExecuteReader())
                 {

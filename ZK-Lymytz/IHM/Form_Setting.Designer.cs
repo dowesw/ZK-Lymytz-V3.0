@@ -77,6 +77,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grp_action_s = new System.Windows.Forms.GroupBox();
+            this.btn_tester = new System.Windows.Forms.Button();
             this.btn_reset_serveur = new System.Windows.Forms.Button();
             this.btn_save_serveur = new System.Windows.Forms.Button();
             this.txt_password = new System.Windows.Forms.TextBox();
@@ -127,7 +128,14 @@
             this.txt_name_user = new System.Windows.Forms.TextBox();
             this.btn_save_users = new System.Windows.Forms.Button();
             this.tab_liaison = new System.Windows.Forms.TabPage();
+            this.dtp_date_debut = new System.Windows.Forms.DateTimePicker();
             this.dgv_liaison = new System.Windows.Forms.DataGridView();
+            this._adresse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._port = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._database = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._users = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._pasword = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.date_debut = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.context_liaison = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.créerColonnesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.relationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -140,6 +148,7 @@
             this._ls_database = new System.Windows.Forms.TextBox();
             this._ls_port = new System.Windows.Forms.TextBox();
             this._ls_adresse = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -147,14 +156,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.ofd_open = new System.Windows.Forms.OpenFileDialog();
             this.fbd_search = new System.Windows.Forms.FolderBrowserDialog();
-            this.dtp_date_debut = new System.Windows.Forms.DateTimePicker();
-            this.label17 = new System.Windows.Forms.Label();
-            this._adresse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._port = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._database = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._users = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._pasword = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.date_debut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_group = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tab_niveau.SuspendLayout();
             this.grp_agence.SuspendLayout();
@@ -217,14 +220,14 @@
             this.grp_agence.Controls.Add(this.cbox_agence);
             this.grp_agence.Location = new System.Drawing.Point(348, 2);
             this.grp_agence.Name = "grp_agence";
-            this.grp_agence.Size = new System.Drawing.Size(334, 77);
+            this.grp_agence.Size = new System.Drawing.Size(334, 100);
             this.grp_agence.TabIndex = 7;
             this.grp_agence.TabStop = false;
             this.grp_agence.Text = "Agence";
             // 
             // txt_name_agence
             // 
-            this.txt_name_agence.Location = new System.Drawing.Point(22, 46);
+            this.txt_name_agence.Location = new System.Drawing.Point(22, 47);
             this.txt_name_agence.Name = "txt_name_agence";
             this.txt_name_agence.ReadOnly = true;
             this.txt_name_agence.Size = new System.Drawing.Size(289, 20);
@@ -233,7 +236,7 @@
             // cbox_agence
             // 
             this.cbox_agence.FormattingEnabled = true;
-            this.cbox_agence.Location = new System.Drawing.Point(22, 19);
+            this.cbox_agence.Location = new System.Drawing.Point(22, 20);
             this.cbox_agence.Name = "cbox_agence";
             this.cbox_agence.Size = new System.Drawing.Size(289, 21);
             this.cbox_agence.TabIndex = 4;
@@ -244,7 +247,7 @@
             this.btn_save_societe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_save_societe.Image = global::ZK_Lymytz.Properties.Resources.save;
             this.btn_save_societe.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_societe.Location = new System.Drawing.Point(689, 48);
+            this.btn_save_societe.Location = new System.Drawing.Point(689, 67);
             this.btn_save_societe.Name = "btn_save_societe";
             this.btn_save_societe.Size = new System.Drawing.Size(86, 31);
             this.btn_save_societe.TabIndex = 6;
@@ -268,9 +271,9 @@
             this.grp_preference.Controls.Add(this.chk_connect);
             this.grp_preference.Controls.Add(this.chk_autorun);
             this.grp_preference.Controls.Add(this.btn_save_preference);
-            this.grp_preference.Location = new System.Drawing.Point(6, 81);
+            this.grp_preference.Location = new System.Drawing.Point(6, 108);
             this.grp_preference.Name = "grp_preference";
-            this.grp_preference.Size = new System.Drawing.Size(769, 332);
+            this.grp_preference.Size = new System.Drawing.Size(769, 305);
             this.grp_preference.TabIndex = 1;
             this.grp_preference.TabStop = false;
             this.grp_preference.Text = "Préference";
@@ -291,7 +294,7 @@
             this.grp_path_setup.Controls.Add(this.btn_open_path_setup);
             this.grp_path_setup.Controls.Add(this.btn_search_path_setup);
             this.grp_path_setup.Controls.Add(this.txt_path_setup);
-            this.grp_path_setup.Location = new System.Drawing.Point(22, 239);
+            this.grp_path_setup.Location = new System.Drawing.Point(22, 215);
             this.grp_path_setup.Name = "grp_path_setup";
             this.grp_path_setup.Size = new System.Drawing.Size(741, 59);
             this.grp_path_setup.TabIndex = 9;
@@ -345,7 +348,7 @@
             this.grp_path_photo.Controls.Add(this.btn_open);
             this.grp_path_photo.Controls.Add(this.txt_search);
             this.grp_path_photo.Controls.Add(this.txt_path_photo);
-            this.grp_path_photo.Location = new System.Drawing.Point(22, 179);
+            this.grp_path_photo.Location = new System.Drawing.Point(22, 155);
             this.grp_path_photo.Name = "grp_path_photo";
             this.grp_path_photo.Size = new System.Drawing.Size(741, 59);
             this.grp_path_photo.TabIndex = 9;
@@ -499,7 +502,7 @@
             this.btn_save_preference.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_save_preference.Image = global::ZK_Lymytz.Properties.Resources.save;
             this.btn_save_preference.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_save_preference.Location = new System.Drawing.Point(677, 301);
+            this.btn_save_preference.Location = new System.Drawing.Point(677, 277);
             this.btn_save_preference.Name = "btn_save_preference";
             this.btn_save_preference.Size = new System.Drawing.Size(86, 28);
             this.btn_save_preference.TabIndex = 2;
@@ -509,18 +512,20 @@
             // 
             // grp_societe
             // 
+            this.grp_societe.Controls.Add(this.label19);
+            this.grp_societe.Controls.Add(this.txt_group);
             this.grp_societe.Controls.Add(this.txt_name);
             this.grp_societe.Controls.Add(this.cbox_societe);
             this.grp_societe.Location = new System.Drawing.Point(6, 2);
             this.grp_societe.Name = "grp_societe";
-            this.grp_societe.Size = new System.Drawing.Size(336, 77);
+            this.grp_societe.Size = new System.Drawing.Size(336, 100);
             this.grp_societe.TabIndex = 0;
             this.grp_societe.TabStop = false;
             this.grp_societe.Text = "Socièté";
             // 
             // txt_name
             // 
-            this.txt_name.Location = new System.Drawing.Point(22, 46);
+            this.txt_name.Location = new System.Drawing.Point(22, 72);
             this.txt_name.Name = "txt_name";
             this.txt_name.ReadOnly = true;
             this.txt_name.Size = new System.Drawing.Size(289, 20);
@@ -529,7 +534,7 @@
             // cbox_societe
             // 
             this.cbox_societe.FormattingEnabled = true;
-            this.cbox_societe.Location = new System.Drawing.Point(22, 19);
+            this.cbox_societe.Location = new System.Drawing.Point(22, 45);
             this.cbox_societe.Name = "cbox_societe";
             this.cbox_societe.Size = new System.Drawing.Size(289, 21);
             this.cbox_societe.TabIndex = 4;
@@ -712,14 +717,28 @@
             // 
             // grp_action_s
             // 
+            this.grp_action_s.Controls.Add(this.btn_tester);
             this.grp_action_s.Controls.Add(this.btn_reset_serveur);
             this.grp_action_s.Controls.Add(this.btn_save_serveur);
             this.grp_action_s.Location = new System.Drawing.Point(662, 28);
             this.grp_action_s.Name = "grp_action_s";
-            this.grp_action_s.Size = new System.Drawing.Size(111, 92);
+            this.grp_action_s.Size = new System.Drawing.Size(111, 142);
             this.grp_action_s.TabIndex = 6;
             this.grp_action_s.TabStop = false;
             this.grp_action_s.Text = "Actions";
+            // 
+            // btn_tester
+            // 
+            this.btn_tester.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_tester.Image = global::ZK_Lymytz.Properties.Resources.irkick;
+            this.btn_tester.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_tester.Location = new System.Drawing.Point(18, 90);
+            this.btn_tester.Name = "btn_tester";
+            this.btn_tester.Size = new System.Drawing.Size(87, 30);
+            this.btn_tester.TabIndex = 103;
+            this.btn_tester.Text = "Tester";
+            this.btn_tester.UseVisualStyleBackColor = true;
+            this.btn_tester.Click += new System.EventHandler(this.btn_tester_Click);
             // 
             // btn_reset_serveur
             // 
@@ -1252,6 +1271,14 @@
             this.tab_liaison.Text = "Liaisons";
             this.tab_liaison.UseVisualStyleBackColor = true;
             // 
+            // dtp_date_debut
+            // 
+            this.dtp_date_debut.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtp_date_debut.Location = new System.Drawing.Point(482, 21);
+            this.dtp_date_debut.Name = "dtp_date_debut";
+            this.dtp_date_debut.Size = new System.Drawing.Size(96, 20);
+            this.dtp_date_debut.TabIndex = 23;
+            // 
             // dgv_liaison
             // 
             this.dgv_liaison.AllowUserToAddRows = false;
@@ -1275,6 +1302,43 @@
             this.dgv_liaison.Size = new System.Drawing.Size(767, 364);
             this.dgv_liaison.TabIndex = 22;
             this.dgv_liaison.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgv_liaison_MouseDown);
+            // 
+            // _adresse
+            // 
+            this._adresse.HeaderText = "Adresse IP";
+            this._adresse.Name = "_adresse";
+            this._adresse.ReadOnly = true;
+            // 
+            // _port
+            // 
+            this._port.HeaderText = "Port";
+            this._port.Name = "_port";
+            this._port.ReadOnly = true;
+            // 
+            // _database
+            // 
+            this._database.HeaderText = "Database";
+            this._database.Name = "_database";
+            this._database.ReadOnly = true;
+            // 
+            // _users
+            // 
+            this._users.HeaderText = "Utilisateur";
+            this._users.Name = "_users";
+            this._users.ReadOnly = true;
+            // 
+            // _pasword
+            // 
+            this._pasword.HeaderText = "Mot de passe";
+            this._pasword.Name = "_pasword";
+            this._pasword.ReadOnly = true;
+            this._pasword.Visible = false;
+            // 
+            // date_debut
+            // 
+            this.date_debut.HeaderText = "Date Début";
+            this.date_debut.Name = "date_debut";
+            this.date_debut.ReadOnly = true;
             // 
             // context_liaison
             // 
@@ -1383,6 +1447,15 @@
             this._ls_adresse.Text = "127.0.0.1";
             this._ls_adresse.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(479, 5);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(69, 13);
+            this.label17.TabIndex = 10;
+            this.label17.Text = "Date début : ";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -1432,59 +1505,22 @@
             // 
             this.ofd_open.FileName = "openFileDialog1";
             // 
-            // dtp_date_debut
+            // txt_group
             // 
-            this.dtp_date_debut.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtp_date_debut.Location = new System.Drawing.Point(482, 21);
-            this.dtp_date_debut.Name = "dtp_date_debut";
-            this.dtp_date_debut.Size = new System.Drawing.Size(96, 20);
-            this.dtp_date_debut.TabIndex = 23;
+            this.txt_group.Location = new System.Drawing.Point(116, 19);
+            this.txt_group.Name = "txt_group";
+            this.txt_group.Size = new System.Drawing.Size(195, 20);
+            this.txt_group.TabIndex = 6;
+            this.txt_group.Leave += new System.EventHandler(this.txt_group_Leave);
             // 
-            // label17
+            // label19
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(479, 5);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(69, 13);
-            this.label17.TabIndex = 10;
-            this.label17.Text = "Date début : ";
-            // 
-            // _adresse
-            // 
-            this._adresse.HeaderText = "Adresse IP";
-            this._adresse.Name = "_adresse";
-            this._adresse.ReadOnly = true;
-            // 
-            // _port
-            // 
-            this._port.HeaderText = "Port";
-            this._port.Name = "_port";
-            this._port.ReadOnly = true;
-            // 
-            // _database
-            // 
-            this._database.HeaderText = "Database";
-            this._database.Name = "_database";
-            this._database.ReadOnly = true;
-            // 
-            // _users
-            // 
-            this._users.HeaderText = "Utilisateur";
-            this._users.Name = "_users";
-            this._users.ReadOnly = true;
-            // 
-            // _pasword
-            // 
-            this._pasword.HeaderText = "Mot de passe";
-            this._pasword.Name = "_pasword";
-            this._pasword.ReadOnly = true;
-            this._pasword.Visible = false;
-            // 
-            // date_debut
-            // 
-            this.date_debut.HeaderText = "Date Début";
-            this.date_debut.Name = "date_debut";
-            this.date_debut.ReadOnly = true;
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(24, 23);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(42, 13);
+            this.label19.TabIndex = 7;
+            this.label19.Text = "Groupe";
             // 
             // Form_Setting
             // 
@@ -1669,5 +1705,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn _users;
         private System.Windows.Forms.DataGridViewTextBoxColumn _pasword;
         private System.Windows.Forms.DataGridViewTextBoxColumn date_debut;
+        private System.Windows.Forms.Button btn_tester;
+        private System.Windows.Forms.TextBox txt_group;
+        private System.Windows.Forms.Label label19;
     }
 }

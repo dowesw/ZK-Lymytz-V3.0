@@ -22,11 +22,16 @@ namespace ZK_Lymytz.ENTITE
             this.name = name;
         }
 
-        public Societe(int id, string name, int groupe, string adresseIp)
+        public Societe(int id, string name, Groupe groupe, string adresseIp)
             : this(id, name)
         {
             this.groupe = groupe;
             this.adresseIp = adresseIp;
+        }
+
+        public Societe(int id, string name, int groupe, string adresseIp)
+            : this(id, name, new Groupe(groupe), adresseIp)
+        {
         }
 
         private int id;
@@ -85,8 +90,8 @@ namespace ZK_Lymytz.ENTITE
             set { typeConnexion = value; }
         }
 
-        private int groupe;
-        public int Groupe
+        private Groupe groupe = new Groupe();
+        public Groupe Groupe
         {
             get { return groupe; }
             set { groupe = value; }

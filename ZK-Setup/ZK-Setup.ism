@@ -362,11 +362,7 @@
 		<row><td>ZK_Service.exe4</td><td>{DD0B5462-6B91-4A17-9D60-62CD842DEB56}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ZK_Service.exe5</td><td>{D671BE44-E966-435E-8DE8-E9FE1028457A}</td><td>INSTALLDIR</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>commpro.dll</td><td>{A44A57C8-A807-4F67-8417-1DC0D3F1ACD8}</td><td>SDK</td><td>8</td><td/><td>commpro.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>commpro.dll1</td><td>{4568381C-7B73-4AE9-BCF1-F8F59B0B4AA1}</td><td>SDK1</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>commpro.dll2</td><td>{5B7431DF-748B-4DE7-8D13-9735805D99DD}</td><td>SDK1</td><td>8</td><td/><td>commpro.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>comms.dll</td><td>{3C181F65-B97F-4527-9F8D-AC44A4183791}</td><td>SDK</td><td>8</td><td/><td>comms.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>comms.dll1</td><td>{3B1631C6-C823-4DAA-9DC1-45995B58D312}</td><td>SDK1</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>comms.dll2</td><td>{891C78D1-70B8-4496-976E-7356F3556712}</td><td>SDK1</td><td>8</td><td/><td>comms.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>plcommpro.dll</td><td>{DE7DB1D5-23ED-4111-8D7B-06817A53614C}</td><td>SDK</td><td>8</td><td/><td>plcommpro.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>plcommpro.dll1</td><td>{CC2110F2-6B26-4DA5-8B95-F45B1A9423D2}</td><td>SDK1</td><td>8</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>plcommpro.dll2</td><td>{B43F4196-68AB-4C80-B036-4AD7DD352A2C}</td><td>SDK1</td><td>8</td><td/><td>plcommpro.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -494,11 +490,7 @@
 		<row><td>INSTALLDIR</td><td>ZK_Service.exe4</td></row>
 		<row><td>INSTALLDIR</td><td>ZK_Service.exe5</td></row>
 		<row><td>INSTALLDIR</td><td>commpro.dll</td></row>
-		<row><td>INSTALLDIR</td><td>commpro.dll1</td></row>
-		<row><td>INSTALLDIR</td><td>commpro.dll2</td></row>
 		<row><td>INSTALLDIR</td><td>comms.dll</td></row>
-		<row><td>INSTALLDIR</td><td>comms.dll1</td></row>
-		<row><td>INSTALLDIR</td><td>comms.dll2</td></row>
 		<row><td>INSTALLDIR</td><td>plcommpro.dll</td></row>
 		<row><td>INSTALLDIR</td><td>plcommpro.dll1</td></row>
 		<row><td>INSTALLDIR</td><td>plcommpro.dll2</td></row>
@@ -552,10 +544,6 @@
 		<row><td>SDK1</td><td>AllOtherFiles6</td></row>
 		<row><td>SDK1</td><td>Interop.zkemkeeper.dll3</td></row>
 		<row><td>SDK1</td><td>Interop.zkemkeeper.dll5</td></row>
-		<row><td>SDK1</td><td>commpro.dll1</td></row>
-		<row><td>SDK1</td><td>commpro.dll2</td></row>
-		<row><td>SDK1</td><td>comms.dll1</td></row>
-		<row><td>SDK1</td><td>comms.dll2</td></row>
 		<row><td>SDK1</td><td>plcommpro.dll1</td></row>
 		<row><td>SDK1</td><td>plcommpro.dll2</td></row>
 		<row><td>SDK1</td><td>plcomms.dll1</td></row>
@@ -1389,11 +1377,7 @@
 		<row><td>DefaultFeature</td><td>ZK_Service.exe4</td></row>
 		<row><td>DefaultFeature</td><td>ZK_Service.exe5</td></row>
 		<row><td>DefaultFeature</td><td>commpro.dll</td></row>
-		<row><td>DefaultFeature</td><td>commpro.dll1</td></row>
-		<row><td>DefaultFeature</td><td>commpro.dll2</td></row>
 		<row><td>DefaultFeature</td><td>comms.dll</td></row>
-		<row><td>DefaultFeature</td><td>comms.dll1</td></row>
-		<row><td>DefaultFeature</td><td>comms.dll2</td></row>
 		<row><td>DefaultFeature</td><td>plcommpro.dll</td></row>
 		<row><td>DefaultFeature</td><td>plcommpro.dll1</td></row>
 		<row><td>DefaultFeature</td><td>plcommpro.dll2</td></row>
@@ -1450,9 +1434,7 @@
 		<row><td>_auto_uninstall_sdk_64.bat</td><td>AllOtherFiles2</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\_Auto-Uninstall_sdk_64.bat</td><td>1</td><td/></row>
 		<row><td>_auto_uninstall_sdk_64.bat1</td><td>AllOtherFiles6</td><td>_AUTO-~1.BAT|_Auto-Uninstall_sdk_64.bat</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\_Auto-Uninstall_sdk_64.bat</td><td>1</td><td/></row>
 		<row><td>commpro.dll</td><td>commpro.dll</td><td>commpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\commpro.dll</td><td>1</td><td/></row>
-		<row><td>commpro.dll1</td><td>commpro.dll2</td><td>commpro.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\commpro.dll</td><td>1</td><td/></row>
 		<row><td>comms.dll</td><td>comms.dll</td><td>comms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\comms.dll</td><td>1</td><td/></row>
-		<row><td>comms.dll1</td><td>comms.dll2</td><td>comms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\comms.dll</td><td>1</td><td/></row>
 		<row><td>interop.zkemkeeper.dll</td><td>Interop.zkemkeeper.dll4</td><td>INTERO~1.DLL|Interop.zkemkeeper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_ZK-LYMYTZ_FILES&gt;\bin\Debug\Interop.zkemkeeper.dll</td><td>1</td><td/></row>
 		<row><td>interop.zkemkeeper.dll1</td><td>Interop.zkemkeeper.dll2</td><td>INTERO~1.DLL|Interop.zkemkeeper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\Interop.zkemkeeper.dll</td><td>1</td><td/></row>
 		<row><td>interop.zkemkeeper.dll2</td><td>Interop.zkemkeeper.dll5</td><td>INTERO~1.DLL|Interop.zkemkeeper.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_TO_DATABASE_FILES&gt;\SDK\Interop.zkemkeeper.dll</td><td>1</td><td/></row>
@@ -1666,11 +1648,7 @@
 		<row><td>ZK_Service.exe4</td><td/><td/><td>_0D30E04A_6F00_436E_A890_10C7C5D52320_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ZK_Service.exe5</td><td/><td/><td>_303F7191_6FD8_4506_B7FE_EA4BD36E66FE_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>commpro.dll</td><td/><td/><td>_67B69EE0_72D0_49DB_BBE1_FD45D0CA0BB6_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>commpro.dll1</td><td/><td/><td>_6297CAC8_C97A_4BB5_AF80_EFCCD2F2BD01_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>commpro.dll2</td><td/><td/><td>_EEA71F29_F046_46C2_AC0F_F2BFF9C07776_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>comms.dll</td><td/><td/><td>_BB323A97_858B_4CB6_9A86_E0D2EA33A9C2_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>comms.dll1</td><td/><td/><td>_E4FD08CF_DA57_4F8F_9E50_C2C06A4E6B6B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>comms.dll2</td><td/><td/><td>_D7E3C77E_DB8C_4A3D_BAE5_5B328423786F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>plcommpro.dll</td><td/><td/><td>_102AFE2A_DAC1_44A2_B885_C17BD4713DDB_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>plcommpro.dll1</td><td/><td/><td>_90160BD0_0F6F_41D4_BA59_34F5ADFA6862_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>plcommpro.dll2</td><td/><td/><td>_34FF4018_8A8D_4B23_BEAF_568533F0E517_FILTER</td><td/><td/><td/><td/></row>
@@ -1981,13 +1959,13 @@
 		<row><td>ISProductFolder</td><td/><td/><td>1</td></row>
 		<row><td>ISProjectDataFolder</td><td>1</td><td/><td>1</td></row>
 		<row><td>ISProjectFolder</td><td/><td/><td>1</td></row>
-		<row><td>PATH_TO_BACKUP_FILES</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Lymytz\bin\Debug\Backup</td><td/><td>2</td></row>
-		<row><td>PATH_TO_DATABASE_FILES</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Lymytz\bin\Debug\Database</td><td/><td>2</td></row>
-		<row><td>PATH_TO_DEBUG_EXTERNE</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Externe\bin\Debug</td><td/><td>2</td></row>
-		<row><td>PATH_TO_DEBUG_SERVICE</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Service\bin\Debug</td><td/><td>2</td></row>
+		<row><td>PATH_TO_BACKUP_FILES</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Lymytz\bin\Debug\Backup</td><td/><td>2</td></row>
+		<row><td>PATH_TO_DATABASE_FILES</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Lymytz\bin\Debug\Database</td><td/><td>2</td></row>
+		<row><td>PATH_TO_DEBUG_EXTERNE</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Externe\bin\Debug</td><td/><td>2</td></row>
+		<row><td>PATH_TO_DEBUG_SERVICE</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Service\bin\Debug</td><td/><td>2</td></row>
 		<row><td>PATH_TO_DEBUG_SORTIE</td><td/><td/><td>2</td></row>
-		<row><td>PATH_TO_SDK_FILES</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Lymytz\bin\Debug\SDK</td><td/><td>2</td></row>
-		<row><td>PATH_TO_ZK-LYMYTZ_FILES</td><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Lymytz</td><td/><td>2</td></row>
+		<row><td>PATH_TO_SDK_FILES</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Lymytz\bin\Debug\SDK</td><td/><td>2</td></row>
+		<row><td>PATH_TO_ZK-LYMYTZ_FILES</td><td>G:\Projets\ZK-Lymytz-V3.0\ZK-Lymytz</td><td/><td>2</td></row>
 		<row><td>ProgramFilesFolder</td><td/><td/><td>1</td></row>
 		<row><td>SystemFolder</td><td/><td/><td>1</td></row>
 		<row><td>WindowsFolder</td><td/><td/><td>1</td></row>
@@ -3598,7 +3576,7 @@
 		<row><td>UNINST_Uninstall_Z_B0BC6723F4B249829E4A930BE9F8B149.exe</td><td/><td>&lt;PATH_TO_ZK-LYMYTZ_FILES&gt;\favicon.ico</td><td>0</td></row>
 		<row><td>ZK_Externe.exe1_43AFB0CC58EA4748B5DEB7F04A37ED38.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\GenericExe.ico</td><td>0</td></row>
 		<row><td>ZK_Externe.exe_6F737D5E2B704E91A7ECE8A104307C42.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\GenericExe.ico</td><td>0</td></row>
-		<row><td>ZK_Lymytz.exe2_9DA515F72C9E4A0181CB7A9E7FBA02C1.exe</td><td/><td>D:\Projets\ERP\Outils\ZK-Lymytz\ZK-Lymytz-V2.0\ZK-Lymytz\bin\Debug\ZK-Lymytz.exe</td><td>0</td></row>
+		<row><td>ZK_Lymytz.exe2_DB7A5A6C88FC4FF4904B13DFE2360AA8.exe</td><td/><td>&lt;PATH_TO_ZK-LYMYTZ_FILES&gt;\bin\Debug\ZK-Lymytz.exe</td><td>0</td></row>
 		<row><td>ZK_Service.exe1_6DB9AC8905E444D098F6B4AFB1D13DD9.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\GenericExe.ico</td><td>0</td></row>
 		<row><td>ZK_Service.exe_3B58844799B34D488570E21C503D9316.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\GenericExe.ico</td><td>0</td></row>
 	</table>
@@ -4149,7 +4127,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{E7EDA498-E8A8-4F79-8521-E686DC7221A1}</td><td/></row>
 		<row><td>ProductName</td><td>ZK-Lymytz</td><td/></row>
-		<row><td>ProductVersion</td><td>3.00.0001</td><td/></row>
+		<row><td>ProductVersion</td><td>4.00.011</td><td/></row>
 		<row><td>REBOOT</td><td>Suppress</td><td/></row>
 		<row><td>STANDARD_USE_SETUPEXE</td><td>##IDS_STANDARD_USE_SETUPEXE##</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISALWAYSINSTALLELEVATED;ISSETUPDRIVEN;ARPSYSTEMCOMPONENT;ARPNOMODIFY;ARPNOREMOVE;INSTALLDIR;ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;IS_SQLSERVER_LIST;IS_SQLSERVER_DATABASE;IS_SQLSERVER_AUTHENTICATION;IS_SQLSERVER_USERNAME;IS_SQLSERVER_SERVER;IS_SQLSERVER_PASSWORD;IS_NET_API_LOGON_USERNAME;IS_NET_API_LOGON_PASSWORD;IS_NEW_USER_CONFIRM_TEXT;IS_NEW_USER_SERVER_TEXT;IS_NEW_USER_GROUP_TEXT;IS_NEW_USER_NAME_TEXT;IS_NET_API_NEW_USER_PASSWORD;IS_NET_API_NEW_USER_NAME;IS_NET_API_NEW_USER_CONFIRM;IS_NEW_USER_PASSWORD_TEXT;IS_NET_API_NEW_USER_SERVER;IS_NET_API_NEW_USER_GROUP;IS_NET_API_GROUP_LIST;IS_NET_API_SERVER_LIST;IS_NET_API_SERVER_NEW_USER_LIST;IS_NET_API_USER_LIST;IS_NET_API_LOGON_DOMAIN_TOKEN;IS_NET_API_LOGON_USERNAME_TOKEN;SUPPORTDIR;ISACTIONPROP1</td><td/></row>
@@ -4306,7 +4284,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>UNINST_Uninstall_ZK_Lymytz1</td><td>INSTALLDIR</td><td>##IDS_SHORTCUT_DISPLAY_NAME4##</td><td>IS_ININSTALL_SHORTCUT</td><td>[ProgramFilesFolder]InstallShield Installation Information\[ProductCode]\setup.exe</td><td>-runfromtemp -removeonly</td><td/><td/><td>UNINST_Uninstall_Z_40E808AD24B74FCAB87B2677EC66CB66.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ZK_Externe.exe</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME17##</td><td>ZK_Externe.exe4</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Externe.exe_6F737D5E2B704E91A7ECE8A104307C42.exe</td><td>0</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ZK_Externe.exe1</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME20##</td><td>ZK_Externe.exe5</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Externe.exe1_43AFB0CC58EA4748B5DEB7F04A37ED38.exe</td><td>0</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ZK_Lymytz.exe2</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME16##</td><td>ZK_Lymytz.exe6</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Lymytz.exe2_9DA515F72C9E4A0181CB7A9E7FBA02C1.exe</td><td>1</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ZK_Lymytz.exe2</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME16##</td><td>ZK_Lymytz.exe6</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Lymytz.exe2_DB7A5A6C88FC4FF4904B13DFE2360AA8.exe</td><td>1</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ZK_Service.exe</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME18##</td><td>ZK_Service.exe4</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Service.exe_3B58844799B34D488570E21C503D9316.exe</td><td>0</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ZK_Service.exe1</td><td>zk_setup</td><td>##IDS_SHORTCUT_DISPLAY_NAME21##</td><td>ZK_Service.exe5</td><td>DefaultFeature</td><td/><td/><td/><td>ZK_Service.exe1_6DB9AC8905E444D098F6B4AFB1D13DD9.exe</td><td>0</td><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>

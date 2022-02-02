@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Threading;
-
-
 using System.Windows.Forms;
 using ZK_Lymytz.BLL;
 using ZK_Lymytz.ENTITE;
@@ -45,12 +43,12 @@ namespace ZK_Lymytz.IHM
         private void Form_Setting_Load(object sender, EventArgs e)
         {
             LoadConfig();
-            LoadSociete();
             LoadCurrentSociete();
             LoadCurrentAgence();
             LoadCurrentServeur();
             LoadCurrentSetting();
             LoadCurrentUser();
+            LoadSociete(txt_group.Text);
             LoadLiaisons();
             ResetLiaison();
         }
@@ -102,6 +100,7 @@ namespace ZK_Lymytz.IHM
                 cbox_societe.SelectedText = s.Name;
                 societe = s;
                 txt_name.Text = s.Name;
+                txt_group.Text = s.Groupe != null ? s.Groupe.Libelle : "";
                 LoadAgence(s);
             }
         }
@@ -136,10 +135,15 @@ namespace ZK_Lymytz.IHM
             }
         }
 
-        private void LoadSociete()
+        private void LoadSociete(string groupe)
         {
-            societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id");
+            string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_base_groupe_societe g on y.groupe = g.id left join yvs_societes_connexion i on i.societe = y.id";
+            if (groupe != null ? groupe.Trim().Length > 0 : false)
+            {
+                query += " where g.libelle = '" + groupe + "'";
+            }
+            societes = SocieteBLL.List(query);
             try
             {
                 cbox_societe.Items.Clear();
@@ -297,6 +301,18 @@ namespace ZK_Lymytz.IHM
                     Application.ExitThread();
                     Application.Restart();
                 }
+            }
+        }
+
+        private void btn_tester_Click(object sender, EventArgs e)
+        {
+            RecopieServeur();
+            if (serveur.Control())
+            {
+                if (new TOOLS.Connexion().isConnection(serveur))
+                    Messages.Information("Connecté");
+                else
+                    Messages.ShowErreur("Echec");
             }
         }
 
@@ -961,6 +977,18 @@ namespace ZK_Lymytz.IHM
             }
         }
 
+        private void txt_group_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                LoadSociete(txt_group.Text);
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
+        }
+
         private void VerifyExterne(Serveur p)
         {
             Npgsql.NpgsqlConnection connect = null;
@@ -970,7 +998,7 @@ namespace ZK_Lymytz.IHM
                 if (index > -1)
                 {
                     ObjectThread row = new ObjectThread(dgv_liaison.Rows[index]);
-                    new Thread(delegate()
+                    new Thread(delegate ()
                     {
                         try
                         {

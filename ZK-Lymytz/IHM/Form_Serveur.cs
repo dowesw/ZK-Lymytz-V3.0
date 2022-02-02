@@ -62,6 +62,15 @@ namespace ZK_Lymytz.IHM
             }
         }
 
+        private void btn_tester_Click(object sender, EventArgs e)
+        {
+            ENTITE.Serveur serveur = getServeur();
+            if (new TOOLS.Connexion().isConnection(serveur))
+                Messages.Information("Connecté");
+            else
+                Messages.ShowErreur("Echec");
+        }
+
         private void Form_Serveur_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!ask_)

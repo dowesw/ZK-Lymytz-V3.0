@@ -153,6 +153,7 @@
     <Compile Include="ENTITE\Employe.cs" />
     <Compile Include="ENTITE\Empreinte.cs" />
     <Compile Include="ENTITE\Finger.cs" />
+    <Compile Include="ENTITE\Groupe.cs" />
     <Compile Include="ENTITE\IOEMDevice.cs" />
     <Compile Include="ENTITE\JoursOuvres.cs" />
     <Compile Include="ENTITE\Parametre.cs" />

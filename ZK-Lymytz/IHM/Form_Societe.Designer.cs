@@ -46,6 +46,7 @@
             this.txt_password = new System.Windows.Forms.TextBox();
             this.txt_domain = new System.Windows.Forms.TextBox();
             this.txt_users = new System.Windows.Forms.TextBox();
+            this.btn_tester = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_port)).BeginInit();
             this.SuspendLayout();
@@ -214,12 +215,24 @@
             this.txt_users.Size = new System.Drawing.Size(196, 20);
             this.txt_users.TabIndex = 4;
             // 
+            // btn_tester
+            // 
+            this.btn_tester.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_tester.Location = new System.Drawing.Point(151, 248);
+            this.btn_tester.Name = "btn_tester";
+            this.btn_tester.Size = new System.Drawing.Size(102, 28);
+            this.btn_tester.TabIndex = 101;
+            this.btn_tester.Text = "Tester";
+            this.btn_tester.UseVisualStyleBackColor = true;
+            this.btn_tester.Click += new System.EventHandler(this.btn_tester_Click);
+            // 
             // Form_Societe
             // 
             this.AcceptButton = this.btn_save;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(368, 281);
+            this.Controls.Add(this.btn_tester);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.lb_adresse);
@@ -264,5 +277,6 @@
         private System.Windows.Forms.TextBox txt_password;
         private System.Windows.Forms.TextBox txt_domain;
         private System.Windows.Forms.TextBox txt_users;
+        private System.Windows.Forms.Button btn_tester;
     }
 }

@@ -319,7 +319,7 @@ namespace ZK_Lymytz.IHM
             return z;
         }
 
-        public void LoadData_OLD()
+        public void LoadData()
         {
             logs.Clear();
             DateTime d = dateDebut.AddMinutes(-Convert.ToDouble(txt_marge_heure_debut.Value));
@@ -390,7 +390,7 @@ namespace ZK_Lymytz.IHM
             LoadLogs(logs);
         }
 
-        public void LoadData()
+        public void LoadData_NEW()
         {
             logs.Clear();
             DateTime d = dateDebut.AddMinutes(-Convert.ToDouble(txt_marge_heure_debut.Value));

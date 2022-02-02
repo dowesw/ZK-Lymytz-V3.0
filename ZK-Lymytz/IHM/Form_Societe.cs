@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
-using ZK_Lymytz.TOOLS;
-using ZK_Lymytz.ENTITE;
 using ZK_Lymytz.BLL;
+using ZK_Lymytz.ENTITE;
+using ZK_Lymytz.TOOLS;
 
 namespace ZK_Lymytz.IHM
 {
@@ -28,8 +27,8 @@ namespace ZK_Lymytz.IHM
 
         private void Form_Societe_Load(object sender, EventArgs e)
         {
-            LoadSociete();
             LoadCurrentSociete();
+            LoadSociete(societe.Groupe != null ? societe.Groupe.Libelle : "");
         }
 
         private void Form_Societe_FormClosing(object sender, FormClosingEventArgs e)
@@ -71,10 +70,15 @@ namespace ZK_Lymytz.IHM
             }
         }
 
-        private void LoadSociete()
+        private void LoadSociete(string groupe)
         {
-            societes = SocieteBLL.List("select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion " +
-                            "from yvs_societes y left join yvs_societes_connexion i on i.societe = y.id ");
+            string query = "select y.id, y.name, y.adresse_ip, COALESCE(i.port, 0) AS port, i.users, i.password, i.domain, i.type_connexion, y.groupe, g.libelle " +
+                            "from yvs_societes y left join yvs_base_groupe_societe g on y.groupe = g.id left join yvs_societes_connexion i on i.societe = y.id ";
+            if (groupe != null ? groupe.Trim().Length > 0 : false)
+            {
+                query += " where g.libelle = '" + groupe + "'";
+            }
+            societes = SocieteBLL.List(query);
             try
             {
                 cbox_societe.Items.Clear();
@@ -107,6 +111,42 @@ namespace ZK_Lymytz.IHM
                 txt_domain.Text = societe.Domain;
                 txt_password.Text = societe.Password;
                 txt_port.Value = societe.Port;
+            }
+            catch (Exception ex)
+            {
+                Messages.Exception(ex);
+            }
+        }
+
+        private void btn_tester_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Societe societe = recopie();
+                string adresse = null;
+                if (Utils.asString(societe.AdresseIp))
+                {
+                    adresse = societe.AdresseIp;
+                }
+                else
+                {
+                    ENTITE.Serveur bean = ServeurBLL.ReturnServeur();
+                    adresse = bean.Adresse;
+                }
+                if (!Utils.IsLocalAdress(adresse))
+                {
+                    string fileName = TOOLS.Chemins.CheminBackup("localhost") + "localhost.csv";
+                    if (!File.Exists(fileName))
+                    {
+                        Logs.WriteCsv(fileName, new IOEMDevice());
+                    }
+                    fileName = new RemoteAcces(adresse, societe.Port, societe.TypeConnexion, societe.Users, societe.Password).GetPathFile(@fileName);
+                    if (Utils.asString(fileName))
+                        Messages.Information("Connecté");
+                    else
+                        Messages.ShowErreur("Echec");
+
+                }
             }
             catch (Exception ex)
             {
@@ -148,6 +188,20 @@ namespace ZK_Lymytz.IHM
                 }
                 Messages.Succes();
             }
+        }
+
+        private Societe recopie()
+        {
+            Societe societe = new Societe();
+            string adresse = txt_adresse.Text;
+            societe.AdresseIp = adresse;
+            societe.TypeConnexion = cbox_type_connexion.SelectedItem.ToString();
+            societe.Users = txt_users.Text;
+            societe.Domain = txt_domain.Text;
+            societe.Password = txt_password.Text;
+            societe.Port = Convert.ToInt32(txt_port.Value);
+            societe.TypeConnexion = cbox_type_connexion.SelectedItem.ToString();
+            return societe;
         }
     }
 }
