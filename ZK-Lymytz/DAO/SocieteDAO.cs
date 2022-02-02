@@ -109,7 +109,7 @@ namespace ZK_Lymytz.DAO
                     serveur.Password = (string)(valKey.GetValue("password") != null ? valKey.GetValue("password") : "");
                     serveur.Domain = (string)(valKey.GetValue("domain") != null ? valKey.GetValue("domain") : "");
                     serveur.TypeConnexion = (string)(valKey.GetValue("type") != null ? valKey.GetValue("type") : "");
-                    int groupe_id = serveur.Port = Convert.ToInt32(valKey.GetValue("groupe_id") != null ? valKey.GetValue("groupe_id") : 0);
+                    int groupe_id = Convert.ToInt32(valKey.GetValue("groupe_id") != null ? valKey.GetValue("groupe_id") : 0);
                     string groupe_libelle = (string)(valKey.GetValue("groupe_libelle") != null ? valKey.GetValue("groupe_libelle") : "");
                     serveur.Groupe = new Groupe(groupe_id, groupe_libelle);
                     valKey.Close();
